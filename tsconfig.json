@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "outDir": "build/",
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

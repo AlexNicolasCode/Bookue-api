@@ -1,1 +1,1 @@
-web: ts-node-dev --respawn src/index.ts
+web: tsc && node build/src/index.js
