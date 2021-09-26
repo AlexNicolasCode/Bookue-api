@@ -1,16 +1,4 @@
 {
-  "name": "bookue-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "start:prod": "node build/server.js"
-  },
-  "keywords": [],
-  "author": "AlexNicolasCode",
-  "license": "ISC",
   "dependencies": {
     "apollo-server": "^3.3.0",
     "graphql": "^15.5.3",
@@ -18,7 +6,4 @@
     "tsc": "^2.0.3",
     "typescript": "^4.4.3"
   },
-  "devDependencies": {
-    "ts-node-dev": "^1.1.8"
-  }
 }
