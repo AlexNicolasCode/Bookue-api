@@ -1,4 +1,9 @@
 {
+  "name": "bookue-api",
+  "version": "1.0.0",
+  "engines": {
+    "yarn": "1.x"
+  },
   "dependencies": {
     "apollo-server": "^3.3.0",
     "graphql": "^15.5.3",
