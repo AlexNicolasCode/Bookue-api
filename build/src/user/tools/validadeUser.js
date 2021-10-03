@@ -38,17 +38,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.verifyToken = exports.createToken = void 0;
 var jwt = require("jsonwebtoken");
-var key = "test";
 var createToken = function (name, email) { return __awaiter(void 0, void 0, void 0, function () {
     var userProps, token;
     return __generator(this, function (_a) {
         userProps = { name: name, email: email };
-        token = jwt.sign(userProps, key, { expiresIn: 60 * 60 * 60 });
+        token = jwt.sign(userProps, process.env.KEY, { expiresIn: 60 * 60 * 60 });
         return [2 /*return*/, { token: token }];
     });
 }); };
 exports.createToken = createToken;
 var verifyToken = function (token) {
-    return jwt.verify(token, key);
+    return jwt.verify(token, process.env.KEY);
 };
 exports.verifyToken = verifyToken;

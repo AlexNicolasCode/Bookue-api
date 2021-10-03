@@ -1,16 +1,16 @@
 import { verifyToken } from "../tools/validadeUser";
 
-type TokenType = {
+type UserType = {
 	name: string,
 	email: string
 }
 
 export const autoLogin = async (token) => {
-	const tokenDecoded: TokenType = verifyToken(token);
+	const user: any = verifyToken(token);
 
-	if (!tokenDecoded) {
+	if (!user) {
     	return
   	}
   	
-   	return { name: tokenDecoded.name, email: tokenDecoded.email }
+   	return { name: user.name, email: user.email }
 }

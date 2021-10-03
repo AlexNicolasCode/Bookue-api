@@ -39,13 +39,13 @@ exports.__esModule = true;
 exports.autoLogin = void 0;
 var validadeUser_1 = require("../tools/validadeUser");
 var autoLogin = function (token) { return __awaiter(void 0, void 0, void 0, function () {
-    var tokenDecoded;
+    var user;
     return __generator(this, function (_a) {
-        tokenDecoded = (0, validadeUser_1.verifyToken)(token);
-        if (!tokenDecoded) {
+        user = (0, validadeUser_1.verifyToken)(token);
+        if (!user) {
             return [2 /*return*/];
         }
-        return [2 /*return*/, { name: tokenDecoded.name, email: tokenDecoded.email }];
+        return [2 /*return*/, { name: user.name, email: user.email }];
     });
 }); };
 exports.autoLogin = autoLogin;
