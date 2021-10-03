@@ -2,9 +2,8 @@ import * as mongoose from "mongoose";
 import { ApolloServer } from "apollo-server";
 import { typeDefs } from "./types"; 
 import { resolvers } from "./resolver"; 
-import uri from "../env"
 
-mongoose.connect(process.env.URI || uri);
+mongoose.connect(process.env.URI);
 !mongoose.connection ? console.log("Error connecting db") : console.log("Db connected successfully")
 
 const server = new ApolloServer({ 
