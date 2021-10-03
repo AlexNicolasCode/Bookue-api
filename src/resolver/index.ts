@@ -3,7 +3,6 @@ import { deleteBook } from "../book/resolvers/deleteBook";
 import { getAllBooks } from "../book/resolvers/getAllBooks";
 import { getBook } from "../book/resolvers/getBook";
 import { updateBook } from "../book/resolvers/updateBook";
-import { updateNotes } from "../book/resolvers/updateNotes";
 import { loginUser } from "../user/resolvers/loginResolver";
 import { signUpUser } from "../user/resolvers/signUpResolver";
 import { autoLogin } from "../user/resolvers/autoLoginResolver";
