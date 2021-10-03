@@ -2,8 +2,7 @@ import { verifyToken } from "../../user/tools/validadeUser";
 import { Book } from "../schema/book";
 
 export const getBook = async (id, token) => {
-  const user = verifyToken(token)
-  console.log(user.email)
+  const user: any = verifyToken(token)
 
   if (!user) {
     return

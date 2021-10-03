@@ -2,7 +2,7 @@ import { verifyToken } from "../../user/tools/validadeUser";
 import { Book } from "../schema/book";
 
 export const addBook = async (token, title, author, description) => {
-  const user = await verifyToken(token)
+  const user: any = await verifyToken(token)
 
   if (!user) {
     return
