@@ -20,7 +20,6 @@ export const resolvers = {
     signUpUser: (_, { name, email, password }) => signUpUser(name, email, password),
     addBook: (_, { title, author, description }, { token }) => addBook(token, title, author, description),
     updateBook: (_, { id, newTitle, newAuthor, newDescription }, { token }) => updateBook(token, id, newTitle, newAuthor, newDescription),
-    updateNotes: (_, { id, newTitle, newAuthor, newDescription, newNotes }, { token }) => updateNotes(token, id, newTitle, newAuthor, newDescription, newNotes),
     deleteBook: (_, { id }, { token }) => deleteBook(token, id)
   }  
 }
