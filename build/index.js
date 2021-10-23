@@ -6,7 +6,8 @@ var apollo_server_1 = require("apollo-server");
 var types_1 = require("./types");
 var resolver_1 = require("./resolver");
 dotenv.config();
-mongoose.connect(process.env.URI);
+var mongooseParams = { useNewUrlParser: true, useUnifiedTopology: true };
+mongoose.connect(process.env.URI, mongooseParams);
 !mongoose.connection ? console.log("Error connecting db") : console.log("Db connected successfully");
 var server = new apollo_server_1.ApolloServer({
     typeDefs: types_1.typeDefs,
