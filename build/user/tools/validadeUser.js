@@ -42,7 +42,7 @@ var createToken = function (name, email) { return __awaiter(void 0, void 0, void
     var userProps, token;
     return __generator(this, function (_a) {
         userProps = { name: name, email: email };
-        token = jwt.sign(userProps, process.env.KEY, { expiresIn: 60 * 60 * 60 });
+        token = jwt.sign(userProps, process.env.KEY, { algorithm: 'RS256', expiresIn: 60 * 60 * 60 });
         return [2 /*return*/, { token: token }];
     });
 }); };
