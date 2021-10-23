@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "skipLibCheck": true,
-    "outDir": "build/",
+    "outDir": "build",
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "./env.ts"]
