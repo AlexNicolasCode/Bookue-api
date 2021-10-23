@@ -1,8 +1,11 @@
 import * as mongoose from "mongoose";
+import * as dotenv from 'dotenv';
 import { ApolloServer } from "apollo-server";
+
 import { typeDefs } from "./types"; 
 import { resolvers } from "./resolver"; 
 
+dotenv.config();
 mongoose.connect(process.env.URI);
 !mongoose.connection ? console.log("Error connecting db") : console.log("Db connected successfully")
 
