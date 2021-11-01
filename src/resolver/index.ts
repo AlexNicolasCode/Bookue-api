@@ -17,8 +17,8 @@ export const resolvers = {
 
   Mutation: {
     signUpUser: (_, { name, email, password }) => signUpUser(name, email, password),
-    addBook: (_, { title, author, description }, { token }) => addBook(token, title, author, description),
-    updateBook: (_, { id, newTitle, newAuthor, newDescription }, { token }) => updateBook(token, id, newTitle, newAuthor, newDescription),
+    addBook: (_, { title, author, description, currentPage, pages }, { token }) => addBook(token, title, author, description, currentPage, pages),
+    updateBook: (_, { id, newTitle, newAuthor, newDescription, currentPage, pages }, { token }) => updateBook(token, id, newTitle, newAuthor, newDescription, currentPage, pages),
     deleteBook: (_, { id }, { token }) => deleteBook(token, id)
   }  
 }

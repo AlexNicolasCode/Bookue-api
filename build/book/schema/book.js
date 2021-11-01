@@ -6,6 +6,8 @@ var BookSchema = new mongoose_1.Schema({
     title: String,
     author: String,
     description: String,
+    currentPage: String,
+    pages: String,
     notes: Array,
     createdBy: String
 });
