@@ -39,7 +39,7 @@ exports.__esModule = true;
 exports.addBook = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
 var book_1 = require("../schema/book");
-var addBook = function (token, title, author, description) { return __awaiter(void 0, void 0, void 0, function () {
+var addBook = function (token, title, author, description, currentPages, pages) { return __awaiter(void 0, void 0, void 0, function () {
     var user, bookProps, book;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -53,6 +53,8 @@ var addBook = function (token, title, author, description) { return __awaiter(vo
                     title: title,
                     author: author,
                     description: description,
+                    currentPages: currentPages,
+                    pages: pages,
                     notes: [],
                     createdBy: user.email
                 };
