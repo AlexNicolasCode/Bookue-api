@@ -35,14 +35,14 @@ exports.resolvers = {
             return (0, signUpResolver_1.signUpUser)(name, email, password);
         },
         addBook: function (_, _a, _b) {
-            var title = _a.title, author = _a.author, description = _a.description;
+            var title = _a.title, author = _a.author, description = _a.description, currentPage = _a.currentPage, pages = _a.pages;
             var token = _b.token;
-            return (0, addBook_1.addBook)(token, title, author, description);
+            return (0, addBook_1.addBook)(token, title, author, description, currentPage, pages);
         },
         updateBook: function (_, _a, _b) {
-            var id = _a.id, newTitle = _a.newTitle, newAuthor = _a.newAuthor, newDescription = _a.newDescription;
+            var id = _a.id, newTitle = _a.newTitle, newAuthor = _a.newAuthor, newDescription = _a.newDescription, currentPage = _a.currentPage, pages = _a.pages;
             var token = _b.token;
-            return (0, updateBook_1.updateBook)(token, id, newTitle, newAuthor, newDescription);
+            return (0, updateBook_1.updateBook)(token, id, newTitle, newAuthor, newDescription, currentPage, pages);
         },
         deleteBook: function (_, _a, _b) {
             var id = _a.id;
