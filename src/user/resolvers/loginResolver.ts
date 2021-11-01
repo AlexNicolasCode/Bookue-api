@@ -7,8 +7,8 @@ type UserType = {
   email: string
 }
 
-export const loginUser = async (name: string, email: string, password: string) => {
-  const user = await User.findOne({ name: name, email: email, password: hashPassword(password) });
+export const loginUser = async (email: string, password: string) => {
+  const user = await User.findOne({ email: email, password: hashPassword(password) });
 
   if (!user) {
     return { token: null }
