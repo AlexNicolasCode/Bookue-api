@@ -14,5 +14,5 @@ export const loginUser = async (email: string, password: string) => {
     return { token: null }
   }
 
-  return createToken(name, email)
+  return createToken(user.name, email)
 }

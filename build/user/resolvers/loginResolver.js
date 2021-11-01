@@ -40,17 +40,17 @@ exports.loginUser = void 0;
 var user_1 = require("../schema/user");
 var validadeUser_1 = require("../tools/validadeUser");
 var passwordEncoder_1 = require("./passwordEncoder");
-var loginUser = function (name, email, password) { return __awaiter(void 0, void 0, void 0, function () {
+var loginUser = function (email, password) { return __awaiter(void 0, void 0, void 0, function () {
     var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, user_1.User.findOne({ name: name, email: email, password: (0, passwordEncoder_1.hashPassword)(password) })];
+            case 0: return [4 /*yield*/, user_1.User.findOne({ email: email, password: (0, passwordEncoder_1.hashPassword)(password) })];
             case 1:
                 user = _a.sent();
                 if (!user) {
                     return [2 /*return*/, { token: null }];
                 }
-                return [2 /*return*/, (0, validadeUser_1.createToken)(name, email)];
+                return [2 /*return*/, (0, validadeUser_1.createToken)(user.name, email)];
         }
     });
 }); };

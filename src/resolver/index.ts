@@ -11,7 +11,7 @@ export const resolvers = {
   Query: {
     getAllBooks: (_, __, { token }) => getAllBooks(token),
     getBook: (_, { id }, { token }) => getBook(id, token),
-    loginUser: (_, { name, email, password }) => loginUser(name, email, password),
+    loginUser: (_, { name, email, password }) => loginUser(email, password),
     autoLogin: (_, __, { token }) => autoLogin(token)
   },
 
