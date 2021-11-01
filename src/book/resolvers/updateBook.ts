@@ -1,7 +1,7 @@
 import { verifyToken } from "../../user/tools/validadeUser";
 import { Book } from "../schema/book";
 
-export const updateBook = async (token, id, newTitle, newAuthor, newDescription) => {
+export const updateBook = async (token, id, newTitle, newAuthor, newDescription, currentPages, pages) => {
   const user: any = verifyToken(token)
 
   if (!user) {
@@ -12,6 +12,8 @@ export const updateBook = async (token, id, newTitle, newAuthor, newDescription)
     title: newTitle,
     author: newAuthor,
     description: newDescription,
+    currentPages: currentPages,
+    pages: pages,
     notes: [],
     createdBy: user.email
   }

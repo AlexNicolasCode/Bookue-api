@@ -11,6 +11,8 @@ export const typeDefs = gql`
     title: String
     author: String
     description: String
+    currentPage: String
+    pages: String
     createdBy: String
   }
 
@@ -20,16 +22,16 @@ export const typeDefs = gql`
 
   type Mutation {
     signUpUser(name: String, email: String, password: String): Token
-    addBook(title: String, author: String, description: String): Book
-    updateBook(id: String, newTitle: String, newAuthor: String, newDescription: String): Book
-    updateNotes(id: String, newTitle: String, newAuthor: String, newDescription: String, newNotes: String): Book
+    addBook(title: String, author: String, description: String, currentPage: String, pages: String): Book
+    updateBook(id: String, newTitle: String, newAuthor: String, newDescription: String, currentPage: String, pages: String): Book
+    updateNotes(id: String, newTitle: String, newAuthor: String, newDescription: String, newNotes: String, currentPage: String, pages: String): Book
     deleteBook(id: String): Book
   }
 
   type Query {
     getAllBooks: [Book]
     getBook(id: String): Book
-    loginUser(name: String, email: String, password: String): Token
+    loginUser(email: String, password: String): Token
     autoLogin: User
   }
 `;

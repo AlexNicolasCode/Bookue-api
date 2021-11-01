@@ -39,7 +39,7 @@ exports.__esModule = true;
 exports.updateBook = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
 var book_1 = require("../schema/book");
-var updateBook = function (token, id, newTitle, newAuthor, newDescription) { return __awaiter(void 0, void 0, void 0, function () {
+var updateBook = function (token, id, newTitle, newAuthor, newDescription, currentPages, pages) { return __awaiter(void 0, void 0, void 0, function () {
     var user, bookProps, updatedBook;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -52,6 +52,8 @@ var updateBook = function (token, id, newTitle, newAuthor, newDescription) { ret
                     title: newTitle,
                     author: newAuthor,
                     description: newDescription,
+                    currentPages: currentPages,
+                    pages: pages,
                     notes: [],
                     createdBy: user.email
                 };
