@@ -22,7 +22,7 @@ exports.resolvers = {
         },
         loginUser: function (_, _a) {
             var name = _a.name, email = _a.email, password = _a.password;
-            return (0, loginResolver_1.loginUser)(name, email, password);
+            return (0, loginResolver_1.loginUser)(email, password);
         },
         autoLogin: function (_, __, _a) {
             var token = _a.token;
