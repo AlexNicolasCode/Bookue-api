@@ -21,7 +21,7 @@ exports.resolvers = {
             return (0, getBook_1.getBook)(id, token);
         },
         loginUser: function (_, _a) {
-            var name = _a.name, email = _a.email, password = _a.password;
+            var email = _a.email, password = _a.password;
             return (0, loginResolver_1.loginUser)(email, password);
         },
         autoLogin: function (_, __, _a) {
@@ -40,9 +40,9 @@ exports.resolvers = {
             return (0, addBook_1.addBook)(token, title, author, description, currentPage, pages);
         },
         updateBook: function (_, _a, _b) {
-            var id = _a.id, newTitle = _a.newTitle, newAuthor = _a.newAuthor, newDescription = _a.newDescription, currentPage = _a.currentPage, pages = _a.pages;
+            var id = _a.id, newTitle = _a.newTitle, newAuthor = _a.newAuthor, newDescription = _a.newDescription, newCurrentPage = _a.newCurrentPage, newPages = _a.newPages;
             var token = _b.token;
-            return (0, updateBook_1.updateBook)(token, id, newTitle, newAuthor, newDescription, currentPage, pages);
+            return (0, updateBook_1.updateBook)(token, id, newTitle, newAuthor, newDescription, newCurrentPage, newPages);
         },
         deleteBook: function (_, _a, _b) {
             var id = _a.id;

@@ -11,14 +11,14 @@ export const resolvers = {
   Query: {
     getAllBooks: (_, __, { token }) => getAllBooks(token),
     getBook: (_, { id }, { token }) => getBook(id, token),
-    loginUser: (_, { name, email, password }) => loginUser(email, password),
+    loginUser: (_, { email, password }) => loginUser(email, password),
     autoLogin: (_, __, { token }) => autoLogin(token)
   },
 
   Mutation: {
     signUpUser: (_, { name, email, password }) => signUpUser(name, email, password),
     addBook: (_, { title, author, description, currentPage, pages }, { token }) => addBook(token, title, author, description, currentPage, pages),
-    updateBook: (_, { id, newTitle, newAuthor, newDescription, currentPage, pages }, { token }) => updateBook(token, id, newTitle, newAuthor, newDescription, currentPage, pages),
+    updateBook: (_, { id, newTitle, newAuthor, newDescription, newCurrentPage, newPages }, { token }) => updateBook(token, id, newTitle, newAuthor, newDescription, newCurrentPage, newPages),
     deleteBook: (_, { id }, { token }) => deleteBook(token, id)
   }  
 }

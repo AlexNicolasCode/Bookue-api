@@ -9,6 +9,7 @@ var BookSchema = new mongoose_1.Schema({
     currentPage: String,
     pages: String,
     notes: Array,
-    createdBy: String
+    created_by: String,
+    created_at: Date
 });
 exports.Book = (0, mongoose_1.model)("books", BookSchema);
