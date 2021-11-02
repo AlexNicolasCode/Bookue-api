@@ -56,7 +56,8 @@ var addBook = function (token, title, author, description, currentPage, pages) {
                     currentPage: currentPage,
                     pages: pages,
                     notes: [],
-                    createdBy: user.email
+                    created_by: user.email,
+                    created_at: Date.now()
                 };
                 return [4 /*yield*/, book_1.Book.findOne(bookProps)];
             case 2:
