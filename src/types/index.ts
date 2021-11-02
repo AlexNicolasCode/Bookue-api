@@ -13,7 +13,8 @@ export const typeDefs = gql`
     description: String
     currentPage: String
     pages: String
-    createdBy: String
+    created_by: String
+    created_at: String
   }
 
   type Token {

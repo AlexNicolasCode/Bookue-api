@@ -15,7 +15,8 @@ export const addBook = async (token, title, author, description, currentPage, pa
     currentPage: currentPage,
     pages: pages,
     notes: [],
-    createdBy: user.email
+    created_by: user.email,
+    created_at: Date.now()
   }      
 
   const book = await Book.findOne(bookProps);
