@@ -7,7 +7,8 @@ const BookSchema = new Schema({
     currentPage: String,
     pages: String,
     notes: Array,
-    createdBy: String
+    created_by: String,
+    created_at: Date
 })
 
 export const Book = model("books", BookSchema);
