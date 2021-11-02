@@ -24,7 +24,7 @@ export const typeDefs = gql`
   type Mutation {
     signUpUser(name: String, email: String, password: String): Token
     addBook(title: String, author: String, description: String, currentPage: String, pages: String): Book
-    updateBook(id: String, newTitle: String, newAuthor: String, newDescription: String, currentPage: String, pages: String): Book
+    updateBook(id: String, newTitle: String, newAuthor: String, newDescription: String, newCurrentPage: String, newPages: String): Book
     updateNotes(id: String, newTitle: String, newAuthor: String, newDescription: String, newNotes: String, currentPage: String, pages: String): Book
     deleteBook(id: String): Book
   }
