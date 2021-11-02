@@ -39,7 +39,7 @@ exports.__esModule = true;
 exports.updateBook = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
 var book_1 = require("../schema/book");
-var updateBook = function (token, id, newTitle, newAuthor, newDescription, currentPages, pages) { return __awaiter(void 0, void 0, void 0, function () {
+var updateBook = function (token, id, newTitle, newAuthor, newDescription, newCurrentPage, newPages) { return __awaiter(void 0, void 0, void 0, function () {
     var user, bookProps, updatedBook;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -52,10 +52,9 @@ var updateBook = function (token, id, newTitle, newAuthor, newDescription, curre
                     title: newTitle,
                     author: newAuthor,
                     description: newDescription,
-                    currentPages: currentPages,
-                    pages: pages,
-                    notes: [],
-                    createdBy: user.email
+                    currentPage: newCurrentPage,
+                    pages: newPages,
+                    notes: []
                 };
                 return [4 /*yield*/, book_1.Book.findOneAndUpdate({ _id: id }, bookProps)];
             case 1:
