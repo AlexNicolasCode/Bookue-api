@@ -32,8 +32,8 @@ export const typeDefs = gql`
     addBook(title: String, author: String, description: String, currentPage: String, pages: String): BookType
     updateBook(id: String, newTitle: String, newAuthor: String, newDescription: String, newCurrentPage: String, newPages: String): BookType
     deleteBook(id: String): BookType
-    addNote(bookID: String, note: String): Boolean
-    deleteNote(bookID: String, noteID: String): Boolean
+    addNote(bookID: String, note: String): NoteType
+    deleteNote(bookID: String, noteID: String): NoteType
   }
 
   type Query {

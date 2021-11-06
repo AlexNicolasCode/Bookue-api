@@ -37,8 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.getNotes = void 0;
+var book_1 = require("../../book/schema/book");
 var validadeUser_1 = require("../../user/tools/validadeUser");
-var findBook_1 = require("../tools/findBook");
 var getNotes = function (token, bookID) { return __awaiter(void 0, void 0, void 0, function () {
     var user, book;
     return __generator(this, function (_a) {
@@ -49,14 +49,10 @@ var getNotes = function (token, bookID) { return __awaiter(void 0, void 0, void 
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
+                return [4 /*yield*/, book_1.Book.findOne({ _id: bookID, createdBy: user.email })];
             case 2:
                 book = _a.sent();
-                console.log(book);
-                if (!book.notes) {
-                    return [2 /*return*/, []];
-                }
-                return [2 /*return*/, book.notes.reverse()];
+                return [2 /*return*/, book.notes];
         }
     });
 }); };
