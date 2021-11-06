@@ -46,11 +46,11 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 exports.__esModule = true;
 exports.addNote = void 0;
+var book_1 = require("../../book/schema/book");
 var validadeUser_1 = require("../../user/tools/validadeUser");
 var findBook_1 = require("../tools/findBook");
-var updateNotes_1 = require("../tools/updateNotes");
 var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, book, newNotes;
+    var user, book, newNotes, updatedBook;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, validadeUser_1.verifyToken)(token)];
@@ -62,44 +62,26 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
             case 2:
                 book = _a.sent();
-                if (book.notes[0]) {
-                    book.notes = [];
+                if (book.notes.find(function (e) { return e.text === note; })) {
+                    return [2 /*return*/];
                 }
-                return [4 /*yield*/, setNewNotes(book.notes, note)];
+                newNotes = {
+                    notes: __spreadArray(__spreadArray([], book.notes, true), [
+                        {
+                            text: note,
+                            created_at: Date.now()
+                        }
+                    ], false)
+                };
+                return [4 /*yield*/, book_1.Book.findOneAndUpdate({ _id: bookID }, newNotes)];
             case 3:
-                newNotes = _a.sent();
-                if (!isValidNote(book.notes, newNotes)) return [3 /*break*/, 5];
-                return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, newNotes)];
-            case 4:
                 _a.sent();
-                _a.label = 5;
-            case 5: return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
-            case 6: return [2 /*return*/, _a.sent()];
+                return [4 /*yield*/, book_1.Book.findOne({ _id: bookID, createdBy: user.email })];
+            case 4:
+                updatedBook = _a.sent();
+                return [4 /*yield*/, updatedBook.notes.find(function (e) { return e.text === note; })];
+            case 5: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
 exports.addNote = addNote;
-var isAdded = function (bookID, email, newNotes) { return __awaiter(void 0, void 0, void 0, function () {
-    var book;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, findBook_1.findBook)(bookID, email)];
-            case 1:
-                book = _a.sent();
-                return [2 /*return*/, book.notes.length === newNotes.notes.length];
-        }
-    });
-}); };
-var isValidNote = function (notes, newNotes) {
-    return notes.find(function (note) { return note.text === newNotes; }) ? false : true;
-};
-var setNewNotes = function (currentNotes, note) {
-    return {
-        notes: __spreadArray(__spreadArray([], currentNotes, true), [
-            {
-                text: note,
-                created_at: Date.now()
-            }
-        ], false)
-    };
-};
