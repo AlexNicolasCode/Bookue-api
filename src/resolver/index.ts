@@ -8,11 +8,13 @@ import { signUpUser } from "../user/resolvers/signUpResolver";
 import { autoLogin } from "../user/resolvers/autoLoginResolver";
 import { addNote } from "../note/resolvers/addNote";
 import { deleteNote } from "../note/resolvers/deleteNote";
+import { getNotes } from "../note/resolvers/getNotes";
 
 export const resolvers = {
   Query: {
     getAllBooks: (_, __, { token }) => getAllBooks(token),
     getBook: (_, { id }, { token }) => getBook(id, token),
+    getNotes: (_, { bookID }, { token }) => getNotes(token, bookID),
     loginUser: (_, { email, password }) => loginUser(email, password),
     autoLogin: (_, __, { token }) => autoLogin(token)
   },
