@@ -50,7 +50,7 @@ var validadeUser_1 = require("../../user/tools/validadeUser");
 var findBook_1 = require("../tools/findBook");
 var updateNotes_1 = require("../tools/updateNotes");
 var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, book, newNotes;
+    var user, newNotes, book;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, validadeUser_1.verifyToken)(token)];
@@ -71,10 +71,17 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 _a.sent();
                 return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
             case 5: return [2 /*return*/, _a.sent()];
-            case 6: return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, { notes: [{ text: note }] })];
+            case 6:
+                newNotes = {
+                    notes: [
+                        { text: note, created_at: Date.now() }
+                    ]
+                };
+                return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, newNotes)];
             case 7:
                 _a.sent();
-                return [2 /*return*/, true];
+                return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
+            case 8: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
@@ -96,7 +103,10 @@ var isValidNote = function (notes, newNotes) {
 var setNewNotes = function (currentNotes, note) {
     return {
         notes: __spreadArray(__spreadArray([], currentNotes, true), [
-            { text: note }
+            {
+                text: note,
+                created_at: Date.now()
+            }
         ], false)
     };
 };
