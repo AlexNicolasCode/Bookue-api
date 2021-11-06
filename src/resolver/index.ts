@@ -6,6 +6,8 @@ import { updateBook } from "../book/resolvers/updateBook";
 import { loginUser } from "../user/resolvers/loginResolver";
 import { signUpUser } from "../user/resolvers/signUpResolver";
 import { autoLogin } from "../user/resolvers/autoLoginResolver";
+import { addNote } from "../note/resolvers/addNote";
+import { deleteNote } from "../note/resolvers/deleteNote";
 
 export const resolvers = {
   Query: {
@@ -19,6 +21,8 @@ export const resolvers = {
     signUpUser: (_, { name, email, password }) => signUpUser(name, email, password),
     addBook: (_, { title, author, description, currentPage, pages }, { token }) => addBook(token, title, author, description, currentPage, pages),
     updateBook: (_, { id, newTitle, newAuthor, newDescription, newCurrentPage, newPages }, { token }) => updateBook(token, id, newTitle, newAuthor, newDescription, newCurrentPage, newPages),
-    deleteBook: (_, { id }, { token }) => deleteBook(token, id)
+    deleteBook: (_, { id }, { token }) => deleteBook(token, id),
+    addNote: (_, { bookID, note }, { token }) => addNote(token, bookID, note),
+    deleteNote: (_, { bookID, noteID }, { token }) => deleteNote(token, bookID, noteID)
   }  
 }
