@@ -71,7 +71,8 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, newNotes)];
             case 4:
                 _a.sent();
-                return [2 /*return*/, isAdded(bookID, user.email, newNotes)];
+                return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
+            case 5: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
@@ -83,14 +84,22 @@ var isAdded = function (bookID, email, newNotes) { return __awaiter(void 0, void
             case 0: return [4 /*yield*/, (0, findBook_1.findBook)(bookID, email)];
             case 1:
                 book = _a.sent();
-                return [2 /*return*/, book.noteslength === newNotes.notes.length];
+                return [2 /*return*/, book.notes.length === newNotes.notes.length];
         }
     });
 }); };
 var isValidNote = function (notes, newNotes) {
+    if (!notes) {
+        return true;
+    }
     return notes.find(function (note) { return note.text === newNotes; });
 };
 var setNewNotes = function (currentNotes, note) {
+    if (!currentNotes) {
+        return {
+            notes: [{ text: note, created_at: Date.now() }]
+        };
+    }
     return {
         notes: __spreadArray(__spreadArray([], currentNotes, true), [
             {
