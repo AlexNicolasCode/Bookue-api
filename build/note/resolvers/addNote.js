@@ -50,7 +50,7 @@ var validadeUser_1 = require("../../user/tools/validadeUser");
 var findBook_1 = require("../tools/findBook");
 var updateNotes_1 = require("../tools/updateNotes");
 var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newNotes, book;
+    var user, book, newNotes;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, validadeUser_1.verifyToken)(token)];
@@ -62,26 +62,19 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
             case 2:
                 book = _a.sent();
-                if (!(book && book.notes[0] && isValidNote(book.notes, note))) return [3 /*break*/, 6];
+                if (book.notes[0]) {
+                    book.notes = [];
+                }
                 return [4 /*yield*/, setNewNotes(book.notes, note)];
             case 3:
                 newNotes = _a.sent();
+                if (!isValidNote(book.notes, newNotes)) return [3 /*break*/, 5];
                 return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, newNotes)];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
-            case 5: return [2 /*return*/, _a.sent()];
-            case 6:
-                newNotes = {
-                    notes: [
-                        { text: note, created_at: Date.now() }
-                    ]
-                };
-                return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, newNotes)];
-            case 7:
-                _a.sent();
-                return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
-            case 8: return [2 /*return*/, _a.sent()];
+                _a.label = 5;
+            case 5: return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
+            case 6: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
