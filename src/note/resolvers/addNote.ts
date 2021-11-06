@@ -22,6 +22,10 @@ export const addNote = async (token, bookID, note) => {
 
 const isAdded = async (bookID, email, newNotes) => {
     const book = await findBook(bookID, email)
+    if (book.notes) {
+        return false
+    }
+
     return book.notes.length === newNotes.notes.length
 }
 
