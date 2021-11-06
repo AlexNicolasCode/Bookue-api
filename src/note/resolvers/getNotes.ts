@@ -9,7 +9,7 @@ export const getNotes = async (token, bookID) => {
     }
 
     const book = await findBook(bookID, user.email)
-    if (book.notes) {
+    if (!book.notes) {
         return false
     }
 
