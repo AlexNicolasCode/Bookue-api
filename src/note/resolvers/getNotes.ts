@@ -9,8 +9,9 @@ export const getNotes = async (token, bookID) => {
     }
 
     const book = await findBook(bookID, user.email)
+    console.log(book)
     if (!book.notes) {
-        return false
+        return []
     }
 
     return book.notes.reverse()
