@@ -13,6 +13,7 @@ export const typeDefs = gql`
     description: String
     currentPage: String
     pages: String
+    notes: [NoteType]
     created_by: String
     created_at: String
   }
