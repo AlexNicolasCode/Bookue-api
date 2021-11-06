@@ -52,6 +52,9 @@ var getNotes = function (token, bookID) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
             case 2:
                 book = _a.sent();
+                if (book.notes) {
+                    return [2 /*return*/, false];
+                }
                 return [2 /*return*/, book.notes.reverse()];
         }
     });
