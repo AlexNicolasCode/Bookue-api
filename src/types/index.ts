@@ -21,6 +21,11 @@ export const typeDefs = gql`
     token: String
   }
 
+  type NoteType {
+    id: String
+    text: String
+  }
+
   type Mutation {
     signUpUser(name: String, email: String, password: String): TokenType
     addBook(title: String, author: String, description: String, currentPage: String, pages: String): BookType
@@ -33,6 +38,7 @@ export const typeDefs = gql`
   type Query {
     getAllBooks: [BookType]
     getBook(id: String): BookType
+    getNotes(bookID: String): [NoteType]
     loginUser(email: String, password: String): TokenType
     autoLogin: UserType
   }
