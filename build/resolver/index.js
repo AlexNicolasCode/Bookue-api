@@ -9,6 +9,9 @@ var updateBook_1 = require("../book/resolvers/updateBook");
 var loginResolver_1 = require("../user/resolvers/loginResolver");
 var signUpResolver_1 = require("../user/resolvers/signUpResolver");
 var autoLoginResolver_1 = require("../user/resolvers/autoLoginResolver");
+var addNote_1 = require("../note/resolvers/addNote");
+var deleteNote_1 = require("../note/resolvers/deleteNote");
+var getNotes_1 = require("../note/resolvers/getNotes");
 exports.resolvers = {
     Query: {
         getAllBooks: function (_, __, _a) {
@@ -19,6 +22,11 @@ exports.resolvers = {
             var id = _a.id;
             var token = _b.token;
             return (0, getBook_1.getBook)(id, token);
+        },
+        getNotes: function (_, _a, _b) {
+            var bookID = _a.bookID;
+            var token = _b.token;
+            return (0, getNotes_1.getNotes)(token, bookID);
         },
         loginUser: function (_, _a) {
             var email = _a.email, password = _a.password;
@@ -48,6 +56,16 @@ exports.resolvers = {
             var id = _a.id;
             var token = _b.token;
             return (0, deleteBook_1.deleteBook)(token, id);
+        },
+        addNote: function (_, _a, _b) {
+            var bookID = _a.bookID, note = _a.note;
+            var token = _b.token;
+            return (0, addNote_1.addNote)(token, bookID, note);
+        },
+        deleteNote: function (_, _a, _b) {
+            var bookID = _a.bookID, noteID = _a.noteID;
+            var token = _b.token;
+            return (0, deleteNote_1.deleteNote)(token, bookID, noteID);
         }
     }
 };
