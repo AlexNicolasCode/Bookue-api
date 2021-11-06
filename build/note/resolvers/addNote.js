@@ -62,9 +62,7 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
             case 2:
                 book = _a.sent();
-                if (isValidNote(book.notes, note) !== undefined) {
-                    return [2 /*return*/, false];
-                }
+                if (!(book && book.notes[0] && isValidNote(book.notes, note))) return [3 /*break*/, 6];
                 return [4 /*yield*/, setNewNotes(book.notes, note)];
             case 3:
                 newNotes = _a.sent();
@@ -73,6 +71,10 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 _a.sent();
                 return [4 /*yield*/, isAdded(bookID, user.email, newNotes)];
             case 5: return [2 /*return*/, _a.sent()];
+            case 6: return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, { notes: [{ text: note }] })];
+            case 7:
+                _a.sent();
+                return [2 /*return*/, true];
         }
     });
 }); };
@@ -89,23 +91,12 @@ var isAdded = function (bookID, email, newNotes) { return __awaiter(void 0, void
     });
 }); };
 var isValidNote = function (notes, newNotes) {
-    if (!notes) {
-        return true;
-    }
-    return notes.find(function (note) { return note.text === newNotes; });
+    return notes.find(function (note) { return note.text === newNotes; }) ? false : true;
 };
 var setNewNotes = function (currentNotes, note) {
-    if (!currentNotes) {
-        return {
-            notes: [{ text: note, created_at: Date.now() }]
-        };
-    }
     return {
         notes: __spreadArray(__spreadArray([], currentNotes, true), [
-            {
-                text: note,
-                created_at: Date.now()
-            }
+            { text: note }
         ], false)
     };
 };
