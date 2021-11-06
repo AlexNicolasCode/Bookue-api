@@ -10,47 +10,30 @@ export const addNote = async (token, bookID, note) => {
   }
 
   const book = await findBook(bookID, user.email);
-  if (isValidNote(book.notes, note) !== undefined) {
-      return false
+  if (book && book.notes[0] && isValidNote(book.notes, note)) {
+    const newNotes = await setNewNotes(book.notes, note);
+    await updateNotes(bookID, newNotes)
+    return await isAdded(bookID, user.email, newNotes)
   }
 
-  const newNotes = await setNewNotes(book.notes, note);
-  await updateNotes(bookID, newNotes)
-
-  return await isAdded(bookID, user.email, newNotes)
+  await updateNotes(bookID, { notes: [{ text: note }] })
+  return true
 } 
 
 const isAdded = async (bookID, email, newNotes) => {
     const book = await findBook(bookID, email)
-    if (book.notes) {
-        return false
-    }
-
     return book.notes.length === newNotes.notes.length
 }
 
 const isValidNote = (notes, newNotes) => {
-    if (!notes) {
-        return true
-    }
-
-    return notes.find((note) => note.text === newNotes)
+    return notes.find((note) => note.text === newNotes) ? false : true
 }
 
 const setNewNotes = (currentNotes, note) => {
-    if (!currentNotes) {
-        return {
-            notes: [{ text:note, created_at: Date.now() }]
-        }
-    }
-
     return {
         notes: [
             ...currentNotes,
-            {
-                text: note,
-                created_at: Date.now()
-            }
+            { text: note }
         ],
       }      
 }
