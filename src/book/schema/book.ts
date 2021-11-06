@@ -1,15 +1,17 @@
 import { model, Schema } from "mongoose";
 
+const NoteSchema = new Schema({
+    text: String,
+    created_at: Date
+})
+
 const BookSchema = new Schema({
     title: String,
     author: String,
     description: String,
     currentPage: String,
     pages: String,
-    notes: [{
-        text: String,
-        created_at: Date
-    }],
+    notes: [NoteSchema],
     created_by: String,
     created_at: Date
 })
