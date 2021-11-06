@@ -17,11 +17,12 @@ export const addNote = async (token, bookID, note) => {
   const newNotes = await setNewNotes(book.notes, note);
   await updateNotes(bookID, newNotes)
 
-  return isAdded(book, newNotes)
+  return isAdded(bookID, user.email, newNotes)
 } 
 
-const isAdded = (book, newNotes) => {
-    return book.notes.length === newNotes.notes.length - 1
+const isAdded = async (bookID, email, newNotes) => {
+    const book = await findBook(bookID, email)
+    return book.noteslength === newNotes.notes.length
 }
 
 const isValidNote = (notes, newNotes) => {
