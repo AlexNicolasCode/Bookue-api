@@ -40,7 +40,7 @@ exports.addNote = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
 var schema_1 = require("../schema");
 var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, checkNotes;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, validadeUser_1.verifyToken)(token)];
@@ -49,12 +49,18 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 if (!user) {
                     return [2 /*return*/];
                 }
+                return [4 /*yield*/, schema_1.Note.findOne({ bookID: bookID, text: note })];
+            case 2:
+                checkNotes = _a.sent();
+                if (checkNotes) {
+                    return [2 /*return*/];
+                }
                 return [4 /*yield*/, schema_1.Note.create({
                         bookID: bookID,
                         text: note,
                         created_at: Date.now()
                     })];
-            case 2: return [2 /*return*/, _a.sent()];
+            case 3: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
