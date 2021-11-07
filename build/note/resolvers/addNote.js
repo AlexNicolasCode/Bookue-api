@@ -35,21 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 exports.__esModule = true;
 exports.addNote = void 0;
-var book_1 = require("../../book/schema/book");
 var validadeUser_1 = require("../../user/tools/validadeUser");
+var schema_1 = require("../schema");
 var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, book;
+    var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, validadeUser_1.verifyToken)(token)];
@@ -58,20 +49,12 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, book_1.Book.findOne({ _id: bookID, createdBy: user.email })];
-            case 2:
-                book = _a.sent();
-                if (book.notes.find(function (e) { return e.text === note; })) {
-                    return [2 /*return*/];
-                }
-                book.notes = __spreadArray(__spreadArray([], book.notes, true), [
-                    {
+                return [4 /*yield*/, schema_1.Note.create({
+                        bookID: bookID,
                         text: note,
                         created_at: Date.now()
-                    }
-                ], false);
-                book.save();
-                return [2 /*return*/, book.notes.find(function (e) { return e.text === note; })];
+                    })];
+            case 2: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
