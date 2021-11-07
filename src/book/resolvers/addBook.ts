@@ -14,7 +14,6 @@ export const addBook = async (token, title, author, description, currentPage, pa
     description: description,
     currentPage: currentPage,
     pages: pages,
-    notes: [],
     created_by: user.email,
     created_at: Date.now()
   }      
