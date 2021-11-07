@@ -14,7 +14,6 @@ export const updateBook = async (token, id, newTitle, newAuthor, newDescription,
     description: newDescription,
     currentPage: newCurrentPage,
     pages: newPages,
-    notes: [],
   }
 
   await Book.findOneAndUpdate({ _id: id }, bookProps);
