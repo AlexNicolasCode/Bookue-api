@@ -13,6 +13,7 @@ export const typeDefs = gql`
     description: String
     currentPage: String
     pages: String
+    notes: [NoteType]
     created_by: String
     created_at: String
   }
@@ -22,6 +23,7 @@ export const typeDefs = gql`
   }
 
   type NoteType {
+    bookID: String
     id: String
     text: String
   }
@@ -30,9 +32,9 @@ export const typeDefs = gql`
     signUpUser(name: String, email: String, password: String): TokenType
     addBook(title: String, author: String, description: String, currentPage: String, pages: String): BookType
     updateBook(id: String, newTitle: String, newAuthor: String, newDescription: String, newCurrentPage: String, newPages: String): BookType
-    deleteBook(id: String): BookType
-    addNote(bookID: String, note: String): Boolean
-    deleteNote(bookID: String, noteID: String): Boolean
+    deleteBook(bookID: String, noteID: String): NoteType
+    addNote(bookID: String, note: String): NoteType
+    deleteNote(bookID: String, noteID: String): NoteType
   }
 
   type Query {

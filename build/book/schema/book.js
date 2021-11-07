@@ -8,10 +8,6 @@ var BookSchema = new mongoose_1.Schema({
     description: String,
     currentPage: String,
     pages: String,
-    notes: [{
-            text: String,
-            created_at: Date
-        }],
     created_by: String,
     created_at: Date
 });

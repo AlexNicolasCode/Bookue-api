@@ -53,8 +53,7 @@ var updateBook = function (token, id, newTitle, newAuthor, newDescription, newCu
                     author: newAuthor,
                     description: newDescription,
                     currentPage: newCurrentPage,
-                    pages: newPages,
-                    notes: []
+                    pages: newPages
                 };
                 return [4 /*yield*/, book_1.Book.findOneAndUpdate({ _id: id }, bookProps)];
             case 1:

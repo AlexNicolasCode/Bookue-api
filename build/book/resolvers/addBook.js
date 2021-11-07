@@ -55,7 +55,6 @@ var addBook = function (token, title, author, description, currentPage, pages) {
                     description: description,
                     currentPage: currentPage,
                     pages: pages,
-                    notes: [],
                     created_by: user.email,
                     created_at: Date.now()
                 };

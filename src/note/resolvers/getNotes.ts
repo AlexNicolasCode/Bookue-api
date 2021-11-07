@@ -1,5 +1,5 @@
 import { verifyToken } from "../../user/tools/validadeUser"
-import { findBook } from "../tools/findBook"
+import { Note } from "../schema"
 
 export const getNotes = async (token, bookID) => {
     const user: any = await verifyToken(token)
@@ -8,11 +8,5 @@ export const getNotes = async (token, bookID) => {
         return
     }
 
-    const book = await findBook(bookID, user.email)
-    console.log(book)
-    if (!book.notes) {
-        return []
-    }
-
-    return book.notes.reverse()
+    return await Note.find({ bookID: bookID });
 } 

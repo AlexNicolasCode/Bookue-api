@@ -1,39 +1,21 @@
 import { verifyToken } from "../../user/tools/validadeUser";
-import { findBook } from "../tools/findBook";
-import { updateNotes } from "../tools/updateNotes";
+import { Note } from "../schema";
 
 export const addNote = async (token, bookID, note) => {
-  const user: any = await verifyToken(token)
+    const user: any = await verifyToken(token)
 
-  if (!user) {
-    return
-  }
+    if (!user) {
+        return
+    }
 
-  const book = await findBook(bookID, user.email);
-  if (book && book.notes[0] && isValidNote(book.notes, note)) {
-    const newNotes = await setNewNotes(book.notes, note);
-    await updateNotes(bookID, newNotes)
-    return await isAdded(bookID, user.email, newNotes)
-  }
-
-  await updateNotes(bookID, { notes: [{ text: note }] })
-  return true
-} 
-
-const isAdded = async (bookID, email, newNotes) => {
-    const book = await findBook(bookID, email)
-    return book.notes.length === newNotes.notes.length
-}
-
-const isValidNote = (notes, newNotes) => {
-    return notes.find((note) => note.text === newNotes) ? false : true
-}
-
-const setNewNotes = (currentNotes, note) => {
-    return {
-        notes: [
-            ...currentNotes,
-            { text: note }
-        ],
-      }      
+    const checkNotes = await Note.findOne({ bookID: bookID, text: note });
+    if (checkNotes)  {
+        return
+    }
+    
+    return await Note.create({
+            bookID: bookID,
+            text: note,
+            created_at: Date.now()
+        })
 }
