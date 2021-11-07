@@ -9,22 +9,18 @@ export const addNote = async (token, bookID, note) => {
         return
     }
 
-    const book = await findBook(bookID, user.email);
+    let book = await Book.findOne({ _id: bookID, createdBy: user.email });
     if (book.notes.find((e) => e.text === note)) {
         return
     }
     
-    const newNotes = {
-        notes: [
-            ...book.notes,
-            {
-                text: note,
-                created_at: Date.now()
-            }
-        ],
-    }
-    await Book.findOneAndUpdate({ _id: bookID }, newNotes);
-
-    const updatedBook = await Book.findOne({ _id: bookID, createdBy: user.email });
-    return await updatedBook.notes.find((e) => e.text === note);
+    book.notes = [
+        ...book.notes,
+        {
+            text: note,
+            created_at: Date.now()
+        }
+    ];
+    book.save();
+    return book.notes.find((e) => e.text === note)
 }
