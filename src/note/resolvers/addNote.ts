@@ -7,6 +7,11 @@ export const addNote = async (token, bookID, note) => {
     if (!user) {
         return
     }
+
+    const checkNotes = await Note.findOne({ bookID: bookID, text: note });
+    if (checkNotes)  {
+        return
+    }
     
     return await Note.create({
             bookID: bookID,
