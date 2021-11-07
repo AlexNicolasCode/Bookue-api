@@ -1,5 +1,5 @@
-import { Book } from "../../book/schema/book"
 import { verifyToken } from "../../user/tools/validadeUser"
+import { Note } from "../schema"
 
 export const getNotes = async (token, bookID) => {
     const user: any = await verifyToken(token)
@@ -8,6 +8,5 @@ export const getNotes = async (token, bookID) => {
         return
     }
 
-    const book = await Book.findOne({ _id: bookID, createdBy: user.email });
-    return book.notes
+    return await Note.find({ bookID: bookID });
 } 

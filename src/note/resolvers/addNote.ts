@@ -1,6 +1,5 @@
-import { Book } from "../../book/schema/book";
 import { verifyToken } from "../../user/tools/validadeUser";
-import { findBook } from "../tools/findBook";
+import { Note } from "../schema";
 
 export const addNote = async (token, bookID, note) => {
     const user: any = await verifyToken(token)
@@ -8,19 +7,10 @@ export const addNote = async (token, bookID, note) => {
     if (!user) {
         return
     }
-
-    let book = await Book.findOne({ _id: bookID, createdBy: user.email });
-    if (book.notes.find((e) => e.text === note)) {
-        return
-    }
     
-    book.notes = [
-        ...book.notes,
-        {
+    return await Note.create({
+            bookID: bookID,
             text: note,
             created_at: Date.now()
-        }
-    ];
-    book.save();
-    return book.notes.find((e) => e.text === note)
+        })
 }
