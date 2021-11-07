@@ -48,9 +48,8 @@ exports.__esModule = true;
 exports.addNote = void 0;
 var book_1 = require("../../book/schema/book");
 var validadeUser_1 = require("../../user/tools/validadeUser");
-var findBook_1 = require("../tools/findBook");
 var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, book, newNotes, updatedBook;
+    var user, book;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, validadeUser_1.verifyToken)(token)];
@@ -59,28 +58,20 @@ var addNote = function (token, bookID, note) { return __awaiter(void 0, void 0, 
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
+                return [4 /*yield*/, book_1.Book.findOne({ _id: bookID, createdBy: user.email })];
             case 2:
                 book = _a.sent();
                 if (book.notes.find(function (e) { return e.text === note; })) {
                     return [2 /*return*/];
                 }
-                newNotes = {
-                    notes: __spreadArray(__spreadArray([], book.notes, true), [
-                        {
-                            text: note,
-                            created_at: Date.now()
-                        }
-                    ], false)
-                };
-                return [4 /*yield*/, book_1.Book.findOneAndUpdate({ _id: bookID }, newNotes)];
-            case 3:
-                _a.sent();
-                return [4 /*yield*/, book_1.Book.findOne({ _id: bookID, createdBy: user.email })];
-            case 4:
-                updatedBook = _a.sent();
-                return [4 /*yield*/, updatedBook.notes.find(function (e) { return e.text === note; })];
-            case 5: return [2 /*return*/, _a.sent()];
+                book.notes = __spreadArray(__spreadArray([], book.notes, true), [
+                    {
+                        text: note,
+                        created_at: Date.now()
+                    }
+                ], false);
+                book.save();
+                return [2 /*return*/, book.notes.find(function (e) { return e.text === note; })];
         }
     });
 }); };
