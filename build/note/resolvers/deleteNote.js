@@ -38,10 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.deleteNote = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
-var updateNotes_1 = require("../tools/updateNotes");
-var findBook_1 = require("../tools/findBook");
+var schema_1 = require("../schema");
 var deleteNote = function (token, bookID, noteID) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, book, newNotes;
+    var user, note;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -49,31 +48,14 @@ var deleteNote = function (token, bookID, noteID) { return __awaiter(void 0, voi
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
+                return [4 /*yield*/, schema_1.Note.findOneAndDelete({ bookID: bookID, _id: noteID })];
             case 1:
-                book = _a.sent();
-                return [4 /*yield*/, setNewNotes(book, noteID)];
-            case 2:
-                newNotes = _a.sent();
-                (0, updateNotes_1.updateNotes)(bookID, { notes: newNotes });
-                return [4 /*yield*/, isDeleted(bookID, user.email, newNotes)];
-            case 3: return [2 /*return*/, _a.sent()];
+                note = _a.sent();
+                if (!note) {
+                    return [2 /*return*/, false];
+                }
+                return [2 /*return*/, note];
         }
     });
 }); };
 exports.deleteNote = deleteNote;
-var setNewNotes = function (book, noteID) {
-    return book.notes.filter(function (note) { return String(note._id) !== noteID; });
-};
-var isDeleted = function (bookID, email, currentNote) { return __awaiter(void 0, void 0, void 0, function () {
-    var book, notes;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, findBook_1.findBook)(bookID, email)];
-            case 1:
-                book = _a.sent();
-                notes = book.notes;
-                return [2 /*return*/, notes.length === currentNote.length && notes.filter(function (note) { return note.text === currentNote; })[0] === undefined];
-        }
-    });
-}); };
