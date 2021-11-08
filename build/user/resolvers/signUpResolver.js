@@ -39,7 +39,7 @@ exports.__esModule = true;
 exports.signUpUser = void 0;
 var user_1 = require("../schema/user");
 var validadeUser_1 = require("../tools/validadeUser");
-var passwordEncoder_1 = require("./passwordEncoder");
+var passwordEncoder_1 = require("../tools/passwordEncoder");
 var signUpUser = function (name, email, password) { return __awaiter(void 0, void 0, void 0, function () {
     var user;
     return __generator(this, function (_a) {
