@@ -38,10 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.updateNote = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
-var findBook_1 = require("../tools/findBook");
-var updateNotes_1 = require("../tools/updateNotes");
+var schema_1 = require("../schema");
 var updateNote = function (token, bookID, noteID, newNote) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, book, newNotes;
+    var user, note;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -49,48 +48,17 @@ var updateNote = function (token, bookID, noteID, newNote) { return __awaiter(vo
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
+                return [4 /*yield*/, schema_1.Note.findOne({ bookID: bookID, _id: noteID })];
             case 1:
-                book = _a.sent();
-                if (isNodeAlreadyExist(book.notes, newNote)) {
-                    return [2 /*return*/];
+                note = _a.sent();
+                if (!note || note.text === newNote) {
+                    return [2 /*return*/, false];
                 }
-                newNotes = getNewNotes(book.notes, noteID, newNote);
-                return [4 /*yield*/, (0, updateNotes_1.updateNotes)(bookID, newNotes)];
+                return [4 /*yield*/, schema_1.Note.findOneAndUpdate({ bookID: bookID, _id: noteID }, { text: newNote })];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, isUpdated(bookID, user.email, newNotes)];
-            case 3: return [2 /*return*/, _a.sent()];
+                return [2 /*return*/, true];
         }
     });
 }); };
 exports.updateNote = updateNote;
-var isUpdated = function (bookID, email, newNotes) { return __awaiter(void 0, void 0, void 0, function () {
-    var book;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, findBook_1.findBook)(bookID, email)];
-            case 1:
-                book = _a.sent();
-                return [2 /*return*/, book.notes.length === newNotes.length];
-        }
-    });
-}); };
-var isNodeAlreadyExist = function (allNotes, newNote) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/, allNotes.map(function (note) { return note.text === newNote; })[0] === undefined ? true : false];
-    });
-}); };
-var getNewNotes = function (notes, noteID, newNote) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/, notes.map(function (note) {
-                if (String(note._id) === noteID) {
-                    return {
-                        text: newNote,
-                        created_at: note.created_at
-                    };
-                }
-                return note;
-            })];
-    });
-}); };
