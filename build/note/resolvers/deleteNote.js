@@ -38,16 +38,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.deleteNote = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
+var updateNotes_1 = require("../tools/updateNotes");
+var findBook_1 = require("../tools/findBook");
 var deleteNote = function (token, bookID, noteID) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, book, newNotes;
     return __generator(this, function (_a) {
-        console.log(token);
-        user = (0, validadeUser_1.verifyToken)(token);
-        if (!user) {
-            return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                user = (0, validadeUser_1.verifyToken)(token);
+                if (!user) {
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, (0, findBook_1.findBook)(bookID, user.email)];
+            case 1:
+                book = _a.sent();
+                return [4 /*yield*/, setNewNotes(book, noteID)];
+            case 2:
+                newNotes = _a.sent();
+                (0, updateNotes_1.updateNotes)(bookID, { notes: newNotes });
+                return [4 /*yield*/, isDeleted(bookID, user.email, newNotes)];
+            case 3: return [2 /*return*/, _a.sent()];
         }
-        // const note = await Note.deleteOne({ bookID: bookID, noteID: noteID});
-        return [2 /*return*/, true];
     });
 }); };
 exports.deleteNote = deleteNote;
+var setNewNotes = function (book, noteID) {
+    return book.notes.filter(function (note) { return String(note._id) !== noteID; });
+};
+var isDeleted = function (bookID, email, currentNote) { return __awaiter(void 0, void 0, void 0, function () {
+    var book, notes;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, findBook_1.findBook)(bookID, email)];
+            case 1:
+                book = _a.sent();
+                notes = book.notes;
+                return [2 /*return*/, notes.length === currentNote.length && notes.filter(function (note) { return note.text === currentNote; })[0] === undefined];
+        }
+    });
+}); };
