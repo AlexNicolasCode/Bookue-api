@@ -9,6 +9,7 @@ import { autoLogin } from "../user/resolvers/autoLoginResolver";
 import { addNote } from "../note/resolvers/addNote";
 import { deleteNote } from "../note/resolvers/deleteNote";
 import { getNotes } from "../note/resolvers/getNotes";
+import { updateNote } from "../note/resolvers/updateNote";
 
 export const resolvers = {
   Query: {
@@ -25,6 +26,7 @@ export const resolvers = {
     updateBook: (_, { id, newTitle, newAuthor, newDescription, newCurrentPage, newPages }, { token }) => updateBook(token, id, newTitle, newAuthor, newDescription, newCurrentPage, newPages),
     deleteBook: (_, { id }, { token }) => deleteBook(token, id),
     addNote: (_, { bookID, note }, { token }) => addNote(token, bookID, note),
-    deleteNote: (_, { bookID, noteID }, { token }) => deleteNote(token, bookID, noteID)
+    deleteNote: (_, { bookID, noteID }, { token }) => deleteNote(token, bookID, noteID),
+    updateNote: (_, { bookID, noteID, newNote }, { token }) => updateNote(token, bookID, noteID, newNote)
   }  
 }

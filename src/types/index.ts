@@ -35,13 +35,14 @@ export const typeDefs = gql`
     deleteBook(bookID: String, noteID: String): NoteType
     addNote(bookID: String, note: String): NoteType
     deleteNote(bookID: String, noteID: String): NoteType
+    updateNote(bookID: String, noteID: String, newNote: String): Boolean
   }
 
   type Query {
     getAllBooks: [BookType]
     getBook(id: String): BookType
-    getNotes(bookID: String): [NoteType]
     loginUser(email: String, password: String): TokenType
     autoLogin: UserType
+    getNotes(bookID: String): [NoteType]
   }
 `;
