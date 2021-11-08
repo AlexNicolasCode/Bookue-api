@@ -12,6 +12,7 @@ var autoLoginResolver_1 = require("../user/resolvers/autoLoginResolver");
 var addNote_1 = require("../note/resolvers/addNote");
 var deleteNote_1 = require("../note/resolvers/deleteNote");
 var getNotes_1 = require("../note/resolvers/getNotes");
+var updateNote_1 = require("../note/resolvers/updateNote");
 exports.resolvers = {
     Query: {
         getAllBooks: function (_, __, _a) {
@@ -66,6 +67,11 @@ exports.resolvers = {
             var bookID = _a.bookID, noteID = _a.noteID;
             var token = _b.token;
             return (0, deleteNote_1.deleteNote)(token, bookID, noteID);
+        },
+        updateNote: function (_, _a, _b) {
+            var bookID = _a.bookID, noteID = _a.noteID, newNote = _a.newNote;
+            var token = _b.token;
+            return (0, updateNote_1.updateNote)(token, bookID, noteID, newNote);
         }
     }
 };

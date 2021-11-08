@@ -38,16 +38,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.deleteNote = void 0;
 var validadeUser_1 = require("../../user/tools/validadeUser");
+var schema_1 = require("../schema");
 var deleteNote = function (token, bookID, noteID) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, note;
     return __generator(this, function (_a) {
-        console.log(token);
-        user = (0, validadeUser_1.verifyToken)(token);
-        if (!user) {
-            return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                user = (0, validadeUser_1.verifyToken)(token);
+                if (!user) {
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, schema_1.Note.findOneAndDelete({ bookID: bookID, _id: noteID })];
+            case 1:
+                note = _a.sent();
+                if (!note) {
+                    return [2 /*return*/, false];
+                }
+                return [2 /*return*/, note];
         }
-        // const note = await Note.deleteOne({ bookID: bookID, noteID: noteID});
-        return [2 /*return*/, true];
     });
 }); };
 exports.deleteNote = deleteNote;
