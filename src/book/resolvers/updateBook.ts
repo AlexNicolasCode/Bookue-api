@@ -17,7 +17,7 @@ export const updateBook = async (token, id, newTitle, newAuthor, newDescription,
   }
 
   await Book.findOneAndUpdate({ _id: id }, bookProps);
-  const updatedBook = await Book.findOne({ _id: id, createdBy: user.email });
+  const updatedBook = await Book.findOne({ _id: id, created_by: user.email });
 
   return updatedBook
 }
