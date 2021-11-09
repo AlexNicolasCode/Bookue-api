@@ -8,6 +8,6 @@ export const getBook = async (id, token) => {
     return
   }
 
-  const book = await Book.findOne({ _id: id, createdBy: user.email});
+  const book = await Book.findOne({ _id: id, created_by: user.email});
   return book
 }

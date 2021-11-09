@@ -48,7 +48,7 @@ var getBook = function (id, token) { return __awaiter(void 0, void 0, void 0, fu
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, book_1.Book.findOne({ _id: id, createdBy: user.email })];
+                return [4 /*yield*/, book_1.Book.findOne({ _id: id, created_by: user.email })];
             case 1:
                 book = _a.sent();
                 return [2 /*return*/, book];

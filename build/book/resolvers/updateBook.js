@@ -58,7 +58,7 @@ var updateBook = function (token, id, newTitle, newAuthor, newDescription, newCu
                 return [4 /*yield*/, book_1.Book.findOneAndUpdate({ _id: id }, bookProps)];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, book_1.Book.findOne({ _id: id, createdBy: user.email })];
+                return [4 /*yield*/, book_1.Book.findOne({ _id: id, created_by: user.email })];
             case 2:
                 updatedBook = _a.sent();
                 return [2 /*return*/, updatedBook];
