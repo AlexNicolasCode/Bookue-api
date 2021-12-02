@@ -8,7 +8,7 @@ Before start, select the env depedencies in a .env file.
 
 ```bash
 URI="MONGODB_URL"
-KEY="KEY_TO_ENCODE_JWT"
+KEY="KEY_TO_ENCODE"
 ```
 
 ## Getting Started

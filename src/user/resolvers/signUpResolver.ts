@@ -3,13 +3,13 @@ import { createToken } from "../tools/validadeUser"
 import { hashPassword } from "../tools/passwordEncoder"
 
 export const signUpUser = async (name, email, password) => {
-  const user = await User.findOne({ name: name, email: email, password: hashPassword(password) });
+  const passwordHash = await hashPassword(password);
+  const user = await User.findOne({ name: name, email: email, password: passwordHash });
 
   if (user) {
     return { token: null }
   }
 
-  await User.create({ name: name, email: email, password: hashPassword(password) })
-
-  return createToken( name, email )
+  await User.create({ name: name, email: email, password: passwordHash })
+  return createToken(name, email)
 }
