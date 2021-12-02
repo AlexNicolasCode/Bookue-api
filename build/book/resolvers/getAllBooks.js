@@ -48,10 +48,10 @@ var getAllBooks = function (token) { return __awaiter(void 0, void 0, void 0, fu
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, book_1.Book.find({ createdBy: user.email }).sort([['created_at', -1]])];
+                return [4 /*yield*/, book_1.Book.find({ created_by: user.email }).sort([['created_at', -1]])];
             case 1:
                 book = _a.sent();
-                return [2 /*return*/, book];
+                return [2 /*return*/, book.filter(function (book) { return book.created_by === user.email; })];
         }
     });
 }); };

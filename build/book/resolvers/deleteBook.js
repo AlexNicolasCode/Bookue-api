@@ -48,7 +48,7 @@ var deleteBook = function (token, id) { return __awaiter(void 0, void 0, void 0,
                 if (!user) {
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, book_1.Book.findOneAndDelete({ _id: id, createdBy: user.email })];
+                return [4 /*yield*/, book_1.Book.findOneAndDelete({ _id: id, created_by: user.email })];
             case 1:
                 book = _a.sent();
                 return [2 /*return*/, book];

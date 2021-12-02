@@ -8,6 +8,6 @@ export const deleteBook = async (token, id) => {
     return
   }
 
-  const book = await Book.findOneAndDelete({ _id: id, createdBy: user.email });
+  const book = await Book.findOneAndDelete({ _id: id, created_by: user.email });
   return book
 }

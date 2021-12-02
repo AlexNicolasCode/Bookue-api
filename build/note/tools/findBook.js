@@ -41,7 +41,7 @@ var book_1 = require("../../book/schema/book");
 var findBook = function (id, email) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, book_1.Book.findOne({ _id: id, createdBy: email })];
+            case 0: return [4 /*yield*/, book_1.Book.findOne({ _id: id, created_by: email })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
