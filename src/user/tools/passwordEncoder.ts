@@ -1,5 +1,5 @@
-import { createHash } from "crypto";
+import { createHmac } from "crypto";
 
 export const hashPassword = (password: string) => {
-	return createHash('sha256').update(`${password}${process.env.PASSWORD_KEY}`).digest('hex');
+	return createHmac("sha256", process.env.KEY_PASSWORD).update(password).digest('hex');
 } 
