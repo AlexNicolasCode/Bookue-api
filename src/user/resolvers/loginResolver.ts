@@ -3,7 +3,8 @@ import { createToken } from "../tools/validadeUser";
 import { hashPassword } from "../tools/passwordEncoder";
 
 export const loginUser = async (email: string, password: string) => {
-  const user = await User.findOne({ email: email, password: hashPassword(password) });
+  const passwordHash = await hashPassword(password);
+  const user = await User.findOne({ email: email, password: passwordHash });
 
   if (!user) {
     return { token: null }
