@@ -9,5 +9,5 @@ export const getAllBooks = async (token) => {
   }
 
   const book = await Book.find({ created_by: user.email }).sort([['created_at', -1]]);
-  return book
+  return book.filter((book) => book.created_by === user.email)
 }
