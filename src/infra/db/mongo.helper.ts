@@ -24,6 +24,13 @@ export const MongoHelper = {
         }
     },
 
+    
+    async deleteManyOn(schemaName: string, colletionName: string): Promise<void> {
+        const schema = await this.findSchema(schemaName);
+        const findModel = await this.findModel(colletionName, schema);
+        await findModel.deleteMany({})
+    },
+
     async findSchema (schemaName: string): Promise<mongoose.Schema> {
         try {
             const schemaMapper = {
@@ -36,8 +43,8 @@ export const MongoHelper = {
         };
     },
 
-    async findModel (modelName: string, schema: mongoose.Schema ): Promise<any> {
-        const model = mongoose.model(modelName, schema);
+    async findModel (colletionName: string, schema: mongoose.Schema ): Promise<any> {
+        const model = mongoose.model(colletionName, schema);
         return model;
     },
 
