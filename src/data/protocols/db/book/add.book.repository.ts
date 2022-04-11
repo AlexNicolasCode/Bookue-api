@@ -1,9 +1,9 @@
-import { AddBook } from "@/domain/usecases";
+import { BookModel } from "@/domain/models";
 
 export interface AddBookRepository {
-    add: (data: AddBookRepository.Params) => Promise<void>;
+    add: (bookData: AddBookRepository.Params) => Promise<void>;
 };
 
 export namespace AddBookRepository {
-    export type Params = AddBook
+    export type Params = BookModel
 }
