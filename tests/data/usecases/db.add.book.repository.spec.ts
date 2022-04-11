@@ -1,16 +1,6 @@
-import { AddBookRepository } from "@/data/protocols";
-import { BookModel } from "@/domain/models";
-import { AddBook } from "@/domain/usecases";
+import { DbAddBook } from "@/data/usecases";
 import { mockBookModel } from "tests/domain/mocks";
 import { AddBookRepositorySpy } from "../mocks";
-
-export class DbAddBook implements AddBook {
-    constructor (private readonly addBookRepository: AddBookRepository) {}
-
-    async add (bookData: BookModel): Promise<void> {
-        await this.addBookRepository.add(bookData)
-    };
-}
 
 describe('DbAddBook', () => {
     test('should send correct bookData', () => {
