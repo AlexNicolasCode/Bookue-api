@@ -14,10 +14,10 @@ export const MongoHelper = {
         !mongoose.connection ? console.log("Error connecting db") : console.log("Db connected successfully")
     },
     
-    async addOne (colletion: mongoose.Schema, data): Promise<void> {
+    async addOne (schemaName: string, colletionName: string, data): Promise<void> {
         try {
-            const schema = await this.findSchema(colletion);
-            const model = await this.findModel('books', schema);
+            const schema = await this.findSchema(schemaName);
+            const model = await this.findModel(colletionName, schema);
             await model.create(data);
         } catch (e) {
             throw new Error(e);
@@ -41,5 +41,5 @@ export const MongoHelper = {
         return model;
     },
 
-    
+
 }
