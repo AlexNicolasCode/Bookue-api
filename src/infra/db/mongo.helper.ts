@@ -14,7 +14,7 @@ export const MongoHelper = {
         !mongoose.connection ? console.log("Error connecting db") : console.log("Db connected successfully")
     },
     
-    async addOne (schemaName: string, colletionName: string, data): Promise<void> {
+    async addOneOn (schemaName: string, colletionName: string, data): Promise<void> {
         try {
             const schema = await this.findSchema(schemaName);
             const model = await this.findModel(colletionName, schema);
