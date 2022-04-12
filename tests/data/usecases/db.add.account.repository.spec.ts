@@ -1,5 +1,4 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, Hasher } from "@/data/protocols";
-import { AddAccount } from "@/domain/usecases";
+import { DbAddAccount } from "@/data/usecases";
 import { mockAddAccountParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AddAccountRepositorySpy, CheckAccountByEmailRepositorySpy, HasherSpy } from "../mocks";
@@ -22,24 +21,7 @@ const makeSut = (): SutTypes => {
         addAccountRepository,
         checkAccountByEmailRepository
     }
-} 
-
-class DbAddAccount implements AddAccount {
-    constructor (
-        private readonly hasher: Hasher,
-        private readonly addAccountRepository: AddAccountRepository,
-        private readonly checkAccountByEmailRepository: CheckAccountByEmailRepository
-        ) {}
-        
-        async add (accountData: AddAccount.Params): Promise<AddAccount.Result> {
-            const hasAccount = await this.checkAccountByEmailRepository.checkByEmail(accountData.email) 
-            if (!hasAccount) {
-                const hashedPassword = await this.hasher.hash(accountData.password)
-                const isAdded = await this.addAccountRepository.add({ ...accountData, password: hashedPassword })
-                return isAdded
-            }
-        }
-    }
+}
 
 describe('DbAddAccount', () => {
     test('should pass correct param to checkAccountByEmailRepository', async () => {
