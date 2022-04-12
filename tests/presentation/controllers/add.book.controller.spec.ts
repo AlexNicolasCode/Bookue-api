@@ -1,4 +1,4 @@
-import { badRequest, noContent, serverError } from "@/presentation/helpers";
+import { badRequest, ok, serverError } from "@/presentation/helpers";
 import { mockBookModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AddBookSpy, ValidationSpy } from "../mocks";
@@ -72,12 +72,12 @@ describe('AddBookController', () => {
         expect(httpResponse).toEqual(serverError(new Error()))
     })
     
-    test('should return noContent on success', async () => {
+    test('should return book data on success', async () => {
         const { sut } = makeSut()
         const request = mockRequest()
 
         const httpResponse = await sut.handle(request)
 
-        expect(httpResponse).toEqual(noContent())
+        expect(httpResponse).toEqual(ok({ ...request, created_at: new Date() }))
     })
 })
