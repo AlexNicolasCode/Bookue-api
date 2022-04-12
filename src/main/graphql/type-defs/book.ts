@@ -1,8 +1,12 @@
 import { gql } from "apollo-server-express";
 
 export default gql`
-    extends type Mutation {
-        addBook: [Book!]!
+    type Query {
+        addBook (title: String!, author: String!, description: String!, currentPage: String!, pages: String!): Book!
+    }
+
+    type Mutation {
+        addBook (title: String!, author: String!, description: String!, currentPage: String!, pages: String!): Book!
     }
 
     type Book {
