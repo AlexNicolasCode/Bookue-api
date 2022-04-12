@@ -1,6 +1,6 @@
 import { BookModel } from "@/domain/models";
 import { AddBook } from "@/domain/usecases";
-import { badRequest } from "@/presentation/helpers";
+import { badRequest, serverError } from "@/presentation/helpers";
 import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
 import { mockBookModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -32,12 +32,18 @@ export class AddBookController implements Controller {
     ) {}
 
     async handle (request: AddBookController.Request): Promise<HttpReponse> {
-        const bookData = {
-            ...request,
-        }
-        const error = await this.validation.validate(bookData)
-        if (error) {
-            return badRequest(error)
+        try {
+            const error = await this.validation.validate(request)
+            if (error) {
+                return badRequest(error)
+            }
+            const book = {
+                ...request,
+                created_at: new Date()
+            }
+            await this.addBook.add(book)
+        } catch (e) {
+            return serverError(e)
         }
         return {
             statusCode: 200,
@@ -68,5 +74,15 @@ describe('AddBookController', () => {
         const promise = sut.handle(request)
 
         expect(promise).rejects.toThrowError()
+    })
+    
+    test('should return 500 if addBook fails', async () => {
+        const { sut, addBook } = makeSut()
+        jest.spyOn(addBook, 'add').mockImplementationOnce(throwError)
+        const request = mockRequest()
+
+        const httpResponse = await sut.handle(request)
+
+        expect(httpResponse).toEqual(serverError(new Error()))
     })
 })
