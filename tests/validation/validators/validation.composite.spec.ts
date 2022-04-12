@@ -1,23 +1,10 @@
 import { MissingParamError } from "@/presentation/errors";
-import { Validation } from "@/presentation/protocols";
 import { ValidationSpy } from "tests/presentation/mocks";
+import { ValidationComposite } from "@/validation/validators";
 
 import faker from "@faker-js/faker";
 
 const field = faker.random.word()
-
-export class ValidationComposite implements Validation {
-    constructor (private readonly validation: Validation[]) {}
-
-    validate (input: any): Error {
-        for (const validation of this.validation) {
-            const error = validation.validate(input)
-            if (error) {
-                return error
-            }
-        }
-    }
-}
 
 type SutType = {
     sut: ValidationComposite
