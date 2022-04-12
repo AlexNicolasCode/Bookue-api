@@ -1,22 +1,25 @@
-import { CheckAccountByEmailRepository, Hasher } from "@/data/protocols";
+import { AddAccountRepository, CheckAccountByEmailRepository, Hasher } from "@/data/protocols";
 import { AddAccount } from "@/domain/usecases";
 import { mockAddAccountParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { CheckAccountByEmailRepositorySpy, HasherSpy } from "../mocks";
+import { AddAccountRepositorySpy, CheckAccountByEmailRepositorySpy, HasherSpy } from "../mocks";
 
 type SutTypes = {
     sut: DbAddAccount
     hasher: HasherSpy
+    addAccountRepository: AddAccountRepositorySpy
     checkAccountByEmailRepository: CheckAccountByEmailRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
     const hasher = new HasherSpy()
+    const addAccountRepository = new AddAccountRepositorySpy()
     const checkAccountByEmailRepository = new CheckAccountByEmailRepositorySpy()
-    const sut = new DbAddAccount(hasher, checkAccountByEmailRepository)
+    const sut = new DbAddAccount(hasher, addAccountRepository, checkAccountByEmailRepository)
     return {
         sut,
         hasher,
+        addAccountRepository,
         checkAccountByEmailRepository
     }
 } 
@@ -24,14 +27,16 @@ const makeSut = (): SutTypes => {
 class DbAddAccount implements AddAccount {
     constructor (
         private readonly hasher: Hasher,
+        private readonly addAccountRepository: AddAccountRepository,
         private readonly checkAccountByEmailRepository: CheckAccountByEmailRepository
         ) {}
         
         async add (accountData: AddAccount.Params): Promise<AddAccount.Result> {
             const hasAccount = await this.checkAccountByEmailRepository.checkByEmail(accountData.email) 
             if (!hasAccount) {
-                await this.hasher.hash(accountData.password)
-                return true
+                const hashedPassword = await this.hasher.hash(accountData.password)
+                const isAdded = await this.addAccountRepository.add({ ...accountData, password: hashedPassword })
+                return isAdded
             }
         }
     }
@@ -73,5 +78,14 @@ describe('DbAddAccount', () => {
         const promise = sut.add(addAccountParams)
 
         expect(promise).rejects.toThrowError()
+    })
+
+    test('should pass correct param to AddAccountRepository', async () => {
+        const { sut, hasher, addAccountRepository } = makeSut()  
+        const addAccountParams = mockAddAccountParams()
+
+        await sut.add(addAccountParams)
+
+        expect({ ...addAccountParams, password: hasher.result }).toStrictEqual(addAccountRepository.params)
     })
 })
