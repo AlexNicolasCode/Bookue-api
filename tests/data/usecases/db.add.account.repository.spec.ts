@@ -99,6 +99,16 @@ describe('DbAddAccount', () => {
         expect(promise).rejects.toThrowError()
     })
 
+    test('should return false if AddAccountRepository fails to save account', async () => {
+        const { sut, addAccountRepository } = makeSut()  
+        const addAccountParams = mockAddAccountParams()
+        addAccountRepository.result = false
+
+        const result = await sut.add(addAccountParams)
+
+        expect(result).toBe(false)
+    })
+
     test('should return true on success', async () => {
         const { sut } = makeSut()  
         const addAccountParams = mockAddAccountParams()
