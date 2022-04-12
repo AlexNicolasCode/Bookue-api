@@ -19,15 +19,40 @@ export class ValidationComposite implements Validation {
     }
 }
 
+type SutType = {
+    sut: ValidationComposite
+    validateSpies: ValidationSpy[]
+}
+
+const makeSut = (): SutType => {
+    const validateSpies = [
+        new ValidationSpy(),
+        new ValidationSpy(),
+    ] 
+    const sut = new ValidationComposite(validateSpies)
+    return {
+        sut,
+        validateSpies,
+    }
+}
+
 describe('ValidationComposite', () => {
     test('should return an error if any validation fails', () => {
-        const validateSpies = [
-            new ValidationSpy(),
-            new ValidationSpy(),
-        ] 
-        const sut = new ValidationComposite(validateSpies)
+        const { sut, validateSpies } = makeSut()
         validateSpies[1].error = new MissingParamError(field)
+
         const error = sut.validate({ [field]: faker.random.word() })
+
         expect(error).toEqual(validateSpies[1].error)
+    })
+
+    test('should return the first error if more than one validation fails', () => {
+        const { sut, validateSpies } = makeSut()
+        validateSpies[0].error = new Error()
+        validateSpies[1].error = new MissingParamError(field)
+
+        const error = sut.validate({ [field]: faker.random.word() })
+
+        expect(error).toEqual(validateSpies[0].error)
     })
 })
