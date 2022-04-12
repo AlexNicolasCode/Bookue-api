@@ -22,22 +22,22 @@ describe('AccountMongoRepository', () => {
         expect(count).toBe(1)
     })
 
-    test('should return true when found an account with checkByEmail', async () => {
+    test('should return true when account exists', async () => {
         const sut = new AccountMongoRepository();
         const accountData = mockAddAccountParams();
 
         await sut.add(accountData);        
-        const hasAccount = await sut.checkByEmail(accountData.email);
+        const result = await sut.checkByEmail(accountData.email);
         
-        expect(hasAccount).toBe(true)
+        expect(result).toBe(true)
     })
 
     test('should return false when account not exists', async () => {
         const sut = new AccountMongoRepository();
         const accountData = mockAddAccountParams();
 
-        const hasAccount = await sut.checkByEmail(accountData.email);
+        const result = await sut.checkByEmail(accountData.email);
         
-        expect(hasAccount).toBe(false)
+        expect(result).toBe(false)
     })
 })
