@@ -55,4 +55,12 @@ describe('ValidationComposite', () => {
 
         expect(error).toEqual(validateSpies[0].error)
     })
+
+    test('should not return on success', () => {
+        const { sut } = makeSut()
+
+        const result = sut.validate({ [field]: faker.random.word() })
+
+        expect(result).toBeUndefined()
+    })
 })
