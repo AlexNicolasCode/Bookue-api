@@ -61,6 +61,16 @@ describe('DbAddAccount', () => {
         expect(promise).rejects.toThrowError()
     })
 
+    test('should return false if checkAccountByEmailRepository found an account', async () => {
+        const { sut, checkAccountByEmailRepository } = makeSut()  
+        const addAccountParams = mockAddAccountParams()
+        checkAccountByEmailRepository.result = true
+
+        const result = await sut.add(addAccountParams)
+
+        expect(result).toBeFalsy()
+    })
+
     test('should pass correct param to Hasher', async () => {
         const { sut, hasher } = makeSut()  
         const addAccountParams = mockAddAccountParams()
