@@ -1,6 +1,7 @@
 import { Hasher } from "@/data/protocols";
 
 import * as bcrypt from 'bcrypt'
+import { throwError } from "tests/domain/mocks/test.helpers";
 
 type SutTypes = {
     sut: BcryptAdapter,
@@ -46,5 +47,14 @@ describe('BcryptAdapter', () => {
         const hash = await sut.hash('any_value')
 
         expect(hash).toBe('hash')
+    })
+
+    test('should throw if hash throws', async () => {
+        const { sut } = makeSut()
+        jest.spyOn(bcrypt, 'hash').mockImplementationOnce(throwError)
+           
+        const promise = sut.hash('any_value')
+
+        expect(promise).rejects.toThrowError()
     })
 })
