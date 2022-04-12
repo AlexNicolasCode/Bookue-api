@@ -1,4 +1,5 @@
 import { Book } from "@/book/schema/book";
+import { AddAccount } from "@/domain/usecases";
 import { User } from "@/user/schema/user";
 import * as mongoose from "mongoose";
 
@@ -22,6 +23,12 @@ export const MongoHelper = {
         } catch (e) {
             throw new Error(e);
         }
+    },
+
+    async findUserByEmail (email: string): Promise<AddAccount.Params> {
+        const user = await this.findModel('user')
+        const account = await user.findOne({ email })
+        return account
     },
     
     async countDocuments (modelName: string, data: any): Promise<number> {
