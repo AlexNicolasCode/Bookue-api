@@ -14,40 +14,31 @@ export const MongoHelper = {
         !mongoose.connection ? console.log("Error connecting db") : console.log("Db connected successfully")
     },
     
-    async addOneOn (schemaName: string, colletionName: string, data): Promise<boolean> {
+    async addOneOn (modelName: string, data): Promise<boolean> {
         try {
-            const schema = await this.findSchema(schemaName);
-            const model = await this.findModel(colletionName, schema);
+            const model = await this.findModel(modelName);
             await model.create(data);
             return true
         } catch (e) {
             throw new Error(e);
         }
     },
-
     
-    async deleteManyOn(schemaName: string, colletionName: string): Promise<void> {
-        const schema = await this.findSchema(schemaName);
-        const findModel = await this.findModel(colletionName, schema);
+    async deleteManyOn(modelName: string): Promise<void> {
+        const findModel = await this.findModel(modelName);
         await findModel.deleteMany({})
     },
 
-    async findSchema (schemaName: string): Promise<mongoose.Schema> {
+    async findModel (modelName: string): Promise<any> {
         try {
-            const schemaMapper = {
+            const modelMapper = {
                 'book': Book,
                 'user': User,
             };
-            return schemaMapper[schemaName];
+            const model = modelMapper[modelName];
+            return model
         } catch (e) {
             throw new Error(e);
         };
     },
-
-    async findModel (colletionName: string, schema: mongoose.Schema ): Promise<any> {
-        const model = mongoose.model(colletionName, schema);
-        return model;
-    },
-
-
 }
