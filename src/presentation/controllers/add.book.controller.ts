@@ -1,6 +1,6 @@
 import { BookModel } from "@/domain/models"
 import { AddBook } from "@/domain/usecases"
-import { badRequest, noContent, serverError } from "../helpers"
+import { badRequest, ok, serverError } from "../helpers"
 import { Controller, HttpReponse, Validation } from "../protocols"
 
 export class AddBookController implements Controller {
@@ -20,7 +20,7 @@ export class AddBookController implements Controller {
                 created_at: new Date()
             }
             await this.addBook.add(book)
-            return noContent()
+            return ok(book)
         } catch (e) {
             return serverError(e)
         }
