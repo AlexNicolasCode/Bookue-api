@@ -88,4 +88,14 @@ describe('DbAddAccount', () => {
 
         expect({ ...addAccountParams, password: hasher.result }).toStrictEqual(addAccountRepository.params)
     })
+
+    test('should throw if AddAccountRepository throws', async () => {
+        const { sut, addAccountRepository } = makeSut()  
+        const addAccountParams = mockAddAccountParams()
+        jest.spyOn(addAccountRepository, 'add').mockImplementationOnce(throwError)
+
+        const promise = sut.add(addAccountParams)
+
+        expect(promise).rejects.toThrowError()
+    })
 })
