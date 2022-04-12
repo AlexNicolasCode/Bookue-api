@@ -31,4 +31,13 @@ describe('AccountMongoRepository', () => {
         
         expect(hasAccount).toBe(true)
     })
+
+    test('should return false when account not exists', async () => {
+        const sut = new AccountMongoRepository();
+        const accountData = mockAddAccountParams();
+
+        const hasAccount = await sut.checkByEmail(accountData.email);
+        
+        expect(hasAccount).toBe(false)
+    })
 })
