@@ -68,12 +68,12 @@ describe('AddBookController', () => {
     
     test('should return 400 if Validation fails', async () => {
         const { sut, validation } = makeSut()
-        jest.spyOn(validation, 'validate').mockImplementationOnce(throwError)
+        validation.error = new Error()
         const request = mockRequest()
 
-        const promise = sut.handle(request)
+        const httpResponse = await sut.handle(request)
 
-        expect(promise).rejects.toThrowError()
+        expect(httpResponse).toEqual(badRequest(validation.error))
     })
     
     test('should return 500 if addBook fails', async () => {
