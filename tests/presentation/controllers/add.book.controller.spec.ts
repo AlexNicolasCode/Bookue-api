@@ -76,7 +76,16 @@ describe('AddBookController', () => {
         expect(httpResponse).toEqual(badRequest(validation.error))
     })
     
-    test('should return 500 if addBook fails', async () => {
+    test('should call AddBook with correct values', async () => {
+        const { sut, addBook } = makeSut()
+        const request = mockRequest()
+
+        await sut.handle(request)
+
+        expect(addBook.params).toEqual({ ...request, created_at: new Date() })
+    })
+    
+    test('should return 500 if AddBook fails', async () => {
         const { sut, addBook } = makeSut()
         jest.spyOn(addBook, 'add').mockImplementationOnce(throwError)
         const request = mockRequest()
