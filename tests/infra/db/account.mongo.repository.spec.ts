@@ -3,6 +3,7 @@ import { MongoHelper } from "@/infra";
 import { serverError } from "@/presentation/helpers";
 
 import env from "@/env";
+import { mockAddAccountParams } from "tests/domain/mocks";
 
 export class AccountMongoRepository implements AddAccountRepository {
     async add (accountData: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
@@ -22,5 +23,15 @@ describe('AccountMongoRepository', () => {
 
     beforeEach(async () => {
         await MongoHelper.deleteManyOn('user')
+    })
+
+    test('should add one only user', async () => {
+        const sut = new AccountMongoRepository();
+        const accountData = mockAddAccountParams();
+        
+        await sut.add(accountData);
+        const count = await MongoHelper.countDocuments('user', accountData);
+        
+        expect(count).toBe(1)
     })
 })
