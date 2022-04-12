@@ -26,4 +26,14 @@ describe('DbAddBook', () => {
         
         expect(addBookRepositorySpy.bookData).toBe(bookData);
     });
+    
+    test('should throw if addBookRepositorySpy throws', () => {
+        const { sut, addBookRepositorySpy } = makeSut();
+        jest.spyOn(addBookRepositorySpy, 'add').mockImplementationOnce(throwError)
+        const bookData = mockBookModel();
+
+        const promise = sut.add(bookData);
+
+        expect(promise).rejects.toThrow()
+    });
 })
