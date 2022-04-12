@@ -6,6 +6,8 @@ import { mockBookModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AddBookSpy, ValidationSpy } from "../mocks";
 
+import MockDate from 'mockdate';
+
 const mockRequest = (): AddBookController.Request => mockBookModel()
 
 type SutType = {
@@ -54,6 +56,14 @@ export namespace AddBookController {
 }
 
 describe('AddBookController', () => {
+    beforeAll(() => {
+        MockDate.set(new Date())
+    })
+
+    afterAll(() => {
+        MockDate.reset()
+    })
+
     test('should call Validation with correct values', async () => {
         const { sut, validation } = makeSut()
         const request = mockRequest()
