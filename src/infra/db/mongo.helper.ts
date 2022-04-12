@@ -24,6 +24,16 @@ export const MongoHelper = {
         }
     },
     
+    async countDocuments (modelName: string, data: any): Promise<number> {
+        try {
+            const model = await this.findModel(modelName);
+            const count = await model.countDocuments(data);
+            return count
+        } catch (e) {
+            throw new Error(e);
+        }
+    },
+    
     async deleteManyOn(modelName: string): Promise<void> {
         const findModel = await this.findModel(modelName);
         await findModel.deleteMany({})
