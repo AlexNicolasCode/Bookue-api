@@ -64,4 +64,14 @@ describe('DbAddAccount', () => {
 
         expect(addAccountParams.password).toBe(hasher.plaintext)
     })
+
+    test('should throw if Hasher throws', async () => {
+        const { sut, hasher } = makeSut()  
+        const addAccountParams = mockAddAccountParams()
+        jest.spyOn(hasher, 'hash').mockImplementationOnce(throwError)
+
+        const promise = sut.add(addAccountParams)
+
+        expect(promise).rejects.toThrowError()
+    })
 })
