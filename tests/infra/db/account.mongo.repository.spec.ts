@@ -21,4 +21,14 @@ describe('AccountMongoRepository', () => {
         
         expect(count).toBe(1)
     })
+
+    test('should return true when found an account with checkByEmail', async () => {
+        const sut = new AccountMongoRepository();
+        const accountData = mockAddAccountParams();
+
+        await sut.add(accountData);        
+        const hasAccount = await sut.checkByEmail(accountData.email);
+        
+        expect(hasAccount).toBe(true)
+    })
 })
