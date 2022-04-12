@@ -10,3 +10,8 @@ export const serverError = (error: Error): HttpReponse  => ({
     statusCode: 500,
     body: new ServerError(error.stack)
 })
+
+export const noContent = (): HttpReponse  => ({
+    statusCode: 204,
+    body: null
+})
