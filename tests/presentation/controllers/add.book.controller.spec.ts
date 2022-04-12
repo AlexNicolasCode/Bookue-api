@@ -1,12 +1,10 @@
-import { BookModel } from "@/domain/models";
-import { AddBook } from "@/domain/usecases";
 import { badRequest, noContent, serverError } from "@/presentation/helpers";
-import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
 import { mockBookModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AddBookSpy, ValidationSpy } from "../mocks";
 
 import MockDate from 'mockdate';
+import { AddBookController } from "@/presentation/controllers/add.book.controller";
 
 const mockRequest = (): AddBookController.Request => mockBookModel()
 
@@ -25,34 +23,6 @@ const makeSut = (): SutType => {
         addBook,
         validation,
     }
-}
-
-export class AddBookController implements Controller {
-    constructor (
-        private readonly validation: Validation,
-        private readonly addBook: AddBook,
-    ) {}
-
-    async handle (request: AddBookController.Request): Promise<HttpReponse> {
-        try {
-            const error = await this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            const book = {
-                ...request,
-                created_at: new Date()
-            }
-            await this.addBook.add(book)
-            return noContent()
-        } catch (e) {
-            return serverError(e)
-        }
-    }
-}
-
-export namespace AddBookController {
-    export type Request = BookModel
 }
 
 describe('AddBookController', () => {
