@@ -1,6 +1,7 @@
 import { CheckAccountByEmailRepository, Hasher } from "@/data/protocols";
 import { AddAccount } from "@/domain/usecases";
 import { mockAddAccountParams } from "tests/domain/mocks";
+import { throwError } from "tests/domain/mocks/test.helpers";
 import { CheckAccountByEmailRepositorySpy, HasherSpy } from "../mocks";
 
 type SutTypes = {
@@ -43,6 +44,16 @@ describe('DbAddAccount', () => {
         await sut.add(addAccountParams)
 
         expect(addAccountParams.email).toBe(checkAccountByEmailRepository.email)
+    })
+
+    test('should throw if checkAccountByEmailRepository throws', async () => {
+        const { sut, checkAccountByEmailRepository } = makeSut()  
+        const addAccountParams = mockAddAccountParams()
+        jest.spyOn(checkAccountByEmailRepository, 'checkByEmail').mockImplementationOnce(throwError)
+
+        const promise = sut.add(addAccountParams)
+
+        expect(promise).rejects.toThrowError()
     })
 
     test('should pass correct param to Hasher', async () => {
