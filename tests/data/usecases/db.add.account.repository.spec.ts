@@ -98,4 +98,13 @@ describe('DbAddAccount', () => {
 
         expect(promise).rejects.toThrowError()
     })
+
+    test('should return true on success', async () => {
+        const { sut } = makeSut()  
+        const addAccountParams = mockAddAccountParams()
+
+        const result = await sut.add(addAccountParams)
+
+        expect(result).toBe(true)
+    })
 })
