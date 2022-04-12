@@ -1,6 +1,6 @@
 import { BookModel } from "@/domain/models";
 import { AddBook } from "@/domain/usecases";
-import { badRequest, serverError } from "@/presentation/helpers";
+import { badRequest, noContent, serverError } from "@/presentation/helpers";
 import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
 import { mockBookModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -42,12 +42,9 @@ export class AddBookController implements Controller {
                 created_at: new Date()
             }
             await this.addBook.add(book)
+            return noContent()
         } catch (e) {
             return serverError(e)
-        }
-        return {
-            statusCode: 200,
-            body: '',
         }
     }
 }
@@ -93,5 +90,14 @@ describe('AddBookController', () => {
         const httpResponse = await sut.handle(request)
 
         expect(httpResponse).toEqual(serverError(new Error()))
+    })
+    
+    test('should return noContent on success', async () => {
+        const { sut } = makeSut()
+        const request = mockRequest()
+
+        const httpResponse = await sut.handle(request)
+
+        expect(httpResponse).toEqual(noContent())
     })
 })
