@@ -1,20 +1,7 @@
-import { AddAccountRepository } from "@/data/protocols";
-import { MongoHelper } from "@/infra";
-import { serverError } from "@/presentation/helpers";
-
-import env from "@/env";
+import { AccountMongoRepository, MongoHelper } from "@/infra";
 import { mockAddAccountParams } from "tests/domain/mocks";
 
-export class AccountMongoRepository implements AddAccountRepository {
-    async add (accountData: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
-        try {
-            const isAdded = await MongoHelper.addOneOn('user', accountData)
-            return isAdded
-        } catch (e) {
-            throw serverError(e)
-        }
-    }
-}
+import env from "@/env";
 
 describe('AccountMongoRepository', () => {
     beforeAll(async () => {
