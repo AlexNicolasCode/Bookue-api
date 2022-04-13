@@ -7,7 +7,9 @@
     "test": "jest --passWithNoTests --runInBand --no-cache --watch -c jest.unit.config.js",
     "dev": "ts-node-dev -r tsconfig-paths/register src/main/server.ts",
     "start": "node dist/src/main/server.js",
-    "build": "tsc"
+    "build": "tsc",
+    "mongo:up": "docker-compose up -d",
+    "mongo:stop": "docker-compose stop"
   },
   "author": "AlexNicolasCode",
   "license": "ISC",
