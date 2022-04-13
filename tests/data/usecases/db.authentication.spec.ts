@@ -13,7 +13,10 @@ class DbAuthentication implements Authentication {
     async auth (authenticationParams: Authentication.Params): Promise<Authentication.Result> {
         const account = await this.loadAccountByEmailRepository.loadByEmail(authenticationParams.email)
         if (account) {
-            await this.hashComparer.compare(authenticationParams.password, account.password)
+            const isValidPassword = await this.hashComparer.compare(authenticationParams.password, account.password)
+            if (isValidPassword) {
+                return 
+            }
         }
         return null
     }
@@ -84,5 +87,15 @@ describe('DbAuthentication', () => {
         const promise = sut.auth(authenticationParams)
 
         expect(promise).rejects.toThrowError()
+    })
+    
+    test('should return null if HashComparer returns false', async () => {
+        const { sut, hashComparerSpy } = makeSut()
+        const authenticationParams = mockAuthenticationParams()
+        hashComparerSpy.isValid = false
+
+        const response = await sut.auth(authenticationParams)
+
+        expect(response).toBeNull()       
     })
 })
