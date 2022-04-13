@@ -1,13 +1,14 @@
-import { HashComparer, LoadAccountByEmailRepository } from "@/data/protocols";
+import { Encrypter, HashComparer, LoadAccountByEmailRepository } from "@/data/protocols";
 import { Authentication } from "@/domain/usecases";
 import { mockAuthenticationParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { HashComparerSpy, LoadAccountByEmailRepositorySpy } from "../mocks";
+import { EncrypterSpy, HashComparerSpy, LoadAccountByEmailRepositorySpy } from "../mocks";
 
 class DbAuthentication implements Authentication {
     constructor (
         private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
-        private readonly hashComparer: HashComparer
+        private readonly hashComparer: HashComparer,
+        private readonly encrypter: Encrypter,
     ) {}
 
     async auth (authenticationParams: Authentication.Params): Promise<Authentication.Result> {
@@ -15,7 +16,8 @@ class DbAuthentication implements Authentication {
         if (account) {
             const isValidPassword = await this.hashComparer.compare(authenticationParams.password, account.password)
             if (isValidPassword) {
-                return 
+                await this.encrypter.encrypt(account.id)
+                return
             }
         }
         return null
@@ -26,16 +28,19 @@ type SutTypes = {
     sut: DbAuthentication
     loadAccountByEmailRepositorySpy: LoadAccountByEmailRepositorySpy
     hashComparerSpy: HashComparerSpy
+    encrypterSpy: EncrypterSpy
 }
 
 const makeSut = (): SutTypes => {
     const hashComparerSpy = new HashComparerSpy()
+    const encrypterSpy = new EncrypterSpy()
     const loadAccountByEmailRepositorySpy = new LoadAccountByEmailRepositorySpy() 
-    const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy)
+    const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy, encrypterSpy)
     return { 
         sut,
         loadAccountByEmailRepositorySpy,
         hashComparerSpy,
+        encrypterSpy,
     }
 }
 
@@ -89,13 +94,12 @@ describe('DbAuthentication', () => {
         expect(promise).rejects.toThrowError()
     })
     
-    test('should return null if HashComparer returns false', async () => {
-        const { sut, hashComparerSpy } = makeSut()
+    test('should call Encrypter with correct account id', async () => {
+        const { sut, loadAccountByEmailRepositorySpy, encrypterSpy } = makeSut()
         const authenticationParams = mockAuthenticationParams()
-        hashComparerSpy.isValid = false
 
-        const response = await sut.auth(authenticationParams)
+        await sut.auth(authenticationParams)
 
-        expect(response).toBeNull()       
+        expect(loadAccountByEmailRepositorySpy.result.id).toBe(encrypterSpy.plaintext)       
     })
 })
