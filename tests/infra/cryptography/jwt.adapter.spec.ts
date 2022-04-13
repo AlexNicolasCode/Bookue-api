@@ -1,16 +1,8 @@
 
-import { Encrypter } from "@/data/protocols";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 import * as jwt from "jsonwebtoken";
-
-class JwtAdapter implements Encrypter {
-    constructor (private readonly secret: string) {}
-
-    async encrypt (plaintext: string): Promise<string> {
-        return jwt.sign({ id: plaintext }, this.secret)
-    }
-}
+import { JwtAdapter } from "@/infra/cryptography/jwt.adapter";
 
 jest.mock('jsonwebtoken', () => ({
     async sign (): Promise<string> {
