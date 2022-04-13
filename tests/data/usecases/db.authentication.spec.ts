@@ -8,8 +8,11 @@ class DbAuthentication implements Authentication {
     constructor (private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository) {}
 
     async auth (authenticationParams: Authentication.Params): Promise<Authentication.Result> {
-        await this.loadAccountByEmailRepository.loadByEmail(authenticationParams.email)
-        return
+        const account = await this.loadAccountByEmailRepository.loadByEmail(authenticationParams.email)
+        if (account) {
+            
+        }
+        return null
     }
 }
 
@@ -45,5 +48,15 @@ describe('DbAuthentication', () => {
         const promise = sut.auth(authenticationParams)
 
         expect(promise).rejects.toThrowError()
+    })
+
+    test('should return null if LoadAccountByEmailRepository returns null', async () => {
+        const { sut, loadAccountByEmailRepositorySpy } = makeSut()
+        loadAccountByEmailRepositorySpy.result = null
+        const authenticationParams = mockAuthenticationParams()
+
+        const response = await sut.auth(authenticationParams)
+
+        expect(response).toBeNull()
     })
 })
