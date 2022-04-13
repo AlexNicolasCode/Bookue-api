@@ -31,7 +31,7 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
     }
 
     async loadByEmail (email: string): Promise<LoadAccountByEmailRepository.Result> {
-        this.email
+        this.email = email
         return this.result
     }
 }
