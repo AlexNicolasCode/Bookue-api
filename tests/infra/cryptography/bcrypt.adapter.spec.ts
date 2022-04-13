@@ -1,7 +1,7 @@
-import { Hasher } from "@/data/protocols";
+import { BcryptAdapter } from "@/infra";
+import { throwError } from "tests/domain/mocks/test.helpers";
 
 import * as bcrypt from 'bcrypt'
-import { throwError } from "tests/domain/mocks/test.helpers";
 
 type SutTypes = {
     sut: BcryptAdapter,
@@ -14,14 +14,6 @@ const makeSut = (): SutTypes => {
     return {
         sut,
         salt
-    }
-}
-
-class BcryptAdapter implements Hasher {
-    constructor (private readonly salt: number) {}
-
-    async hash (plaintext: string): Promise<string> {
-        return bcrypt.hash(plaintext, this.salt)
     }
 }
 
