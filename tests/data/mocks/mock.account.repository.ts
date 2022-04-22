@@ -27,6 +27,7 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
     result = {
         id: faker.datatype.uuid(),
         name: faker.name.findName(),
+        email: faker.internet.email(),
         password: faker.internet.password(),
     }
 
