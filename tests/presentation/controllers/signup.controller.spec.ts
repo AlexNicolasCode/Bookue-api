@@ -1,12 +1,14 @@
+import { AddAccount } from "@/domain/usecases";
 import { MissingParamError } from "@/presentation/errors";
 import { badRequest } from "@/presentation/helpers";
 import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
+import { AddAccountSpy, ValidationSpy } from "../mocks";
+
 import faker from "@faker-js/faker";
-import { throwError } from "tests/domain/mocks/test.helpers";
-import { ValidationSpy } from "../mocks";
 
 export class SignUpController implements Controller {
     constructor (
+        private addAccount: AddAccount,
         private validation: Validation,
     ) {}
 
@@ -16,6 +18,12 @@ export class SignUpController implements Controller {
             if (error) {
                 return badRequest(error)
             }
+            const { name, email, password } = request
+            await this.addAccount.add({
+                name,
+                email,
+                password
+            })
         } catch (e) {}
     }
 }
@@ -42,14 +50,17 @@ namespace SignUpController {
 type SutType = {
     sut: SignUpController,
     validationSpy: ValidationSpy,
+    addAccountSpy: AddAccountSpy
 }
 
 const makeSut = (): SutType => {
     const validationSpy = new ValidationSpy()
-    const sut = new SignUpController(validationSpy)
+    const addAccountSpy = new AddAccountSpy()
+    const sut = new SignUpController(addAccountSpy, validationSpy)
     return {
         sut,
         validationSpy,
+        addAccountSpy,
     }
 }
 
@@ -70,5 +81,18 @@ describe('SignUpController', () => {
         await sut.handle(fakeRequest)
 
         expect(validationSpy.input).toStrictEqual(fakeRequest)
+    })
+
+    test('should call AddAccount with correct values', async () => {
+        const { sut, addAccountSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        await sut.handle(fakeRequest)
+
+        expect(addAccountSpy.params).toStrictEqual({
+            name: fakeRequest.name,
+            email: fakeRequest.email,
+            password: fakeRequest.password 
+        })
     })
 })
