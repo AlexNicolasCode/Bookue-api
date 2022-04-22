@@ -98,6 +98,16 @@ describe('SignUpController', () => {
         expect(validationSpy.input).toStrictEqual(fakeRequest)
     })
 
+    test('should throw if Validation throws', async () => {
+        const { sut, validationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+        jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse).toStrictEqual(serverError(new Error()))
+    })
+
     test('should call AddAccount with correct values', async () => {
         const { sut, addAccountSpy, } = makeSut()
         const fakeRequest = mockRequest()
