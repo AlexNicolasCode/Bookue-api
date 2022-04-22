@@ -61,7 +61,7 @@ export const MongoHelper = {
 
     async updateAccessToken (id: string, token: string): Promise<void> {
         try {
-            const model = this.findModel('user')
+            const model = await this.findModel('user')
             await model.findOneAndUpdate({ id: id }, {
                 accessToken: token
             })
