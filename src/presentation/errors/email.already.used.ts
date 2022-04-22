@@ -1,6 +1,6 @@
 export class EmailAlreadyUsed extends Error {
-    constructor (paramName: string) {
-        super(`Email Already Used: ${paramName}`)
+    constructor () {
+        super(`Email Already Used`)
         this.name = 'EmailAlreadyUsed'
     }
 } 
