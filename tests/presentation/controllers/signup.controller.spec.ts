@@ -1,44 +1,10 @@
-import { AddAccount, Authentication } from "@/domain/usecases";
 import { EmailAlreadyUsed, MissingParamError } from "@/presentation/errors";
 import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers";
-import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
 import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from "../mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 import faker from "@faker-js/faker";
-
-export class SignUpController implements Controller {
-    constructor (
-        private readonly addAccount: AddAccount,
-        private readonly validation: Validation,
-        private readonly authentication: Authentication,
-    ) {}
-
-    async handle (request: any): Promise<HttpReponse> {
-        try {
-            const error = await this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            const { name, email, password } = request
-            const isValid = await this.addAccount.add({
-                name,
-                email,
-                password,
-            })
-            if (!isValid) {
-                return forbidden(new EmailAlreadyUsed())
-            }
-            const authenticationModel = await this.authentication.auth({
-                email,
-                password,
-            })
-            return ok(authenticationModel)
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
+import { SignUpController } from "@/presentation/controllers";
 
 const mockRequest = (): SignUpController.Request => {
     const password = faker.internet.password()
