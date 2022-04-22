@@ -1,4 +1,4 @@
-import { Encrypter, HashComparer, LoadAccountByEmailRepository } from "@/data/protocols";
+import { Encrypter, HashComparer, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from "@/data/protocols";
 import { Authentication } from "@/domain/usecases";
 import { mockAuthenticationParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -16,8 +16,11 @@ class DbAuthentication implements Authentication {
         if (account) {
             const isValidPassword = await this.hashComparer.compare(authenticationParams.password, account.password)
             if (isValidPassword) {
-                await this.encrypter.encrypt(account.id)
-                return
+                const accessToken = await this.encrypter.encrypt(account.id)
+                return {
+                    accessToken,
+                    name: account.name
+                }
             }
         }
         return null
@@ -111,5 +114,17 @@ describe('DbAuthentication', () => {
         const promise = sut.auth(authenticationParams)
 
         expect(promise).rejects.toThrowError()       
+    })
+    
+    test('should return access token and user name on success', async () => {
+        const { sut, encrypterSpy, loadAccountByEmailRepositorySpy } = makeSut()
+        const authenticationParams = mockAuthenticationParams()
+
+        const result = await sut.auth(authenticationParams)
+
+        expect(result).toStrictEqual({
+            accessToken: encrypterSpy.ciphertext,
+            name: loadAccountByEmailRepositorySpy.result.name
+        })   
     })
 })
