@@ -31,13 +31,27 @@ describe('AccountMongoRepository', () => {
         
         expect(result).toBe(true)
     })
-
+    
     test('should return false when account not exists', async () => {
         const sut = new AccountMongoRepository();
         const accountData = mockAddAccountParams();
-
+        
         const result = await sut.checkByEmail(accountData.email);
         
         expect(result).toBe(false)
+    })
+    
+    test('should return data account on success', async () => {
+        const sut = new AccountMongoRepository();
+        const accountData = mockAddAccountParams();
+        
+        await sut.add(accountData);
+        const result = await sut.loadByEmail(accountData.email);
+        
+        expect({
+            name: result.name,
+            email: result.email,
+            password: result.password,
+        }).toStrictEqual(accountData)
     })
 })
