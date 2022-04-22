@@ -58,4 +58,15 @@ export const MongoHelper = {
             throw new Error(e);
         };
     },
+
+    async updateAccessToken (id: string, token: string): Promise<void> {
+        try {
+            const model = this.findModel('user')
+            await model.findOneAndUpdate({ id: id }, {
+                accessToken: token
+            })
+        } catch (e) {
+            new Error(e)
+        }
+    },
 }
