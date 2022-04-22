@@ -1,16 +1,16 @@
-import { AddAccount } from "@/domain/usecases";
+import { AddAccount, Authentication } from "@/domain/usecases";
 import { EmailAlreadyUsed, MissingParamError, ServerError } from "@/presentation/errors";
-import { badRequest, forbidden, serverError } from "@/presentation/helpers";
+import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers";
 import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
-import { AddAccountSpy, ValidationSpy } from "../mocks";
+import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from "../mocks";
 
 import faker from "@faker-js/faker";
-import { throwError } from "tests/domain/mocks/test.helpers";
 
 export class SignUpController implements Controller {
     constructor (
-        private addAccount: AddAccount,
-        private validation: Validation,
+        private readonly addAccount: AddAccount,
+        private readonly validation: Validation,
+        private readonly authentication: Authentication,
     ) {}
 
     async handle (request: any): Promise<HttpReponse> {
@@ -23,11 +23,16 @@ export class SignUpController implements Controller {
             const isValid = await this.addAccount.add({
                 name,
                 email,
-                password
+                password,
             })
             if (!isValid) {
                 return forbidden(new EmailAlreadyUsed())
             }
+            const authenticationModel = await this.authentication.auth({
+                email,
+                password,
+            })
+            return ok(authenticationModel)
         } catch (e) {}
     }
 }
@@ -52,19 +57,22 @@ namespace SignUpController {
 }
 
 type SutType = {
-    sut: SignUpController,
-    validationSpy: ValidationSpy,
+    sut: SignUpController
+    validationSpy: ValidationSpy
     addAccountSpy: AddAccountSpy
+    authenticationSpy: AuthenticationSpy
 }
 
 const makeSut = (): SutType => {
     const validationSpy = new ValidationSpy()
     const addAccountSpy = new AddAccountSpy()
-    const sut = new SignUpController(addAccountSpy, validationSpy)
+    const authenticationSpy = new AuthenticationSpy()
+    const sut = new SignUpController(addAccountSpy, validationSpy, authenticationSpy)
     return {
         sut,
         validationSpy,
         addAccountSpy,
+        authenticationSpy,
     }
 }
 
@@ -108,5 +116,17 @@ describe('SignUpController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse).toStrictEqual(forbidden(new EmailAlreadyUsed()))
+    })
+
+    test('should call Authentication with correct values', async () => {
+        const { sut, authenticationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        await sut.handle(fakeRequest)
+
+        expect(authenticationSpy.params).toStrictEqual({
+            email: fakeRequest.email,
+            password: fakeRequest.password,
+        })
     })
 })
