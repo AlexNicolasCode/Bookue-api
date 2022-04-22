@@ -1,5 +1,5 @@
 import { Book } from "@/book/schema/book";
-import { AddAccount } from "@/domain/usecases";
+import { LoadAccountByEmailRepository } from "@/data/protocols";
 import { User } from "@/user/schema/user";
 import * as mongoose from "mongoose";
 
@@ -25,7 +25,7 @@ export const MongoHelper = {
         }
     },
 
-    async findUserByEmail (email: string): Promise<AddAccount.Params> {
+    async findUserByEmail (email: string): Promise<LoadAccountByEmailRepository.Result> {
         const user = await this.findModel('user')
         const account = await user.findOne({ email })
         return account
