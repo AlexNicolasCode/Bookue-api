@@ -1,10 +1,11 @@
 import { AddAccount } from "@/domain/usecases";
-import { MissingParamError } from "@/presentation/errors";
-import { badRequest } from "@/presentation/helpers";
+import { EmailAlreadyUsed, MissingParamError, ServerError } from "@/presentation/errors";
+import { badRequest, forbidden, serverError } from "@/presentation/helpers";
 import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
 import { AddAccountSpy, ValidationSpy } from "../mocks";
 
 import faker from "@faker-js/faker";
+import { throwError } from "tests/domain/mocks/test.helpers";
 
 export class SignUpController implements Controller {
     constructor (
@@ -19,11 +20,14 @@ export class SignUpController implements Controller {
                 return badRequest(error)
             }
             const { name, email, password } = request
-            await this.addAccount.add({
+            const isValid = await this.addAccount.add({
                 name,
                 email,
                 password
             })
+            if (!isValid) {
+                return forbidden(new EmailAlreadyUsed())
+            }
         } catch (e) {}
     }
 }
@@ -94,5 +98,15 @@ describe('SignUpController', () => {
             email: fakeRequest.email,
             password: fakeRequest.password 
         })
+    })
+
+    test('should return 403 if AddAccount returns false', async () => {
+        const { sut, addAccountSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+        addAccountSpy.result = false
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse).toStrictEqual(forbidden(new EmailAlreadyUsed()))
     })
 })
