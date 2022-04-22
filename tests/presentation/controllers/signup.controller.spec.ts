@@ -129,4 +129,25 @@ describe('SignUpController', () => {
             password: fakeRequest.password,
         })
     })
+
+    test('should call Authentication with correct values', async () => {
+        const { sut, authenticationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        await sut.handle(fakeRequest)
+
+        expect(authenticationSpy.params).toStrictEqual({
+            email: fakeRequest.email,
+            password: fakeRequest.password,
+        })
+    })
+
+    test('should return 200 if valid data is provided', async () => {
+        const { sut, authenticationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse).toStrictEqual(ok(authenticationSpy.result))
+    })
 })
