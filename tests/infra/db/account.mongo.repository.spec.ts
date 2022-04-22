@@ -2,6 +2,7 @@ import { AccountMongoRepository, MongoHelper } from "@/infra";
 import { mockAddAccountParams } from "tests/domain/mocks";
 
 import env from "@/env";
+import faker from "@faker-js/faker";
 
 describe('AccountMongoRepository', () => {
     beforeAll(async () => {
@@ -53,5 +54,19 @@ describe('AccountMongoRepository', () => {
             email: result.email,
             password: result.password,
         }).toStrictEqual(accountData)
+    })
+    
+    test('should call updateAccessToken to update token on success', async () => {
+        const sut = new AccountMongoRepository();
+        const accountDataMock = mockAddAccountParams();
+        const token = faker.datatype.uuid();
+        
+        await sut.add(accountDataMock);
+        const account = await MongoHelper.findUserByEmail(accountDataMock.email)
+        expect(account.accessToken).toBeFalsy()
+        await sut.updateAccessToken(account.id, token);        
+        const accountAfterUpdateAccessToken = await MongoHelper.findUserByEmail(accountDataMock.email)
+        
+        expect(accountAfterUpdateAccessToken.accessToken).toBe(token)
     })
 })
