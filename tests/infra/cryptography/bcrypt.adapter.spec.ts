@@ -20,6 +20,10 @@ const makeSut = (): SutTypes => {
 jest.mock('bcrypt', () => ({
     async hash (): Promise<string> {
         return 'hash'
+    },
+
+    async compare (): Promise<boolean> {
+        return true
     }
 }))
 
@@ -53,6 +57,13 @@ describe('BcryptAdapter', () => {
     })
 
     describe('compare method', () => {
-
+        test('should call compare with correct values', async () => {
+            const { sut } = makeSut()
+            const compareSpy = jest.spyOn(bcrypt, 'compare')
+            
+            await sut.compare('any_value', 'any_hash')
+        
+            expect(compareSpy).toHaveBeenCalledWith('any_value', 'any_hash')
+        })
     })
 })
