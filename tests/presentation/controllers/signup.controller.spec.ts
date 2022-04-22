@@ -62,4 +62,13 @@ describe('SignUpController', () => {
 
         expect(httpResponse).toStrictEqual(badRequest(validationSpy.error))
     })
+
+    test('should call Validation with correct values', async () => {
+        const { sut, validationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        await sut.handle(fakeRequest)
+
+        expect(validationSpy.input).toStrictEqual(fakeRequest)
+    })
 })
