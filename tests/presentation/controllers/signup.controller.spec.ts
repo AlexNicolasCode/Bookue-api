@@ -1,8 +1,9 @@
 import { AddAccount, Authentication } from "@/domain/usecases";
-import { EmailAlreadyUsed, MissingParamError, ServerError } from "@/presentation/errors";
+import { EmailAlreadyUsed, MissingParamError } from "@/presentation/errors";
 import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers";
 import { Controller, HttpReponse, Validation } from "@/presentation/protocols";
 import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from "../mocks";
+import { throwError } from "tests/domain/mocks/test.helpers";
 
 import faker from "@faker-js/faker";
 
@@ -33,7 +34,9 @@ export class SignUpController implements Controller {
                 password,
             })
             return ok(authenticationModel)
-        } catch (e) {}
+        } catch (error) {
+            return serverError(error)
+        }
     }
 }
 
@@ -140,6 +143,16 @@ describe('SignUpController', () => {
             email: fakeRequest.email,
             password: fakeRequest.password,
         })
+    })
+
+    test('should throw if Authentication throws', async () => {
+        const { sut, authenticationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+        jest.spyOn(authenticationSpy, 'auth').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse).toStrictEqual(serverError(new Error()))
     })
 
     test('should return 200 if valid data is provided', async () => {
