@@ -39,10 +39,23 @@ namespace SignUpController {
     }
 }
 
+type SutType = {
+    sut: SignUpController,
+    validationSpy: ValidationSpy,
+}
+
+const makeSut = (): SutType => {
+    const validationSpy = new ValidationSpy()
+    const sut = new SignUpController(validationSpy)
+    return {
+        sut,
+        validationSpy,
+    }
+}
+
 describe('SignUpController', () => {
     test('should return 400 if Validation returns an error', async () => {
-        const validationSpy = new ValidationSpy()
-        const sut = new SignUpController(validationSpy)
+        const { sut, validationSpy, } = makeSut()
         validationSpy.error = new MissingParamError(faker.random.word())
 
         const httpResponse = await sut.handle(mockRequest())
