@@ -121,6 +121,16 @@ describe('SignUpController', () => {
         expect(httpResponse).toStrictEqual(forbidden(new EmailAlreadyUsed()))
     })
 
+    test('should throw if AddAccount throws', async () => {
+        const { sut, addAccountSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+        jest.spyOn(addAccountSpy, 'add').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse).toStrictEqual(serverError(new Error()))
+    })
+
     test('should call Authentication with correct values', async () => {
         const { sut, authenticationSpy, } = makeSut()
         const fakeRequest = mockRequest()
