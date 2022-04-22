@@ -2,11 +2,12 @@ import {
     AddAccountRepository, 
     CheckAccountByEmailRepository, 
     LoadAccountByEmailRepository,
+    UpdateAccessTokenRepository,
 } from "@/data/protocols"
 import { serverError } from "@/presentation/helpers"
 import { MongoHelper } from "./mongo.helper"
 
-export class AccountMongoRepository implements AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository {
+export class AccountMongoRepository implements AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository {
     async add (accountData: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
         try {
             const isAdded = await MongoHelper.addOneOn('user', accountData)
@@ -29,5 +30,9 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
             email: account.email,
             password: account.password,
         }
+    }
+
+    async updateAccessToken (id: string, token: string): Promise<void> {
+        await MongoHelper.updateAccessToken(id, token)
     }
 }
