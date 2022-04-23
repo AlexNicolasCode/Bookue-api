@@ -25,4 +25,13 @@ describe('EmailValidatorAdapter', () => {
 
         expect(isValid).toBe(false)
     })
+
+    test('should return true if validator returns true', () => {
+        const sut = new EmailValidatorAdapter()
+        const fakeEmail = faker.internet.email()
+
+        const isValid = sut.isValid(fakeEmail)
+
+        expect(isValid).toBe(true)
+    })
 })
