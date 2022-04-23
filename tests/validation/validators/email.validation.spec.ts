@@ -4,6 +4,7 @@ import { EmailValidator } from "@/validation/protocols";
 import { EmailValidationSpy } from "../mocks";
 
 import faker from "@faker-js/faker";
+import { throwError } from "tests/domain/mocks/test.helpers";
 
 export class EmailValidation implements Validation {
     constructor (
@@ -53,5 +54,12 @@ describe('EmailValidation', () => {
         sut.validate({ [field]: email })
 
         expect(emailValidatorSpy.email).toBe(email)
+    })
+
+    test('should throw if EmailValidator throws', async () => {
+        const { sut, emailValidatorSpy, } = makeSut()
+        const email = faker.internet.email()
+        jest.spyOn(emailValidatorSpy, 'isValid').mockImplementationOnce(throwError)
+        expect(sut.validate).toThrow
     })
 })
