@@ -86,4 +86,13 @@ describe('LoginController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(200)
     })
+
+    test('should return accessToken on success', async () => {
+        const { sut, authenticationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body.accessToken).toStrictEqual(authenticationSpy.result.accessToken)
+    })
 })
