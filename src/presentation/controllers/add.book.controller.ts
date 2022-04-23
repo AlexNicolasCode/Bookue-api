@@ -1,7 +1,7 @@
 import { BookModel } from "@/domain/models"
 import { AddBook } from "@/domain/usecases"
 import { badRequest, ok, serverError } from "../helpers"
-import { Controller, HttpReponse, Validation } from "../protocols"
+import { Controller, HttpResponse, Validation } from "../protocols"
 
 export class AddBookController implements Controller {
     constructor (
@@ -9,7 +9,7 @@ export class AddBookController implements Controller {
         private readonly addBook: AddBook,
     ) {}
 
-    async handle (request: AddBookController.Request): Promise<HttpReponse> {
+    async handle (request: AddBookController.Request): Promise<HttpResponse> {
         try {
             const error = await this.validation.validate(request)
             if (error) {
