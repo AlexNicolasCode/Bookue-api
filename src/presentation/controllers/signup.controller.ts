@@ -1,7 +1,7 @@
 import { AddAccount, Authentication } from "@/domain/usecases"
 import { EmailAlreadyUsed } from "../errors"
 import { badRequest, forbidden, ok, serverError } from "../helpers"
-import { Controller, HttpReponse, Validation } from "../protocols"
+import { Controller, HttpResponse, Validation } from "../protocols"
 
 export class SignUpController implements Controller {
     constructor (
@@ -10,7 +10,7 @@ export class SignUpController implements Controller {
         private readonly authentication: Authentication,
     ) {}
 
-    async handle (request: any): Promise<HttpReponse> {
+    async handle (request: any): Promise<HttpResponse> {
         try {
             const error = await this.validation.validate(request)
             if (error) {
