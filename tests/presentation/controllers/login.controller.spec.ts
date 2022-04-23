@@ -1,6 +1,6 @@
 import { Authentication } from "@/domain/usecases";
 import { MissingParamError } from "@/presentation/errors";
-import { badRequest, unauthorized } from "@/presentation/helpers";
+import { badRequest, ok, unauthorized } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import faker from "@faker-js/faker";
 import { AuthenticationSpy, ValidationSpy } from "../mocks";
@@ -21,6 +21,7 @@ export class LoginController implements Controller {
             if (!authenticationModel) {
                 return unauthorized()
             }
+            return ok(authenticationModel)
         } catch (error) {}
     }
 }
@@ -75,5 +76,14 @@ describe('LoginController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse).toStrictEqual(unauthorized())
+    })
+
+    test('should return 200 on success', async () => {
+        const { sut, authenticationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(200)
     })
 })
