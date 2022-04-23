@@ -6,7 +6,7 @@ const BookSchema = new Schema({
     description: String,
     currentPage: String,
     pages: String,
-    created_by: String,
+    userId: String,
     created_at: Date
 })
 
