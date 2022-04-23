@@ -1,46 +1,15 @@
-import { Authentication } from "@/domain/usecases";
 import { MissingParamError } from "@/presentation/errors";
-import { badRequest, ok, serverError, unauthorized } from "@/presentation/helpers";
-import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
+import { badRequest, unauthorized } from "@/presentation/helpers";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AuthenticationSpy, ValidationSpy } from "../mocks";
+import { LoginController } from "@/presentation/controllers";
 
 import faker from "@faker-js/faker";
 
-export class LoginController implements Controller {
-    constructor (
-        private readonly validation: Validation,
-        private readonly authentication: Authentication,
-    ) {}
-
-    async handle (request: any): Promise<HttpResponse> {
-        try {
-            const error = this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            const authenticationModel = await this.authentication.auth(request)
-            if (!authenticationModel) {
-                return unauthorized()
-            }
-            return ok(authenticationModel)
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
-
-const mockRequest = (): SignUpController.Request => {
+const mockRequest = (): LoginController.Request => {
     return {
       email: faker.internet.email(),
       password: faker.internet.password(),
-    }
-}
-
-namespace SignUpController {
-    export type Request = {
-        email: string
-        password: string
     }
 }
 
