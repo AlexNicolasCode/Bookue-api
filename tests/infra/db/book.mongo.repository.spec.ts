@@ -1,7 +1,7 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository";
 import { MongoHelper } from "@/infra";
 import { mockBookModel } from "tests/domain/mocks";
-
+import { throwError } from "tests/domain/mocks/test.helpers";
 import env from '@/env'
 
 describe('BookMongoRepository', () => {
@@ -21,5 +21,15 @@ describe('BookMongoRepository', () => {
         
         const count = await MongoHelper.countDocuments('book', bookData);
         expect(count).toBe(1)
+    })
+
+    test('should throw if MongoHelper throws', async () => {
+        const sut = new BookMongoRepository();
+        const bookData = mockBookModel();
+        jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
+        
+        const promise = sut.add(bookData);
+        
+        expect(promise).rejects.toThrowError()
     })
 })
