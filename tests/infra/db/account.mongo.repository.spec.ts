@@ -1,7 +1,8 @@
 import { AccountMongoRepository, MongoHelper } from "@/infra";
 import { mockAddAccountParams } from "tests/domain/mocks";
-
+import { throwError } from "tests/domain/mocks/test.helpers";
 import env from "@/env";
+
 import faker from "@faker-js/faker";
 
 describe('AccountMongoRepository', () => {
@@ -68,5 +69,15 @@ describe('AccountMongoRepository', () => {
         const accountAfterUpdateAccessToken = await MongoHelper.findUserByEmail(accountDataMock.email)
         
         expect(accountAfterUpdateAccessToken.accessToken).toBe(token)
+    })
+
+    test('should throw if MongoHelper throws', async () => {
+        const sut = new AccountMongoRepository();
+        const accountData = mockAddAccountParams();
+        jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
+        
+        const promise = sut.add(accountData);
+
+        expect(promise).rejects.toThrowError()
     })
 })
