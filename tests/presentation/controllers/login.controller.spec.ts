@@ -95,4 +95,13 @@ describe('LoginController', () => {
 
         expect(httpResponse.body.accessToken).toStrictEqual(authenticationSpy.result.accessToken)
     })
+
+    test('should return user name on success', async () => {
+        const { sut, authenticationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body.name).toStrictEqual(authenticationSpy.result.name)
+    })
 })
