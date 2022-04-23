@@ -1,24 +1,9 @@
 import { InvalidParamError } from "@/presentation/errors";
-import { Validation } from "@/presentation/protocols";
-import { EmailValidator } from "@/validation/protocols";
 import { EmailValidationSpy } from "../mocks";
+import { throwError } from "tests/domain/mocks/test.helpers";
+import { EmailValidation } from "@/validation/validators";
 
 import faker from "@faker-js/faker";
-import { throwError } from "tests/domain/mocks/test.helpers";
-
-export class EmailValidation implements Validation {
-    constructor (
-        private readonly fieldName: string,
-        private readonly emailValidator: EmailValidator,
-    ) {}
-
-    validate (input: any): Error {
-        const isValid = this.emailValidator.isValid(input[this.fieldName])
-        if (!isValid) {
-            return new InvalidParamError(this.fieldName)
-        }
-    }
-}
 
 type SutType = {
     sut: EmailValidation
