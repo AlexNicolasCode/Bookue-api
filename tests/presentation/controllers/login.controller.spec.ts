@@ -39,11 +39,26 @@ namespace SignUpController {
     }
 }
 
+type SutType = {
+    sut: LoginController
+    authenticationSpy: AuthenticationSpy
+    validationSpy: ValidationSpy
+}
+
+const makeSut = (): SutType => {
+    const authenticationSpy = new AuthenticationSpy()
+    const validationSpy = new ValidationSpy()
+    const sut = new LoginController(validationSpy, authenticationSpy)
+    return {
+        sut,
+        authenticationSpy,
+        validationSpy,
+    }
+}
+
 describe('LoginController', () => {
     test('should return 400 when validation fails', async () => {
-        const authenticationSpy = new AuthenticationSpy()
-        const validationSpy = new ValidationSpy()
-        const sut = new LoginController(validationSpy, authenticationSpy)
+        const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockRequest()
         validationSpy.error = new MissingParamError(faker.random.word())
 
@@ -53,9 +68,7 @@ describe('LoginController', () => {
     })
 
     test('should return 401 when user is unauthorized', async () => {
-        const authenticationSpy = new AuthenticationSpy()
-        const validationSpy = new ValidationSpy()
-        const sut = new LoginController(validationSpy, authenticationSpy)
+        const { sut, authenticationSpy, } = makeSut()
         const fakeRequest = mockRequest()
         authenticationSpy.result = null
 
