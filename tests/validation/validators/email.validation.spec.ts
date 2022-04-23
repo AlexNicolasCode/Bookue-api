@@ -19,12 +19,25 @@ export class EmailValidation implements Validation {
     }
 }
 
+type SutType = {
+    sut: EmailValidation
+    emailValidatorSpy: EmailValidationSpy
+}
+
 const field = faker.random.word()
+
+const makeSut = (): SutType => {
+    const emailValidatorSpy = new EmailValidationSpy()
+    const sut = new EmailValidation(field, emailValidatorSpy)
+    return {
+        sut,
+        emailValidatorSpy,
+    }
+}
 
 describe('EmailValidation', () => {
     test('should return an error if EmailValidator returns false', async () => {
-        const emailValidatorSpy = new EmailValidationSpy()
-        const sut = new EmailValidation(field, emailValidatorSpy)
+        const { sut, emailValidatorSpy, } = makeSut()
         emailValidatorSpy.isEmailValid = false
         const email = faker.internet.email()
 
