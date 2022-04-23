@@ -1,9 +1,11 @@
 import { Authentication } from "@/domain/usecases";
 import { MissingParamError } from "@/presentation/errors";
-import { badRequest, ok, unauthorized } from "@/presentation/helpers";
+import { badRequest, ok, serverError, unauthorized } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
-import faker from "@faker-js/faker";
+import { throwError } from "tests/domain/mocks/test.helpers";
 import { AuthenticationSpy, ValidationSpy } from "../mocks";
+
+import faker from "@faker-js/faker";
 
 export class LoginController implements Controller {
     constructor (
@@ -22,7 +24,9 @@ export class LoginController implements Controller {
                 return unauthorized()
             }
             return ok(authenticationModel)
-        } catch (error) {}
+        } catch (error) {
+            return serverError(error)
+        }
     }
 }
 
@@ -103,5 +107,15 @@ describe('LoginController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.body.name).toStrictEqual(authenticationSpy.result.name)
+    })
+
+    test('should return 500 if Validation throws', async () => {
+        const { sut, validationSpy, } = makeSut()
+        const fakeRequest = mockRequest()
+        jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(500)
     })
 })
