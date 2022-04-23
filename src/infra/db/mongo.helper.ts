@@ -1,6 +1,6 @@
 import { Book } from "@/book/schema/book";
 import { UserModel } from "@/domain/models";
-import { User } from "@/user/schema/user";
+import { User } from "./mongoose.schemas";
 import * as mongoose from "mongoose";
 
 export const MongoHelper = {
