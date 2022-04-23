@@ -45,4 +45,13 @@ describe('EmailValidation', () => {
 
         expect(error).toStrictEqual(new InvalidParamError(field))
     })
+
+    test('should call EmailValidator with correct email', async () => {
+        const { sut, emailValidatorSpy, } = makeSut()
+        const email = faker.internet.email()
+
+        sut.validate({ [field]: email })
+
+        expect(emailValidatorSpy.email).toBe(email)
+    })
 })
