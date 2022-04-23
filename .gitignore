@@ -4,3 +4,4 @@ env.ts
 environment.d.ts
 yarn.lock
 /data
+coverage
