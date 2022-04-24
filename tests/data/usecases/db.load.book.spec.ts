@@ -8,8 +8,8 @@ import faker from "@faker-js/faker";
 export class DbLoadBook implements LoadBook {
     constructor (private readonly loadBookRepository: LoadBookRepository) {}
 
-    async load (userId: string): Promise<LoadBook.Result> {
-        return await this.loadBookRepository.load(userId)
+    async load (data: LoadBook.Request): Promise<LoadBook.Result> {
+        return await this.loadBookRepository.load(data)
     }
 }
 
@@ -17,10 +17,13 @@ describe('DbLoadBook', () => {
     test('should throw if loadBookRepository throws', async () => {
         const loadBookRepository = new LoadBookRepositorySpy()
         const sut = new DbLoadBook(loadBookRepository)
-        const fakeUserId = faker.datatype.uuid()
+        const fakeData = {
+            userId: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+        }
         jest.spyOn(loadBookRepository, 'load').mockImplementationOnce(throwError)
 
-        const promise = sut.load(fakeUserId)
+        const promise = sut.load(fakeData)
 
         expect(promise).rejects.toThrowError()
     })
