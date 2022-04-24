@@ -1,4 +1,4 @@
-import { AddBookRepository, LoadBooksRepository } from "@/data/protocols";
+import { AddBookRepository, LoadBookListRepository } from "@/data/protocols";
 import { BookModel } from "@/domain/models";
 import { mockBookModel } from "tests/domain/mocks";
 
@@ -10,7 +10,7 @@ export class AddBookRepositorySpy implements AddBookRepository {
     }
 }
 
-export class LoadBooksRepositorySpy implements LoadBooksRepository {
+export class LoadBookListRepositorySpy implements LoadBookListRepository {
     userId: string
     result = [
         mockBookModel(),
@@ -19,7 +19,7 @@ export class LoadBooksRepositorySpy implements LoadBooksRepository {
         mockBookModel(),
     ]
 
-    async load (userId: string): Promise<LoadBooksRepository.Result> {
+    async load (userId: string): Promise<LoadBookListRepository.Result> {
         this.userId = userId
         return this.result
     }
