@@ -27,4 +27,17 @@ describe('DbLoadBook', () => {
 
         expect(promise).rejects.toThrowError()
     })
+
+    test('should call LoadBookRepository with correct bookId', async () => {
+        const loadBookRepository = new LoadBookRepositorySpy()
+        const sut = new DbLoadBook(loadBookRepository)
+        const fakeData = {
+            userId: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+        }
+
+        await sut.load(fakeData)
+
+        expect(loadBookRepository.bookId).toBe(fakeData.bookId)
+    })
 })
