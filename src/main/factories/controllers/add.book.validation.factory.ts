@@ -1,10 +1,11 @@
 import { Validation } from "@/presentation/protocols";
-import { RequiredFieldValidation, ValidationComposite } from "@/validation/validators";
+import { PageCountValidation, RequiredFieldValidation, ValidationComposite } from "@/validation/validators";
 
 export const makeAddBookValidation = (): ValidationComposite => {
     const validations: Validation[] = []
     for (const field of ['title', 'author', 'pages', 'userId']) {
         validations.push(new RequiredFieldValidation(field))
     }
+    validations.push(new PageCountValidation())
     return new ValidationComposite(validations)
 }
