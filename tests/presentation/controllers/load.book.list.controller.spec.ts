@@ -68,4 +68,13 @@ describe('LoadBookListController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(200)
     })
+
+    test('should return book list on success', async () => {
+        const { sut, loadBookListSpy, } = makeSut()
+        const fakeUserId = faker.datatype.uuid()
+
+        const httpResponse = await sut.handle({ userId: fakeUserId })
+
+        expect(httpResponse.body).toStrictEqual(loadBookListSpy.result)
+    })
 })
