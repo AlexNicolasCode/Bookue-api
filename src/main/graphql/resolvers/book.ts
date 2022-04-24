@@ -1,9 +1,10 @@
 import { adaptResolver } from "@/main/adapters";
-import { makeAddBookController, makeLoadBookListController } from "@/main/factories/controllers";
+import { makeAddBookController, makeLoadBookController, makeLoadBookListController } from "@/main/factories/controllers";
 
 export default {
     Query: {
-        loadAllBooks: async (parent: any, args: any) => adaptResolver(makeLoadBookListController(), args)
+        loadAllBooks: async (parent: any, args: any) => adaptResolver(makeLoadBookListController(), args),
+        loadOneBook: async (parent: any, args: any) => adaptResolver(makeLoadBookController(), args),
     },
 
     Mutation: {
