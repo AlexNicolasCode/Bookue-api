@@ -1,17 +1,8 @@
-import { LoadBookRepository } from "@/data/protocols";
-import { LoadBook } from "@/domain/usecases";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadBookRepositorySpy } from "../mocks";
+import { DbLoadBook } from "@/data/usecases";
 
 import faker from "@faker-js/faker";
-
-export class DbLoadBook implements LoadBook {
-    constructor (private readonly loadBookRepository: LoadBookRepository) {}
-
-    async load (data: LoadBook.Request): Promise<LoadBook.Result> {
-        return await this.loadBookRepository.load(data)
-    }
-}
 
 type SutType = {
     sut: DbLoadBook
