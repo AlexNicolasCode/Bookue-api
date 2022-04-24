@@ -26,10 +26,23 @@ export namespace LoadBookController {
     }
 }
 
+type SutType = {
+    sut: LoadBookController
+    loadBookSpy: LoadBookSpy
+}
+
+const makeSut = (): SutType => {
+    const loadBookSpy = new LoadBookSpy()
+    const sut = new LoadBookController(loadBookSpy)
+    return {
+        sut,
+        loadBookSpy,
+    }
+}
+
 describe('LoadBookController', () => {
     test('should return 500 if LoadBook throws', async () => {
-        const loadBookSpy = new LoadBookSpy()
-        const sut = new LoadBookController(loadBookSpy)
+        const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
             userId: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
@@ -42,8 +55,7 @@ describe('LoadBookController', () => {
     })
 
     test('should return 200 on success', async () => {
-        const loadBookSpy = new LoadBookSpy()
-        const sut = new LoadBookController(loadBookSpy)
+        const { sut } = makeSut()
         const fakeRequest = {
             userId: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
@@ -55,8 +67,7 @@ describe('LoadBookController', () => {
     })
 
     test('should return book on success', async () => {
-        const loadBookSpy = new LoadBookSpy()
-        const sut = new LoadBookController(loadBookSpy)
+        const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
             userId: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
