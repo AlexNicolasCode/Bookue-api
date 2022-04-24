@@ -45,4 +45,13 @@ describe('DbLoadBooks', () => {
 
         expect(loadBooksRepositorySpy.userId).toBe(fakeUserId)
     })
+
+    test('should return book list on success', async () => {
+        const { sut, loadBooksRepositorySpy } = makeSut()
+        const fakeUserId = faker.datatype.uuid()
+
+        const books = await sut.load(fakeUserId)
+
+        expect(books).toBe(loadBooksRepositorySpy.result)
+    })
 })
