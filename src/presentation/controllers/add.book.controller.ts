@@ -28,5 +28,12 @@ export class AddBookController implements Controller {
 }
 
 export namespace AddBookController {
-    export type Request = BookModel
+    export type Request = {
+        title: string
+        author: string
+        description: string
+        currentPage: number
+        pages: number,
+        userId: string
+    }  
 }
