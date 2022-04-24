@@ -1,9 +1,9 @@
 import { BookModel } from "@/domain/models";
 
-export interface LoadBooksRepository {
-    load: (userId: string) => Promise<LoadBooksRepository.Result>;
+export interface LoadBookListRepository {
+    load: (userId: string) => Promise<LoadBookListRepository.Result>;
 };
 
-export namespace LoadBooksRepository {
+export namespace LoadBookListRepository {
     export type Result = BookModel[]
 }

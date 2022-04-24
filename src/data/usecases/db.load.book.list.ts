@@ -1,10 +1,10 @@
 import { LoadBooks } from "@/domain/usecases";
-import { LoadBooksRepository } from "../protocols";
+import { LoadBookListRepository } from "../protocols";
 
 export class DbLoadBooks implements LoadBooks {
-    constructor (private readonly loadBooksRepository: LoadBooksRepository) {}
+    constructor (private readonly loadBookListRepository: LoadBookListRepository) {}
 
     async load (userId: string): Promise<LoadBooks.Result> {
-        return await this.loadBooksRepository.load(userId)
+        return await this.loadBookListRepository.load(userId)
     }
 }
