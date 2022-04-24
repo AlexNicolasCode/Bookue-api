@@ -4,6 +4,8 @@ import { mockBookModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import env from '@/env'
 
+import faker from "@faker-js/faker";
+
 describe('BookMongoRepository', () => {
     beforeAll(async () => {
         await MongoHelper.connect(env.MONGO_URL);
@@ -38,10 +40,10 @@ describe('BookMongoRepository', () => {
     describe('load book list system', () => {
         test('should throw if loadBookList method on MongoHelper throws', async () => {
             const sut = new BookMongoRepository();
-            const bookData = mockBookModel();
+            const fakeUserId = faker.datatype.uuid()
             jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
             
-            const promise = sut.add(bookData);
+            const promise = sut.load(fakeUserId);
             
             expect(promise).rejects.toThrowError()
         })
