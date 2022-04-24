@@ -1,5 +1,6 @@
 import { LoadBooksRepository } from "@/data/protocols";
 import { LoadBooks } from "@/domain/usecases";
+import faker from "@faker-js/faker";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadBooksRepositorySpy } from "../mocks";
 
@@ -28,7 +29,7 @@ const makeSut = (): SutType => {
 describe('DbLoadBooks', () => {
     test('should throw if LoadBooksRepository throws', async () => {
         const { sut, loadBooksRepositorySpy } = makeSut()
-        const fakeUserId = '100'
+        const fakeUserId = faker.datatype.uuid()
         jest.spyOn(loadBooksRepositorySpy, 'load').mockImplementationOnce(throwError)
 
         const promise = sut.load(fakeUserId)
@@ -38,7 +39,7 @@ describe('DbLoadBooks', () => {
 
     test('should call LoadBooksRepository with correct userId', async () => {
         const { sut, loadBooksRepositorySpy } = makeSut()
-        const fakeUserId = '100'
+        const fakeUserId = faker.datatype.uuid()
 
         await sut.load(fakeUserId)
 
