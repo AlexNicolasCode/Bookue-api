@@ -1,5 +1,5 @@
 import { LoadBookList } from "@/domain/usecases";
-import { ok, serverError } from "@/presentation/helpers";
+import { noContent, ok, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse } from "@/presentation/protocols";
 import { LoadBookListSpy } from "../mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -12,7 +12,7 @@ class LoadBookListController implements Controller {
     async handle (request: LoadBookListController.Request): Promise<HttpResponse> {
         try {
             const bookList = await this.loadBookList.load(request.userId)
-            return ok(bookList)
+            return bookList.length ? ok(bookList) : noContent()
         } catch (error) {
             return serverError(error)
         }
@@ -76,5 +76,15 @@ describe('LoadBookListController', () => {
         const httpResponse = await sut.handle({ userId: fakeUserId })
 
         expect(httpResponse.body).toStrictEqual(loadBookListSpy.result)
+    })
+
+    test('should return 204 on success if not have book', async () => {
+        const { sut, loadBookListSpy, } = makeSut()
+        const fakeUserId = faker.datatype.uuid()
+        loadBookListSpy.result = []
+
+        const httpResponse = await sut.handle({ userId: fakeUserId })
+
+        expect(httpResponse.statusCode).toStrictEqual(204)
     })
 })
