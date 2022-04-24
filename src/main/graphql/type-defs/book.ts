@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 export default gql`
     type Query {
         loadAllBooks (userId: String!): [Book]
+        loadOneBook (userId: String!, bookId: String!): Book
     }
 
     type Mutation {
