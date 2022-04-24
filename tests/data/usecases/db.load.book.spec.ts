@@ -25,7 +25,7 @@ describe('DbLoadBook', () => {
             userId: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
-        jest.spyOn(loadBookRepositorySpy, 'load').mockImplementationOnce(throwError)
+        jest.spyOn(loadBookRepositorySpy, 'loadOne').mockImplementationOnce(throwError)
 
         const promise = sut.load(fakeData)
 

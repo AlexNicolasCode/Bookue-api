@@ -29,7 +29,7 @@ export class LoadBookRepositorySpy implements LoadBookRepository {
     bookId: string
     result = mockBookModel()
     
-    async load (data: LoadBookRepository.Request): Promise<LoadBookRepository.Result> {
+    async loadOne (data: LoadBookRepository.Request): Promise<LoadBookRepository.Result> {
         this.userId = data.userId
         this.bookId = data.bookId
         return this.result
