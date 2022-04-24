@@ -1,29 +1,9 @@
-import { LoadBookList } from "@/domain/usecases";
-import { noContent, ok, serverError } from "@/presentation/helpers";
-import { Controller, HttpResponse } from "@/presentation/protocols";
+import { serverError } from "@/presentation/helpers";
 import { LoadBookListSpy } from "../mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
+import { LoadBookListController } from "@/presentation/controllers";
 
 import faker from "@faker-js/faker";
-
-class LoadBookListController implements Controller {
-    constructor (private readonly loadBookList: LoadBookList) {}
-
-    async handle (request: LoadBookListController.Request): Promise<HttpResponse> {
-        try {
-            const bookList = await this.loadBookList.load(request.userId)
-            return bookList.length ? ok(bookList) : noContent()
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
-
-namespace LoadBookListController {
-    export type Request = {
-        userId: string
-    }
-}
 
 type SutType = {
     sut: LoadBookListController
