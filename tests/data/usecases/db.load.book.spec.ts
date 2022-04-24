@@ -13,15 +13,28 @@ export class DbLoadBook implements LoadBook {
     }
 }
 
+type SutType = {
+    sut: DbLoadBook
+    loadBookRepositorySpy: LoadBookRepositorySpy
+}
+
+const makeSut = (): SutType => {
+    const loadBookRepositorySpy = new LoadBookRepositorySpy()
+    const sut = new DbLoadBook(loadBookRepositorySpy)
+    return {
+        sut,
+        loadBookRepositorySpy,
+    }
+}
+
 describe('DbLoadBook', () => {
     test('should throw if loadBookRepository throws', async () => {
-        const loadBookRepository = new LoadBookRepositorySpy()
-        const sut = new DbLoadBook(loadBookRepository)
+        const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
             userId: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
-        jest.spyOn(loadBookRepository, 'load').mockImplementationOnce(throwError)
+        jest.spyOn(loadBookRepositorySpy, 'load').mockImplementationOnce(throwError)
 
         const promise = sut.load(fakeData)
 
@@ -29,8 +42,7 @@ describe('DbLoadBook', () => {
     })
 
     test('should call LoadBookRepository with correct bookId', async () => {
-        const loadBookRepository = new LoadBookRepositorySpy()
-        const sut = new DbLoadBook(loadBookRepository)
+        const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
             userId: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
@@ -38,6 +50,6 @@ describe('DbLoadBook', () => {
 
         await sut.load(fakeData)
 
-        expect(loadBookRepository.bookId).toBe(fakeData.bookId)
+        expect(loadBookRepositorySpy.bookId).toBe(fakeData.bookId)
     })
 })
