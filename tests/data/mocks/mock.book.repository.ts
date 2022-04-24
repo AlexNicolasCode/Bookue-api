@@ -26,10 +26,12 @@ export class LoadBookListRepositorySpy implements LoadBookListRepository {
 
 export class LoadBookRepositorySpy implements LoadBookRepository {
     userId: string
+    bookId: string
     result = mockBookModel()
     
-    async load (userId: string): Promise<LoadBookRepository.Result> {
-        this.userId = userId
+    async load (data: LoadBookRepository.Request): Promise<LoadBookRepository.Result> {
+        this.userId = data.userId
+        this.bookId = data.bookId
         return this.result
     }
 }
