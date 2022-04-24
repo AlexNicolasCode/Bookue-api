@@ -61,4 +61,19 @@ describe('BookMongoRepository', () => {
             expect(result).toStrictEqual(bookListOfRepository)
         })
     })
+
+    describe('load one book system', () => {
+        test('should throw if loadOneBook method on MongoHelper throws', async () => {
+            const sut = new BookMongoRepository();
+            const fakeDataRequest = { 
+                userId: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+            }
+            jest.spyOn(MongoHelper, 'loadOneBook').mockImplementationOnce(throwError)
+            
+            const promise = sut.loadOne(fakeDataRequest);
+            
+            expect(promise).rejects.toThrowError()
+        })
+    })
 })
