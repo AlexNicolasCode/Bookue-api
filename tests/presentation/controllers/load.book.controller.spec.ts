@@ -1,17 +1,18 @@
 import { LoadBook } from "@/domain/usecases"
-import { serverError } from "@/presentation/helpers"
+import { ok, serverError } from "@/presentation/helpers"
 import { Controller, HttpResponse } from "@/presentation/protocols"
-import faker from "@faker-js/faker"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadBookSpy } from "../mocks"
+
+import faker from "@faker-js/faker"
 
 export class LoadBookController implements Controller {
     constructor (private readonly loadBook: LoadBook) {}
 
     async handle (request: LoadBookController.Request): Promise<HttpResponse> {
         try {
-            await this.loadBook.load({ userId: request.userId, bookId: request.bookId })
-            return
+            const book = await this.loadBook.load({ userId: request.userId, bookId: request.bookId })
+            return ok(book)
         } catch (error) {
             return serverError(error)
         }
@@ -38,5 +39,18 @@ describe('LoadBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toBe(500)
+    })
+
+    test('should return book on success', async () => {
+        const loadBookSpy = new LoadBookSpy()
+        const sut = new LoadBookController(loadBookSpy)
+        const fakeRequest = {
+            userId: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+        }
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body).toBe(loadBookSpy.result)
     })
 })
