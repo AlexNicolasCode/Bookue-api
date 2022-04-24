@@ -7,8 +7,7 @@ class DbLoadBooks implements LoadBooks {
     constructor (private readonly loadBooksRepository: LoadBooksRepository) {}
 
     async load (userId: string): Promise<LoadBooks.Result> {
-        await this.loadBooksRepository.load(userId)
-        return
+        return await this.loadBooksRepository.load(userId)
     }
 }
 
@@ -22,5 +21,15 @@ describe('DbLoadBooks', () => {
         const promise = sut.load(fakeUserId)
 
         expect(promise).rejects.toThrowError()
+    })
+
+    test('should call LoadBooksRepository with correct userId', async () => {
+        const loadBooksRepositorySpy = new LoadBooksRepositorySpy()
+        const sut = new DbLoadBooks(loadBooksRepositorySpy)
+        const fakeUserId = '100'
+
+        await sut.load(fakeUserId)
+
+        expect(loadBooksRepositorySpy.userId).toBe(fakeUserId)
     })
 })
