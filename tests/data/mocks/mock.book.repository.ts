@@ -1,11 +1,10 @@
 import { AddBookRepository, LoadBookListRepository } from "@/data/protocols";
-import { BookModel } from "@/domain/models";
 import { mockBookModel } from "tests/domain/mocks";
 
 export class AddBookRepositorySpy implements AddBookRepository {
     bookData: AddBookRepository.Params
 
-    async add (bookData: BookModel): Promise<void> {
+    async add (bookData: AddBookRepository.Params): Promise<void> {
         this.bookData = bookData
     }
 }
