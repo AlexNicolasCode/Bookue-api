@@ -23,10 +23,20 @@ describe('BookMongoRepository', () => {
         expect(count).toBe(1)
     })
 
-    test('should throw if MongoHelper throws', async () => {
+    test('should throw if addOneOn method on MongoHelper throws', async () => {
         const sut = new BookMongoRepository();
         const bookData = mockBookModel();
         jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
+        
+        const promise = sut.add(bookData);
+        
+        expect(promise).rejects.toThrowError()
+    })
+
+    test('should throw if loadBookList method on MongoHelper throws', async () => {
+        const sut = new BookMongoRepository();
+        const bookData = mockBookModel();
+        jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
         
         const promise = sut.add(bookData);
         
