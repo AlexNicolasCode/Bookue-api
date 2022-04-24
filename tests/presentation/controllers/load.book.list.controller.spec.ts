@@ -87,4 +87,14 @@ describe('LoadBookListController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(204)
     })
+
+    test('should return null on success if not have book', async () => {
+        const { sut, loadBookListSpy, } = makeSut()
+        const fakeUserId = faker.datatype.uuid()
+        loadBookListSpy.result = []
+
+        const httpResponse = await sut.handle({ userId: fakeUserId })
+
+        expect(httpResponse.body).toBeNull()
+    })
 })
