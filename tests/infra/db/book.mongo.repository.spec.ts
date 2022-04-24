@@ -13,33 +13,37 @@ describe('BookMongoRepository', () => {
         await MongoHelper.deleteManyOn('book')
     });
 
-    test('should add one only book', async () => {
-        const sut = new BookMongoRepository();
-        const bookData = mockBookModel();
-        
-        await sut.add(bookData);
-        
-        const count = await MongoHelper.countDocuments('book', bookData);
-        expect(count).toBe(1)
+    describe('add book system', () => {
+        test('should add one only book', async () => {
+            const sut = new BookMongoRepository();
+            const bookData = mockBookModel();
+            
+            await sut.add(bookData);
+            
+            const count = await MongoHelper.countDocuments('book', bookData);
+            expect(count).toBe(1)
+        })
+    
+        test('should throw if addOneOn method on MongoHelper throws', async () => {
+            const sut = new BookMongoRepository();
+            const bookData = mockBookModel();
+            jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
+            
+            const promise = sut.add(bookData);
+            
+            expect(promise).rejects.toThrowError()
+        })
     })
 
-    test('should throw if addOneOn method on MongoHelper throws', async () => {
-        const sut = new BookMongoRepository();
-        const bookData = mockBookModel();
-        jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
-        
-        const promise = sut.add(bookData);
-        
-        expect(promise).rejects.toThrowError()
-    })
-
-    test('should throw if loadBookList method on MongoHelper throws', async () => {
-        const sut = new BookMongoRepository();
-        const bookData = mockBookModel();
-        jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
-        
-        const promise = sut.add(bookData);
-        
-        expect(promise).rejects.toThrowError()
+    describe('load book list system', () => {
+        test('should throw if loadBookList method on MongoHelper throws', async () => {
+            const sut = new BookMongoRepository();
+            const bookData = mockBookModel();
+            jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
+            
+            const promise = sut.add(bookData);
+            
+            expect(promise).rejects.toThrowError()
+        })
     })
 })
