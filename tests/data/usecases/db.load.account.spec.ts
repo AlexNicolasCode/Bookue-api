@@ -1,8 +1,9 @@
 import { LoadBooksRepository } from "@/data/protocols";
 import { LoadBooks } from "@/domain/usecases";
-import faker from "@faker-js/faker";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadBooksRepositorySpy } from "../mocks";
+
+import faker from "@faker-js/faker";
 
 class DbLoadBooks implements LoadBooks {
     constructor (private readonly loadBooksRepository: LoadBooksRepository) {}
