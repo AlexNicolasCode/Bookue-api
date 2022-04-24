@@ -25,10 +25,23 @@ namespace LoadBookListController {
     }
 }
 
+type SutType = {
+    sut: LoadBookListController
+    loadBookListSpy: LoadBookListSpy
+}
+
+const makeSut = (): SutType => {
+    const loadBookListSpy = new LoadBookListSpy()
+    const sut = new LoadBookListController(loadBookListSpy)
+    return {
+        sut,
+        loadBookListSpy,
+    }
+}
+
 describe('LoadBookListController', () => {
     test('should return 500 if LoadBookList throws', async () => {
-        const loadBookListSpy = new LoadBookListSpy()
-        const sut = new LoadBookListController(loadBookListSpy)
+        const { sut, loadBookListSpy } = makeSut()
         const fakeUserId = faker.datatype.uuid()
         jest.spyOn(loadBookListSpy, 'load').mockImplementationOnce(throwError)
 
@@ -38,8 +51,7 @@ describe('LoadBookListController', () => {
     })
 
     test('should return error on body if LoadBookList throws', async () => {
-        const loadBookListSpy = new LoadBookListSpy()
-        const sut = new LoadBookListController(loadBookListSpy)
+        const { sut, loadBookListSpy } = makeSut()
         const fakeUserId = faker.datatype.uuid()
         jest.spyOn(loadBookListSpy, 'load').mockImplementationOnce(throwError)
 
