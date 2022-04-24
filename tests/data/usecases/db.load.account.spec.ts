@@ -11,10 +11,23 @@ class DbLoadBooks implements LoadBooks {
     }
 }
 
+type SutType = {
+    sut: DbLoadBooks
+    loadBooksRepositorySpy: LoadBooksRepositorySpy
+}
+
+const makeSut = (): SutType => {
+    const loadBooksRepositorySpy = new LoadBooksRepositorySpy()
+    const sut = new DbLoadBooks(loadBooksRepositorySpy)
+    return {
+        sut,
+        loadBooksRepositorySpy,
+    }
+}
+
 describe('DbLoadBooks', () => {
     test('should throw if LoadBooksRepository throws', async () => {
-        const loadBooksRepositorySpy = new LoadBooksRepositorySpy()
-        const sut = new DbLoadBooks(loadBooksRepositorySpy)
+        const { sut, loadBooksRepositorySpy } = makeSut()
         const fakeUserId = '100'
         jest.spyOn(loadBooksRepositorySpy, 'load').mockImplementationOnce(throwError)
 
@@ -24,8 +37,7 @@ describe('DbLoadBooks', () => {
     })
 
     test('should call LoadBooksRepository with correct userId', async () => {
-        const loadBooksRepositorySpy = new LoadBooksRepositorySpy()
-        const sut = new DbLoadBooks(loadBooksRepositorySpy)
+        const { sut, loadBooksRepositorySpy } = makeSut()
         const fakeUserId = '100'
 
         await sut.load(fakeUserId)
