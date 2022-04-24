@@ -1,5 +1,5 @@
 import { LoadBookList } from "@/domain/usecases";
-import { serverError } from "@/presentation/helpers";
+import { ok, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse } from "@/presentation/protocols";
 import { LoadBookListSpy } from "../mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -11,8 +11,8 @@ class LoadBookListController implements Controller {
 
     async handle (request: LoadBookListController.Request): Promise<HttpResponse> {
         try {
-            await this.loadBookList.load(request.userId)
-            return
+            const bookList = await this.loadBookList.load(request.userId)
+            return ok(bookList)
         } catch (error) {
             return serverError(error)
         }
@@ -58,5 +58,14 @@ describe('LoadBookListController', () => {
         const httpResponse = await sut.handle({ userId: fakeUserId })
 
         expect(httpResponse.body).toStrictEqual(serverError(new Error).body)
+    })
+
+    test('should return 200 on success', async () => {
+        const { sut } = makeSut()
+        const fakeUserId = faker.datatype.uuid()
+
+        const httpResponse = await sut.handle({ userId: fakeUserId })
+
+        expect(httpResponse.statusCode).toStrictEqual(200)
     })
 })
