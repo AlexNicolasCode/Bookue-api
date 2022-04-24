@@ -1,12 +1,12 @@
 import { badRequest, ok, serverError } from "@/presentation/helpers";
-import { mockBookModel } from "tests/domain/mocks";
+import { mockAddBookParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AddBookSpy, ValidationSpy } from "../mocks";
 
 import MockDate from 'mockdate';
 import { AddBookController } from "@/presentation/controllers/add.book.controller";
 
-const mockRequest = (): AddBookController.Request => mockBookModel()
+const mockRequest = (): AddBookController.Request => mockAddBookParams()
 
 type SutType = {
     sut: AddBookController
