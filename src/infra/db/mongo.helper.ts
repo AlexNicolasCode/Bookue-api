@@ -1,6 +1,8 @@
 import { Book } from "@/book/schema/book";
 import { UserModel } from "@/domain/models";
 import { User } from "./mongoose.schemas";
+import { LoadBookList } from "@/domain/usecases";
+
 import * as mongoose from "mongoose";
 
 export const MongoHelper = {
@@ -69,4 +71,13 @@ export const MongoHelper = {
             new Error(e)
         }
     },
+
+    async loadBookList (userId: string): Promise<LoadBookList.Result> {
+        try {
+            const bookModel = this.findModel('book')
+            return await bookModel.find({ userId: userId })
+        } catch (error) {
+            new Error(error)
+        }
+    }
 }
