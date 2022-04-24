@@ -41,6 +41,19 @@ describe('LoadBookController', () => {
         expect(httpResponse.statusCode).toBe(500)
     })
 
+    test('should return 200 on success', async () => {
+        const loadBookSpy = new LoadBookSpy()
+        const sut = new LoadBookController(loadBookSpy)
+        const fakeRequest = {
+            userId: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+        }
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(200)
+    })
+
     test('should return book on success', async () => {
         const loadBookSpy = new LoadBookSpy()
         const sut = new LoadBookController(loadBookSpy)
