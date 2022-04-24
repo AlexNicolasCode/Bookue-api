@@ -90,4 +90,17 @@ describe('LoadBookController', () => {
 
         expect(httpResponse.statusCode).toBe(204)
     })
+
+    test('should return null on boby if not found book', async () => {
+        const { sut, loadBookSpy } = makeSut()
+        const fakeRequest = {
+            userId: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+        }
+        loadBookSpy.result = null
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body).toBeNull()
+    })
 })
