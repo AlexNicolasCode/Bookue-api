@@ -36,4 +36,15 @@ describe('LoadBookListController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(500)
     })
+
+    test('should return error on body if LoadBookList throws', async () => {
+        const loadBookListSpy = new LoadBookListSpy()
+        const sut = new LoadBookListController(loadBookListSpy)
+        const fakeUserId = faker.datatype.uuid()
+        jest.spyOn(loadBookListSpy, 'load').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle({ userId: fakeUserId })
+
+        expect(httpResponse.body).toStrictEqual(serverError(new Error).body)
+    })
 })
