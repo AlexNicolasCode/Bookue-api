@@ -22,7 +22,7 @@ describe('DbLoadBookList', () => {
     test('should throw if LoadBookListRepository throws', async () => {
         const { sut, loadBookListRepositorySpy } = makeSut()
         const fakeUserId = faker.datatype.uuid()
-        jest.spyOn(loadBookListRepositorySpy, 'load').mockImplementationOnce(throwError)
+        jest.spyOn(loadBookListRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
 
         const promise = sut.load(fakeUserId)
 

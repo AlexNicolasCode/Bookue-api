@@ -10,7 +10,7 @@ export class BookMongoRepository implements AddBookRepository, LoadBookListRepos
         }
     }
 
-    async load (userId: string): Promise<LoadBookListRepository.Result> {
+    async loadAll (userId: string): Promise<LoadBookListRepository.Result> {
         try {
             return await MongoHelper.loadBookList(userId)
         } catch (error) {

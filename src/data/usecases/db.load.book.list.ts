@@ -5,6 +5,6 @@ export class DbLoadBookList implements LoadBookList {
     constructor (private readonly loadBookListRepository: LoadBookListRepository) {}
 
     async load (userId: string): Promise<LoadBookList.Result> {
-        return await this.loadBookListRepository.load(userId)
+        return await this.loadBookListRepository.loadAll(userId)
     }
 }
