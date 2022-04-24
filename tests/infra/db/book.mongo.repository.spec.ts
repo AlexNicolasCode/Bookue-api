@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository";
 import { MongoHelper } from "@/infra";
-import { mockBookModel } from "tests/domain/mocks";
+import { mockAddBookParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import env from '@/env'
 
@@ -18,7 +18,7 @@ describe('BookMongoRepository', () => {
     describe('add book system', () => {
         test('should add one only book', async () => {
             const sut = new BookMongoRepository();
-            const bookData = mockBookModel();
+            const bookData = mockAddBookParams();
             
             await sut.add(bookData);
             
@@ -28,7 +28,7 @@ describe('BookMongoRepository', () => {
     
         test('should throw if addOneOn method on MongoHelper throws', async () => {
             const sut = new BookMongoRepository();
-            const bookData = mockBookModel();
+            const bookData = mockAddBookParams();
             jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
             
             const promise = sut.add(bookData);
@@ -46,6 +46,17 @@ describe('BookMongoRepository', () => {
             const promise = sut.load(fakeUserId);
             
             expect(promise).rejects.toThrowError()
+        })
+
+        test('should throw if loadBookList method on MongoHelper throws', async () => {
+            const sut = new BookMongoRepository();
+            const fakeUserId = faker.datatype.uuid()
+            
+            await sut.add({ ...mockAddBookParams(), userId: fakeUserId });
+            const result = await sut.load(fakeUserId);
+
+            console.log(await MongoHelper.loadBookList("1010"))            
+            expect(result).toBe('kdsak')
         })
     })
 })
