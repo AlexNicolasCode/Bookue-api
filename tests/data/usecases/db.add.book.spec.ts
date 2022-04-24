@@ -1,5 +1,5 @@
 import { DbAddBook } from "@/data/usecases";
-import { mockBookModel } from "tests/domain/mocks";
+import { mockAddBookParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AddBookRepositorySpy } from "../mocks";
 
@@ -20,7 +20,7 @@ const makeSut = (): SutTypes => {
 describe('DbAddBook', () => {
     test('should send correct bookData', () => {
         const { sut, addBookRepositorySpy } = makeSut();
-        const bookData = mockBookModel();
+        const bookData = mockAddBookParams();
         
         sut.add(bookData);
         
@@ -30,7 +30,7 @@ describe('DbAddBook', () => {
     test('should throw if addBookRepositorySpy throws', () => {
         const { sut, addBookRepositorySpy } = makeSut();
         jest.spyOn(addBookRepositorySpy, 'add').mockImplementationOnce(throwError)
-        const bookData = mockBookModel();
+        const bookData = mockAddBookParams();
 
         const promise = sut.add(bookData);
 
