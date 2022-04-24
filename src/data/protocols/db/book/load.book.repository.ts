@@ -1,7 +1,7 @@
 import { BookModel } from "@/domain/models";
 
 export interface LoadBookRepository {
-    load: (data: LoadBookRepository.Request) => Promise<LoadBookRepository.Result>;
+    loadOne: (data: LoadBookRepository.Request) => Promise<LoadBookRepository.Result>;
 };
 
 export namespace LoadBookRepository {
