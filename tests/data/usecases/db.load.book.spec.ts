@@ -52,4 +52,16 @@ describe('DbLoadBook', () => {
 
         expect(loadBookRepositorySpy.bookId).toBe(fakeData.bookId)
     })
+
+    test('should call LoadBookRepository with correct userId', async () => {
+        const { sut, loadBookRepositorySpy, } = makeSut()
+        const fakeData = {
+            userId: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+        }
+
+        await sut.load(fakeData)
+
+        expect(loadBookRepositorySpy.userId).toBe(fakeData.userId)
+    })
 })
