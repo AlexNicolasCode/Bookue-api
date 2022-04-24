@@ -43,7 +43,7 @@ describe('BookMongoRepository', () => {
             const fakeUserId = faker.datatype.uuid()
             jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
             
-            const promise = sut.load(fakeUserId);
+            const promise = sut.loadAll(fakeUserId);
             
             expect(promise).rejects.toThrowError()
         })
@@ -55,7 +55,7 @@ describe('BookMongoRepository', () => {
             for (let count = 0; count < 5; count++) {
                 await sut.add({ ...mockAddBookParams(), userId: fakeUserId })
             }
-            const result = await sut.load(fakeUserId)
+            const result = await sut.loadAll(fakeUserId)
             const bookListOfRepository = await MongoHelper.loadBookList(fakeUserId)
 
             expect(result).toStrictEqual(bookListOfRepository)
