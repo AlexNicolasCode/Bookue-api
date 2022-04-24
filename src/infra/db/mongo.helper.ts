@@ -74,7 +74,7 @@ export const MongoHelper = {
 
     async loadBookList (userId: string): Promise<LoadBookList.Result> {
         try {
-            const bookModel = this.findModel('book')
+            const bookModel = await this.findModel('book')
             return await bookModel.find({ userId: userId })
         } catch (error) {
             new Error(error)
