@@ -48,15 +48,17 @@ describe('BookMongoRepository', () => {
             expect(promise).rejects.toThrowError()
         })
 
-        test('should throw if loadBookList method on MongoHelper throws', async () => {
-            const sut = new BookMongoRepository();
+        test('should return book list on success', async () => {
+            const sut = new BookMongoRepository()
             const fakeUserId = faker.datatype.uuid()
             
-            await sut.add({ ...mockAddBookParams(), userId: fakeUserId });
-            const result = await sut.load(fakeUserId);
+            for (let count = 0; count < 5; count++) {
+                await sut.add({ ...mockAddBookParams(), userId: fakeUserId })
+            }
+            const result = await sut.load(fakeUserId)
+            const bookListOfRepository = await MongoHelper.loadBookList(fakeUserId)
 
-            console.log(await MongoHelper.loadBookList("1010"))            
-            expect(result).toBe('kdsak')
+            expect(result).toStrictEqual(bookListOfRepository)
         })
     })
 })
