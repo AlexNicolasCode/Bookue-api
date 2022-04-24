@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository";
 import { MongoHelper } from "@/infra";
-import { mockAddBookParams } from "tests/domain/mocks";
+import { mockAddBookParams, mockBookModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import env from '@/env'
 
@@ -74,6 +74,20 @@ describe('BookMongoRepository', () => {
             const promise = sut.loadOne(fakeDataRequest);
             
             expect(promise).rejects.toThrowError()
+        })
+
+        test('should return a book on success', async () => {
+            const sut = new BookMongoRepository();
+            const fakeBook = mockAddBookParams()
+            const fakeDataRequest = { 
+                userId: fakeBook.userId,
+                bookId: faker.datatype.uuid(),
+            }
+            jest.spyOn(MongoHelper, 'loadOneBook').mockReturnValueOnce(fakeBook as any)
+            
+            const book = await sut.loadOne(fakeDataRequest);
+            
+            expect(book).toBe(fakeBook)
         })
     })
 })
