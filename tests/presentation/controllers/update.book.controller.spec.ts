@@ -43,4 +43,15 @@ describe('UpdateBookController', () => {
 
         expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
     })
+
+    test('should return 400 if Validation returns error', async () => {
+        const validationSpy = new ValidationSpy()
+        const sut = new UpdateBookController(validationSpy)
+        const fakeRequest = mockUpdateBookRequest() 
+        validationSpy.error = new Error()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(400)
+    })
 })
