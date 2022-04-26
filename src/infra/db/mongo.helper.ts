@@ -28,8 +28,8 @@ export const MongoHelper = {
     },
 
     async findUserByEmail (email: string): Promise<UserModel> {
-        const user = await this.findModel('user')
-        const account = await user.findOne({ email })
+        const userModel = await this.findModel('user')
+        const account = await userModel.findOne({ email })
         return account
     },
     
