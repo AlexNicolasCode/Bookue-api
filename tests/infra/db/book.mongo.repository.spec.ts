@@ -101,5 +101,14 @@ describe('BookMongoRepository', () => {
 
             expect(promise).rejects.toThrowError()
         })
+
+        test('should return undefined on success', async () => {
+            const sut = new BookMongoRepository()
+            const fakeBook = mockUpdateBookRequest()
+
+            const result = await sut.update(fakeBook)
+
+            expect(result).toBeUndefined()
+        })
     })
 })
