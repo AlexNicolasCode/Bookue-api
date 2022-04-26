@@ -43,4 +43,14 @@ describe('DbUpdateBook', () => {
 
         expect(promise).rejects.toThrowError()
     })
+
+    test('should call UpdateBookRepository with correct values', async () => {
+        const updateBookRepositorySpy = new UpdateBookRepositorySpy()
+        const sut = new DbUpdateBook(updateBookRepositorySpy)
+        const fakeBook = mockUpdateBookRequest()   
+
+        await sut.update(fakeBook)
+
+        expect(updateBookRepositorySpy.params).toBe(fakeBook)
+    })
 })
