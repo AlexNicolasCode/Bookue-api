@@ -82,13 +82,13 @@ describe('UpdateBookController', () => {
         expect(httpResponse.body).toStrictEqual(new Error())
     })
 
-    test('should return Error on body if Validation returns error', async () => {
-        const { sut, validationSpy, } = makeSut()
+    test('should return 500 if UpdateBook throws', async () => {
+        const { sut, updateBookSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
-        validationSpy.error = new Error()
+        jest.spyOn(updateBookSpy, 'update').mockImplementationOnce(throwError)
 
         const httpResponse = await sut.handle(fakeRequest)
 
-        expect(httpResponse.body).toStrictEqual(new Error())
+        expect(httpResponse.statusCode).toStrictEqual(500)
     })
 })
