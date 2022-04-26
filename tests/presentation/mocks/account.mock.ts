@@ -1,4 +1,4 @@
-import { AddAccount, Authentication } from "@/domain/usecases";
+import { AddAccount, Authentication, UpdateBook } from "@/domain/usecases";
 import faker from "@faker-js/faker";
 
 export class AddAccountSpy implements AddAccount {
@@ -21,5 +21,13 @@ export class AuthenticationSpy implements Authentication {
     async auth (params: Authentication.Params): Promise<Authentication.Result> {
       this.params = params
       return this.result
+    }
+}
+
+export class UpdateBookSpy implements UpdateBook {
+    params: UpdateBook.Params
+  
+    async update (params: UpdateBook.Params): Promise<void> {
+      this.params = params
     }
 }
