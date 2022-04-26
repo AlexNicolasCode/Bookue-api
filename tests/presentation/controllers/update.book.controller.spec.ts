@@ -24,11 +24,26 @@ export class UpdateBookController implements Controller {
     }
 }
 
+type SutType = {
+    sut: UpdateBookController
+    validationSpy: ValidationSpy
+    updateBookSpy: UpdateBookSpy
+}
+
+const makeSut = (): SutType => {
+    const validationSpy = new ValidationSpy()
+    const updateBookSpy = new UpdateBookSpy()
+    const sut = new UpdateBookController(validationSpy, updateBookSpy)
+    return {
+        sut,
+        validationSpy,
+        updateBookSpy,
+    }
+}
+
 describe('UpdateBookController', () => {
     test('should return 500 if Validation throws', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateBookSpy = new UpdateBookSpy()
-        const sut = new UpdateBookController(validationSpy, updateBookSpy)
+        const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
         jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
 
@@ -38,9 +53,7 @@ describe('UpdateBookController', () => {
     })
 
     test('should return Error on body if Validation throws', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateBookSpy = new UpdateBookSpy()
-        const sut = new UpdateBookController(validationSpy, updateBookSpy)
+        const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
         jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
 
@@ -50,9 +63,7 @@ describe('UpdateBookController', () => {
     })
 
     test('should return 400 if Validation returns error', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateBookSpy = new UpdateBookSpy()
-        const sut = new UpdateBookController(validationSpy, updateBookSpy)
+        const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
         validationSpy.error = new Error()
 
@@ -62,9 +73,7 @@ describe('UpdateBookController', () => {
     })
 
     test('should return Error on body if Validation returns error', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateBookSpy = new UpdateBookSpy()
-        const sut = new UpdateBookController(validationSpy, updateBookSpy)
+        const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
         validationSpy.error = new Error()
 
@@ -74,9 +83,7 @@ describe('UpdateBookController', () => {
     })
 
     test('should return Error on body if Validation returns error', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateBookSpy = new UpdateBookSpy()
-        const sut = new UpdateBookController(validationSpy, updateBookSpy)
+        const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
         validationSpy.error = new Error()
 
