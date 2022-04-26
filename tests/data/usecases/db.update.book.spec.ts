@@ -1,18 +1,9 @@
-import { UpdateBook } from "@/domain/usecases";
-import { UpdateBookRepository } from "@/data/protocols";
 import { UpdateBookRepositorySpy } from "../mocks";
 import { BookModel } from "@/domain/models";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 import faker from "@faker-js/faker";
-
-export class DbUpdateBook implements UpdateBook {
-    constructor (private readonly updateBookRepository: UpdateBookRepository) {}
-
-    async update (bookData: UpdateBook.Params): Promise<void> {
-        await this.updateBookRepository.update(bookData)
-    }
-}
+import { DbUpdateBook } from "@/data/usecases";
 
 interface UpdateBookRequest extends BookModel {
     userId: string
