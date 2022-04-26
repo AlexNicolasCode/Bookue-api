@@ -1,12 +1,14 @@
+import { UpdateBook } from "@/domain/usecases"
 import { badRequest, serverError } from "@/presentation/helpers"
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { ValidationSpy } from "../mocks"
+import { UpdateBookSpy, ValidationSpy } from "../mocks"
 
 export class UpdateBookController implements Controller {
     constructor (
         private readonly validation: Validation,
+        private readonly updateBook: UpdateBook,
     ) {}
 
     async handle (request: any): Promise<HttpResponse> {
@@ -15,6 +17,7 @@ export class UpdateBookController implements Controller {
             if (error) {
                 return badRequest(error)
             }
+            await this.updateBook.update(request)
         } catch (error) {
             return serverError(error)
         }
@@ -24,7 +27,8 @@ export class UpdateBookController implements Controller {
 describe('UpdateBookController', () => {
     test('should return 500 if Validation throws', async () => {
         const validationSpy = new ValidationSpy()
-        const sut = new UpdateBookController(validationSpy)
+        const updateBookSpy = new UpdateBookSpy()
+        const sut = new UpdateBookController(validationSpy, updateBookSpy)
         const fakeRequest = mockUpdateBookRequest() 
         jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
 
@@ -35,7 +39,8 @@ describe('UpdateBookController', () => {
 
     test('should return Error on body if Validation throws', async () => {
         const validationSpy = new ValidationSpy()
-        const sut = new UpdateBookController(validationSpy)
+        const updateBookSpy = new UpdateBookSpy()
+        const sut = new UpdateBookController(validationSpy, updateBookSpy)
         const fakeRequest = mockUpdateBookRequest() 
         jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
 
@@ -46,7 +51,8 @@ describe('UpdateBookController', () => {
 
     test('should return 400 if Validation returns error', async () => {
         const validationSpy = new ValidationSpy()
-        const sut = new UpdateBookController(validationSpy)
+        const updateBookSpy = new UpdateBookSpy()
+        const sut = new UpdateBookController(validationSpy, updateBookSpy)
         const fakeRequest = mockUpdateBookRequest() 
         validationSpy.error = new Error()
 
@@ -57,7 +63,20 @@ describe('UpdateBookController', () => {
 
     test('should return Error on body if Validation returns error', async () => {
         const validationSpy = new ValidationSpy()
-        const sut = new UpdateBookController(validationSpy)
+        const updateBookSpy = new UpdateBookSpy()
+        const sut = new UpdateBookController(validationSpy, updateBookSpy)
+        const fakeRequest = mockUpdateBookRequest() 
+        validationSpy.error = new Error()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body).toStrictEqual(new Error())
+    })
+
+    test('should return Error on body if Validation returns error', async () => {
+        const validationSpy = new ValidationSpy()
+        const updateBookSpy = new UpdateBookSpy()
+        const sut = new UpdateBookController(validationSpy, updateBookSpy)
         const fakeRequest = mockUpdateBookRequest() 
         validationSpy.error = new Error()
 
