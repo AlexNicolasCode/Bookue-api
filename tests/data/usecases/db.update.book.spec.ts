@@ -32,10 +32,23 @@ const mockUpdateBookRequest = (): UpdateBookRequest => {
     }
 }
 
+type SutType = {
+    sut: DbUpdateBook
+    updateBookRepositorySpy: UpdateBookRepositorySpy
+}
+
+const makeSut = (): SutType => {
+    const updateBookRepositorySpy = new UpdateBookRepositorySpy()
+    const sut = new DbUpdateBook(updateBookRepositorySpy)
+    return {
+        sut,
+        updateBookRepositorySpy,
+    }
+}
+
 describe('DbUpdateBook', () => {
     test('should throw if UpdateBookRepository throws', async () => {
-        const updateBookRepositorySpy = new UpdateBookRepositorySpy()
-        const sut = new DbUpdateBook(updateBookRepositorySpy)
+        const { sut, updateBookRepositorySpy } = makeSut()
         const fakeBook = mockUpdateBookRequest()   
         jest.spyOn(updateBookRepositorySpy, 'update').mockImplementationOnce(throwError)     
 
@@ -45,8 +58,7 @@ describe('DbUpdateBook', () => {
     })
 
     test('should call UpdateBookRepository with correct values', async () => {
-        const updateBookRepositorySpy = new UpdateBookRepositorySpy()
-        const sut = new DbUpdateBook(updateBookRepositorySpy)
+        const { sut, updateBookRepositorySpy } = makeSut()
         const fakeBook = mockUpdateBookRequest()   
 
         await sut.update(fakeBook)
@@ -55,8 +67,7 @@ describe('DbUpdateBook', () => {
     })
 
     test('should return undefined on success', async () => {
-        const updateBookRepositorySpy = new UpdateBookRepositorySpy()
-        const sut = new DbUpdateBook(updateBookRepositorySpy)
+        const { sut } = makeSut()
         const fakeBook = mockUpdateBookRequest()   
 
         const result = await sut.update(fakeBook)
