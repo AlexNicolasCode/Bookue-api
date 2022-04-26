@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository";
 import { MongoHelper } from "@/infra";
-import { mockAddBookParams, mockBookModel } from "tests/domain/mocks";
+import { mockAddBookParams, mockUpdateBookRequest } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import env from '@/env'
 
@@ -88,6 +88,18 @@ describe('BookMongoRepository', () => {
             const book = await sut.loadOne(fakeDataRequest);
             
             expect(book).toBe(fakeBook)
+        })
+    })
+
+    describe('updateBook method', () => {
+        test('should throw if MongoHelper throws', async () => {
+            const sut = new BookMongoRepository()
+            const fakeBook = mockUpdateBookRequest()
+            jest.spyOn(MongoHelper, 'updateBook').mockImplementationOnce(throwError)
+
+            const promise = sut.update(fakeBook)
+
+            expect(promise).rejects.toThrowError()
         })
     })
 })

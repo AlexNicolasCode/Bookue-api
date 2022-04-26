@@ -1,8 +1,8 @@
-import { AddBookRepository, LoadBookListRepository, LoadBookRepository } from "@/data/protocols";
+import { AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols";
 import { BookModel } from "@/domain/models";
 import { MongoHelper } from "./mongo.helper";
 
-export class BookMongoRepository implements AddBookRepository, LoadBookListRepository, LoadBookRepository {
+export class BookMongoRepository implements AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository {
     async add (bookData: AddBookRepository.Params): Promise<void> {
         try {
             await MongoHelper.addOneOn('book', bookData);
@@ -22,6 +22,14 @@ export class BookMongoRepository implements AddBookRepository, LoadBookListRepos
     async loadOne (data: LoadBookRepository.Request): Promise<BookModel> {
         try {
             return await MongoHelper.loadOneBook(data)
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
+    async update (bookData: UpdateBookRepository.Params): Promise<void> {
+        try {
+            await MongoHelper.updateBook(bookData)
         } catch (error) {
             throw new Error(error)
         }
