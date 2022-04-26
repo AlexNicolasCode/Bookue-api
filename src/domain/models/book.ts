@@ -1,7 +1,7 @@
 export type BookModel = {
-    title: String,
-    author: String,
-    description: String,
+    title: string,
+    author: string,
+    description: string,
     currentPage: number,
     pages: number,
 }
