@@ -1,7 +1,7 @@
 import { Book } from "@/book/schema/book";
 import { UserModel } from "@/domain/models";
 import { User } from "./mongoose.schemas";
-import { LoadBook, LoadBookList } from "@/domain/usecases";
+import { LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases";
 
 import * as mongoose from "mongoose";
 
@@ -87,6 +87,17 @@ export const MongoHelper = {
             return await bookModel.findOne({ userId: data.userId, bookId: data.bookId })
         } catch (error) {
             new Error(error)
+        }
+    },
+
+    async updateBook (data: UpdateBook.Params): Promise<void> {
+        try {
+            const model = await this.findModel('book')
+            await model.findOneAndUpdate({ userId: data, bookId: data }, {
+                ...data
+            })
+        } catch (e) {
+            new Error(e)
         }
     },
 }
