@@ -1,4 +1,4 @@
-import { AddBookRepository, LoadBookListRepository, LoadBookRepository } from "@/data/protocols";
+import { AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols";
 import { mockBookModel } from "tests/domain/mocks";
 
 export class AddBookRepositorySpy implements AddBookRepository {
@@ -33,5 +33,13 @@ export class LoadBookRepositorySpy implements LoadBookRepository {
         this.userId = data.userId
         this.bookId = data.bookId
         return this.result
+    }
+}
+
+export class UpdateBookRepositorySpy implements UpdateBookRepository {
+    params: UpdateBookRepository.Params
+    
+    async update (params: UpdateBookRepository.Params): Promise<void> {
+        this.params = params
     }
 }
