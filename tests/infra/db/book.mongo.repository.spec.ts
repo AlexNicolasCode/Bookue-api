@@ -110,5 +110,15 @@ describe('BookMongoRepository', () => {
 
             expect(result).toBeUndefined()
         })
+
+        test('should call MongoHelper with correct values', async () => {
+            const sut = new BookMongoRepository()
+            const fakeBook = mockUpdateBookRequest()
+            const MongoHelperSpy = jest.spyOn(MongoHelper, 'updateBook')
+
+            await sut.update(fakeBook)
+
+            expect(MongoHelperSpy).toBeCalledWith(fakeBook)
+        })
     })
 })
