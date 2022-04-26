@@ -1,27 +1,7 @@
 import { UpdateBookRepositorySpy } from "../mocks";
-import { BookModel } from "@/domain/models";
 import { throwError } from "tests/domain/mocks/test.helpers";
-
-import faker from "@faker-js/faker";
 import { DbUpdateBook } from "@/data/usecases";
-
-interface UpdateBookRequest extends BookModel {
-    userId: string
-    bookId: string
-}
-
-const mockUpdateBookRequest = (): UpdateBookRequest => {
-    const currentPage = faker.datatype.number()
-    return {
-        title: faker.name.findName(),
-        author: faker.name.findName(),
-        description: faker.datatype.string(),
-        currentPage: currentPage,
-        pages: currentPage + 1,
-        userId: faker.datatype.uuid(),
-        bookId: faker.datatype.uuid(),
-    }
-}
+import { mockUpdateBookRequest } from "tests/domain/mocks";
 
 type SutType = {
     sut: DbUpdateBook
