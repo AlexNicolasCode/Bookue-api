@@ -53,4 +53,14 @@ describe('DbUpdateBook', () => {
 
         expect(updateBookRepositorySpy.params).toBe(fakeBook)
     })
+
+    test('should return undefined on success', async () => {
+        const updateBookRepositorySpy = new UpdateBookRepositorySpy()
+        const sut = new DbUpdateBook(updateBookRepositorySpy)
+        const fakeBook = mockUpdateBookRequest()   
+
+        const result = await sut.update(fakeBook)
+
+        expect(result).toBeUndefined()
+    })
 })
