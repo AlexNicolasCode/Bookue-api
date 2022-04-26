@@ -1,4 +1,5 @@
 import { UpdateBook } from "@/domain/usecases"
+import { ServerError } from "@/presentation/errors"
 import { badRequest, serverError } from "@/presentation/helpers"
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
@@ -90,5 +91,15 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toStrictEqual(500)
+    })
+
+    test('should return ServerError on body if UpdateBook throws', async () => {
+        const { sut, updateBookSpy, } = makeSut()
+        const fakeRequest = mockUpdateBookRequest() 
+        jest.spyOn(updateBookSpy, 'update').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
     })
 })
