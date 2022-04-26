@@ -1,5 +1,5 @@
 export interface UpdateBook {
-    update: (bookData: UpdateBook.Params) => Promise<UpdateBook.Result>;
+    update: (bookData: UpdateBook.Params) => Promise<void>;
 };
 
 export namespace UpdateBook {
@@ -12,5 +12,4 @@ export namespace UpdateBook {
         userId: string
         bookId: string
     }
-    export type Result = boolean
 };
