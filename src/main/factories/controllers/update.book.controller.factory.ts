@@ -1,8 +1,8 @@
 import { UpdateBookController } from "@/presentation/controllers";
 import { makeDbUpdateBook } from "../usecases";
-import { makeSignUpValidation } from "./signup.validation.factory";
+import { makeUpdateBookValidation } from "./update.book.validation.factory";
 
 export const makeUpdateBookController = (): UpdateBookController => {
-    const controller = new UpdateBookController(makeSignUpValidation(), makeDbUpdateBook())
+    const controller = new UpdateBookController(makeUpdateBookValidation(), makeDbUpdateBook())
     return controller
 }
