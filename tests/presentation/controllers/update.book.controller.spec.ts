@@ -1,6 +1,6 @@
 import { UpdateBook } from "@/domain/usecases"
 import { ServerError } from "@/presentation/errors"
-import { badRequest, serverError } from "@/presentation/helpers"
+import { badRequest, noContent, serverError } from "@/presentation/helpers"
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
@@ -19,6 +19,7 @@ export class UpdateBookController implements Controller {
                 return badRequest(error)
             }
             await this.updateBook.update(request)
+            return noContent()
         } catch (error) {
             return serverError(error)
         }
@@ -101,5 +102,14 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
+    })
+
+    test('should return 204 on status code on success', async () => {
+        const { sut } = makeSut()
+        const fakeRequest = mockUpdateBookRequest() 
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(204)
     })
 })
