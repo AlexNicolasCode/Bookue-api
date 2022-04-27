@@ -7,3 +7,4 @@ export * from './login.controller.factory';
 export * from './load.book.list.controller.factory';
 export * from './load.book.controller.factory';
 export * from './update.book.validation.factory';
+export * from './update.book.controller.factory';
