@@ -32,6 +32,12 @@ export const MongoHelper = {
         const account = await userModel.findOne({ email })
         return account
     },
+
+    async findUserById (userId: string): Promise<UserModel> {
+        const userModel = await this.findModel('user')
+        const account = await userModel.findOne({ id: userId })
+        return account
+    },
     
     async countDocuments (modelName: string, data: any): Promise<number> {
         try {

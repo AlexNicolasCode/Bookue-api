@@ -1,6 +1,5 @@
 import { AccountMongoRepository, MongoHelper } from "@/infra";
-import { mockAddAccountParams } from "tests/domain/mocks";
-import { throwError } from "tests/domain/mocks/test.helpers";
+import { mockAddAccountParams, mockUserModel } from "tests/domain/mocks";
 import env from "@/env";
 
 import faker from "@faker-js/faker";
@@ -69,5 +68,15 @@ describe('AccountMongoRepository', () => {
         const accountAfterUpdateAccessToken = await MongoHelper.findUserByEmail(accountDataMock.email)
         
         expect(accountAfterUpdateAccessToken.accessToken).toBe(token)
+    })
+
+    test('should return true when account exists', async () => {
+        const sut = new AccountMongoRepository();
+        const fakeAccount = mockUserModel()
+        jest.spyOn(MongoHelper, 'findUserById').mockResolvedValueOnce(fakeAccount)
+        
+        const promise = await sut.checkById(fakeAccount.id);
+
+        expect(promise).toBe(true)
     })
 })
