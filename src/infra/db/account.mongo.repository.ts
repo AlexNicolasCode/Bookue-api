@@ -1,6 +1,7 @@
 import { 
     AddAccountRepository, 
     CheckAccountByEmailRepository, 
+    CheckAccountByIdRepository, 
     LoadAccountByEmailRepository,
     UpdateAccessTokenRepository,
 } from "@/data/protocols"
@@ -19,6 +20,12 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
 
     async checkByEmail (email: string): Promise<CheckAccountByEmailRepository.Result> {
         const hasAccount = await MongoHelper.findUserByEmail(email)
+        return hasAccount ? true : false
+    }
+    
+
+    async checkById (userId: string): Promise<CheckAccountByIdRepository.Result> {
+        const hasAccount = await MongoHelper.findUserById(userId)
         return hasAccount ? true : false
     }
     
