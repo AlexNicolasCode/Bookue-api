@@ -70,14 +70,4 @@ describe('AccountMongoRepository', () => {
         
         expect(accountAfterUpdateAccessToken.accessToken).toBe(token)
     })
-
-    test('should throw if MongoHelper throws', async () => {
-        const sut = new AccountMongoRepository();
-        const accountData = mockAddAccountParams();
-        jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
-        
-        const promise = sut.add(accountData);
-
-        expect(promise).rejects.toThrowError()
-    })
 })
