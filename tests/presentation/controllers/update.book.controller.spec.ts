@@ -1,30 +1,9 @@
-import { UpdateBook } from "@/domain/usecases"
+import { UpdateBookController } from "@/presentation/controllers"
 import { ServerError } from "@/presentation/errors"
-import { badRequest, noContent, serverError } from "@/presentation/helpers"
-import { Controller, HttpResponse, Validation } from "@/presentation/protocols"
+import { serverError } from "@/presentation/helpers"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { UpdateBookSpy, ValidationSpy } from "../mocks"
-
-export class UpdateBookController implements Controller {
-    constructor (
-        private readonly validation: Validation,
-        private readonly updateBook: UpdateBook,
-    ) {}
-
-    async handle (request: any): Promise<HttpResponse> {
-        try {
-            const error = await this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            await this.updateBook.update(request)
-            return noContent()
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
 
 type SutType = {
     sut: UpdateBookController
