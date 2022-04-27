@@ -112,4 +112,13 @@ describe('UpdateBookController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(204)
     })
+
+    test('should return null on body on success', async () => {
+        const { sut } = makeSut()
+        const fakeRequest = mockUpdateBookRequest() 
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body).toBeNull()
+    })
 })
