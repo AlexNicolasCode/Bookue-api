@@ -79,4 +79,14 @@ describe('AccountMongoRepository', () => {
 
         expect(promise).toBe(true)
     })
+
+    test('should return false when account exists', async () => {
+        const sut = new AccountMongoRepository();
+        const fakeAccount = mockUserModel()
+        jest.spyOn(MongoHelper, 'findUserById').mockResolvedValueOnce(undefined)
+        
+        const promise = await sut.checkById(fakeAccount.id);
+
+        expect(promise).toBe(false)
+    })
 })
