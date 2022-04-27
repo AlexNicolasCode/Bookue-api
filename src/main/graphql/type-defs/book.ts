@@ -8,6 +8,15 @@ export default gql`
 
     type Mutation {
         addBook (title: String!, author: String!, description: String, currentPage: String, pages: String!, userId: String!): Book!
+        updateBook (
+            title: String, 
+            author: String, 
+            description: String, 
+            currentPage: String, 
+            pages: String, 
+            userId: String, 
+            bookId: String
+        ): Boolean
     }
 
     type Book {
