@@ -102,7 +102,7 @@ describe('AccountMongoRepository', () => {
         
         const result = await sut.loadByToken(fakeAccount.accessToken)
 
-        expect(result).toStrictEqual({ id: fakeAccount.id })
+        expect(result).toStrictEqual(fakeAccount)
     })
 
     test('should throw if MongoHelper on findUserByAccessToken method throws', async () => {
@@ -110,8 +110,18 @@ describe('AccountMongoRepository', () => {
         const fakeAccount = mockUserModel()
         jest.spyOn(MongoHelper, 'findUserByAccessToken').mockImplementationOnce(throwError)
         
-        const Promise = sut.loadByToken(fakeAccount.accessToken)
+        const promise = sut.loadByToken(fakeAccount.accessToken)
 
-        expect(Promise).rejects.toThrowError()
+        expect(promise).rejects.toThrowError()
+    })
+
+    test('should return undefined if MongoHelper on findUserByAccessToken method not found account', async () => {
+        const sut = makeSut()
+        const fakeAccount = mockUserModel()
+        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(undefined)
+        
+        const result = await sut.loadByToken(fakeAccount.accessToken)
+
+        expect(result).toBeUndefined()
     })
 })

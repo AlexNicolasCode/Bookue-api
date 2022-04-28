@@ -42,6 +42,6 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
 
     async loadByToken (token: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
         const account = await MongoHelper.findUserByAccessToken(token)
-        return { id: account.id }
+        return account
     }
 }
