@@ -1,4 +1,4 @@
-import { UpdateBookRepositorySpy } from "../mocks"
+import { CheckAccountByAccessTokenRepositorySpy, UpdateBookRepositorySpy } from "../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbUpdateBook } from "@/data/usecases"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
@@ -9,8 +9,9 @@ type SutType = {
 }
 
 const makeSut = (): SutType => {
+    const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
     const updateBookRepositorySpy = new UpdateBookRepositorySpy()
-    const sut = new DbUpdateBook(updateBookRepositorySpy)
+    const sut = new DbUpdateBook(checkAccountByAccessTokenRepositorySpy, updateBookRepositorySpy)
     return {
         sut,
         updateBookRepositorySpy,
@@ -37,12 +38,12 @@ describe('DbUpdateBook', () => {
         expect(updateBookRepositorySpy.params).toBe(fakeBook)
     })
 
-    test('should return undefined on success', async () => {
+    test('should return true on success', async () => {
         const { sut } = makeSut()
-        const fakeBook = mockUpdateBookRequest()   
+        const fakeBook = mockUpdateBookRequest() 
 
         const result = await sut.update(fakeBook)
 
-        expect(result).toBeUndefined()
+        expect(result).toBe(true)
     })
 })
