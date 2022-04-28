@@ -114,4 +114,14 @@ describe('UpdateBookController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(500)
     })
+
+    test('should return ServerError on body if CheckAccountById throws', async () => {
+        const { sut, checkAccountById, } = makeSut()
+        const fakeRequest = mockUpdateBookRequest()
+        jest.spyOn(checkAccountById, 'checkById').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
+    })
 })
