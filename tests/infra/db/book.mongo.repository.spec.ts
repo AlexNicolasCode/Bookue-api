@@ -6,6 +6,10 @@ import env from '@/env'
 
 import faker from "@faker-js/faker";
 
+const makeSut = (): BookMongoRepository => {
+    return new BookMongoRepository();
+}
+
 describe('BookMongoRepository', () => {
     beforeAll(async () => {
         await MongoHelper.connect(env.MONGO_URL);
@@ -17,7 +21,7 @@ describe('BookMongoRepository', () => {
 
     describe('add book system', () => {
         test('should add one only book', async () => {
-            const sut = new BookMongoRepository();
+            const sut = makeSut();
             const bookData = mockAddBookParams();
             jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValue(mockUserModel())
             
@@ -28,7 +32,7 @@ describe('BookMongoRepository', () => {
         })
     
         test('should throw if addOneOn method on MongoHelper throws', async () => {
-            const sut = new BookMongoRepository();
+            const sut = makeSut()
             const bookData = mockAddBookParams();
             jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
             
@@ -40,7 +44,7 @@ describe('BookMongoRepository', () => {
 
     describe('load book list system', () => {
         test('should throw if loadBookList method on MongoHelper throws', async () => {
-            const sut = new BookMongoRepository();
+            const sut = makeSut()
             const fakeAccessToken = faker.datatype.uuid()
             jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
             
@@ -50,7 +54,7 @@ describe('BookMongoRepository', () => {
         })
 
         test('should return book list on success', async () => {
-            const sut = new BookMongoRepository()
+            const sut = makeSut()
             const fakeAccessToken = faker.datatype.uuid()
             
             for (let count = 0; count < 5; count++) {
@@ -65,7 +69,7 @@ describe('BookMongoRepository', () => {
 
     describe('load one book system', () => {
         test('should throw if loadOneBook method on MongoHelper throws', async () => {
-            const sut = new BookMongoRepository();
+            const sut = makeSut()
             const fakeDataRequest = { 
                 accessToken: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
@@ -78,7 +82,7 @@ describe('BookMongoRepository', () => {
         })
 
         test('should return a book on success', async () => {
-            const sut = new BookMongoRepository();
+            const sut = makeSut()
             const fakeBook = mockAddBookParams()
             const fakeDataRequest = { 
                 accessToken: fakeBook.accessToken,
@@ -94,7 +98,7 @@ describe('BookMongoRepository', () => {
 
     describe('updateBook method', () => {
         test('should throw if MongoHelper throws', async () => {
-            const sut = new BookMongoRepository()
+            const sut = makeSut()
             const fakeBook = mockUpdateBookRequest()
             jest.spyOn(MongoHelper, 'updateBook').mockImplementationOnce(throwError)
 
@@ -104,7 +108,7 @@ describe('BookMongoRepository', () => {
         })
 
         test('should return undefined on success', async () => {
-            const sut = new BookMongoRepository()
+            const sut = makeSut()
             const fakeBook = mockUpdateBookRequest()
 
             const result = await sut.update(fakeBook)
@@ -113,7 +117,7 @@ describe('BookMongoRepository', () => {
         })
 
         test('should call MongoHelper with correct values', async () => {
-            const sut = new BookMongoRepository()
+            const sut = makeSut()
             const fakeBook = mockUpdateBookRequest()
             const MongoHelperSpy = jest.spyOn(MongoHelper, 'updateBook')
 
