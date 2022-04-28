@@ -48,4 +48,16 @@ describe('DbLoadAccountByToken', () => {
 
         expect(result).toBeNull()
     })
+
+    test('should return null if LoadAccountByTokenRepository not found account', async () => {
+        const decrypterSpy = new DecrypterSpy()
+        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
+        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const fakeAccessToken = faker.internet.password()
+        jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockResolvedValueOnce(undefined)
+
+        const result = await sut.load(fakeAccessToken)
+
+        expect(result).toBeNull()
+    })
 })
