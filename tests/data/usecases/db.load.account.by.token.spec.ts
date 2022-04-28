@@ -25,11 +25,26 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     }
 }
 
+type SutType = {
+    decrypterSpy: DecrypterSpy
+    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
+    sut: DbLoadAccountByToken
+}
+
+const makeSut = (): SutType => {
+    const decrypterSpy = new DecrypterSpy()
+    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
+    const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+    return {
+        sut,
+        decrypterSpy,
+        loadAccountByTokenRepositorySpy,
+    }
+}
+
 describe('DbLoadAccountByToken', () => {
     test('should return null if Decrypt throws', async () => {
-        const decrypterSpy = new DecrypterSpy()
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const { sut, decrypterSpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
         jest.spyOn(decrypterSpy, 'decrypt').mockImplementationOnce(throwError)
 
@@ -39,9 +54,7 @@ describe('DbLoadAccountByToken', () => {
     })
     
     test('should call Decrypt with corrent token', async () => {
-        const decrypterSpy = new DecrypterSpy()
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
 
         await sut.load(fakeAccessToken)
@@ -50,9 +63,7 @@ describe('DbLoadAccountByToken', () => {
     })
 
     test('should call LoadAccountByTokenRepository with correct token and role', async () => {
-        const decrypterSpy = new DecrypterSpy()
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
 
         await sut.load(fakeAccessToken, 'any_role')
@@ -62,9 +73,7 @@ describe('DbLoadAccountByToken', () => {
     })
 
     test('should return null if LoadAccountByTokenRepository throws', async () => {
-        const decrypterSpy = new DecrypterSpy()
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
         jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockImplementationOnce(throwError)
 
@@ -74,9 +83,7 @@ describe('DbLoadAccountByToken', () => {
     })
 
     test('should return null if LoadAccountByTokenRepository not found account', async () => {
-        const decrypterSpy = new DecrypterSpy()
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
         jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockResolvedValueOnce(undefined)
 
@@ -86,9 +93,7 @@ describe('DbLoadAccountByToken', () => {
     })
 
     test('should return account data if LoadAccountByTokenRepository found an account', async () => {
-        const decrypterSpy = new DecrypterSpy()
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
         const fakeAccount = mockUserModel()
         jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockResolvedValueOnce(fakeAccount)
