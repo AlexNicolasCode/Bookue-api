@@ -56,6 +56,17 @@ describe('UpdateBookController', () => {
         expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
     })
 
+    test('should return 204 if UpdateBook return true', async () => {
+        const { sut, updateBookSpy, } = makeSut()
+        const fakeRequest = mockUpdateBookRequest() 
+        jest.spyOn(updateBookSpy, 'update').mockResolvedValue(true)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(204)
+        expect(httpResponse.body).toBeNull()
+    })
+
     test('should return 204 on success', async () => {
         const { sut } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
