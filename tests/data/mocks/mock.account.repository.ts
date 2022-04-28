@@ -1,4 +1,4 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from "@/data/protocols"
+import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository } from "@/data/protocols"
 
 import faker from "@faker-js/faker"
 
@@ -43,6 +43,23 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
 
     async loadByEmail (email: string): Promise<LoadAccountByEmailRepository.Result> {
         this.email = email
+        return this.result
+    }
+}
+
+export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
+    token: string
+    role: string
+    result = {
+        id: faker.datatype.uuid(),
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+    }
+
+    async loadByToken (token: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
+        this.token = token
+        this.role = role
         return this.result
     }
 }
