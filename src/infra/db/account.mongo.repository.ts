@@ -10,12 +10,8 @@ import { MongoHelper } from "./mongo.helper"
 
 export class AccountMongoRepository implements AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, CheckAccountByAccessTokenRepository {
     async add (accountData: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
-        try {
-            const isAdded = await MongoHelper.addOneOn('user', accountData)
-            return isAdded
-        } catch (e) {
-            throw serverError(e)
-        }
+        const isAdded = await MongoHelper.addOneOn('user', accountData)
+        return isAdded
     }
 
     async checkByEmail (email: string): Promise<CheckAccountByEmailRepository.Result> {
