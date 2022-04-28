@@ -1,4 +1,4 @@
-import { CheckAccountByIdRepository } from "@/data/protocols"
+import { CheckAccountByAccessTokenRepository } from "@/data/protocols"
 import { UpdateBook } from "@/domain/usecases"
 import { InvalidParamError } from "../errors"
 import { badRequest, forbidden, noContent, serverError } from "../helpers"
@@ -6,7 +6,7 @@ import { Controller, Validation, HttpResponse } from "../protocols"
 
 export class UpdateBookController implements Controller {
     constructor (
-        private readonly checkAccountById: CheckAccountByIdRepository,
+        private readonly checkAccountByAccessToken: CheckAccountByAccessTokenRepository,
         private readonly validation: Validation,
         private readonly updateBook: UpdateBook,
     ) {}
@@ -17,9 +17,9 @@ export class UpdateBookController implements Controller {
             if (error) {
                 return badRequest(error)
             }
-            const hasAccount = await this.checkAccountById.checkById(request.userId)
+            const hasAccount = await this.checkAccountByAccessToken.checkByAccessToken(request.accessToken)
             if (!hasAccount) {
-                return forbidden(new InvalidParamError('userId'))
+                return forbidden(new InvalidParamError('accessToken'))
             }
             await this.updateBook.update(request)
             return noContent()

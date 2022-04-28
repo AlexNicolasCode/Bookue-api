@@ -11,25 +11,25 @@ export class AddBookSpy implements AddBook {
 }
 
 export class LoadBookListSpy implements LoadBookList {
-    userId: string
+    accessToken: string
     result = [
         mockBookModel(),
         mockBookModel(),
     ]
 
-    async load (userId: string): Promise<LoadBookList.Result> {
-        this.userId = userId
+    async load (accessToken: string): Promise<LoadBookList.Result> {
+        this.accessToken = accessToken
         return this.result
     }
 }
 
 export class LoadBookSpy implements LoadBook {
-    userId: string
+    accessToken: string
     bookId: string
     result = mockBookModel()
 
     async load (data: LoadBook.Request): Promise<BookModel> {
-        this.userId = data.userId
+        this.accessToken = data.accessToken
         this.bookId = data.bookId
         return this.result
     }

@@ -21,7 +21,7 @@ export const mockAddBookParams = (): AddBook.Params => {
         description: faker.random.words(),
         currentPage: faker.datatype.number(),
         pages: faker.datatype.number(),
-        userId: faker.datatype.uuid(),
+        accessToken: faker.datatype.uuid(),
     };
 };
 
@@ -33,7 +33,7 @@ export const mockUpdateBookRequest = (): UpdateBookRepository.Params => {
         description: faker.datatype.string(),
         currentPage: currentPage,
         pages: currentPage + 1,
-        userId: faker.datatype.uuid(),
+        accessToken: faker.datatype.uuid(),
         bookId: faker.datatype.uuid(),
     }
 }

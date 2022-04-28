@@ -73,9 +73,9 @@ describe('AccountMongoRepository', () => {
     test('should return true when account exists', async () => {
         const sut = new AccountMongoRepository();
         const fakeAccount = mockUserModel()
-        jest.spyOn(MongoHelper, 'findUserById').mockResolvedValueOnce(fakeAccount)
+        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(fakeAccount)
         
-        const promise = await sut.checkById(fakeAccount.id);
+        const promise = await sut.checkByAccessToken(fakeAccount.id);
 
         expect(promise).toBe(true)
     })
@@ -83,9 +83,9 @@ describe('AccountMongoRepository', () => {
     test('should return false when account exists', async () => {
         const sut = new AccountMongoRepository();
         const fakeAccount = mockUserModel()
-        jest.spyOn(MongoHelper, 'findUserById').mockResolvedValueOnce(undefined)
+        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(undefined)
         
-        const promise = await sut.checkById(fakeAccount.id);
+        const promise = await sut.checkByAccessToken(fakeAccount.id);
 
         expect(promise).toBe(false)
     })

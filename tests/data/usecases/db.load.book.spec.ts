@@ -22,7 +22,7 @@ describe('DbLoadBook', () => {
     test('should throw if loadBookRepository throws', async () => {
         const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
         jest.spyOn(loadBookRepositorySpy, 'loadOne').mockImplementationOnce(throwError)
@@ -35,7 +35,7 @@ describe('DbLoadBook', () => {
     test('should call LoadBookRepository with correct bookId', async () => {
         const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
 
@@ -47,19 +47,19 @@ describe('DbLoadBook', () => {
     test('should call LoadBookRepository with correct userId', async () => {
         const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
 
         await sut.load(fakeData)
 
-        expect(loadBookRepositorySpy.userId).toBe(fakeData.userId)
+        expect(loadBookRepositorySpy.accessToken).toBe(fakeData.accessToken)
     })
 
     test('should return a book on success', async () => {
         const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
 

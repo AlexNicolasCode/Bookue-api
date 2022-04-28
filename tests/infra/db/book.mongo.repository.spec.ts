@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository";
 import { MongoHelper } from "@/infra";
-import { mockAddBookParams, mockUpdateBookRequest } from "tests/domain/mocks";
+import { mockAddBookParams, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import env from '@/env'
 
@@ -19,6 +19,7 @@ describe('BookMongoRepository', () => {
         test('should add one only book', async () => {
             const sut = new BookMongoRepository();
             const bookData = mockAddBookParams();
+            jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValue(mockUserModel())
             
             await sut.add(bookData);
             
@@ -40,23 +41,23 @@ describe('BookMongoRepository', () => {
     describe('load book list system', () => {
         test('should throw if loadBookList method on MongoHelper throws', async () => {
             const sut = new BookMongoRepository();
-            const fakeUserId = faker.datatype.uuid()
+            const fakeAccessToken = faker.datatype.uuid()
             jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
             
-            const promise = sut.loadAll(fakeUserId);
+            const promise = sut.loadAll(fakeAccessToken);
             
             expect(promise).rejects.toThrowError()
         })
 
         test('should return book list on success', async () => {
             const sut = new BookMongoRepository()
-            const fakeUserId = faker.datatype.uuid()
+            const fakeAccessToken = faker.datatype.uuid()
             
             for (let count = 0; count < 5; count++) {
-                await sut.add({ ...mockAddBookParams(), userId: fakeUserId })
+                await sut.add({ ...mockAddBookParams(), accessToken: fakeAccessToken })
             }
-            const result = await sut.loadAll(fakeUserId)
-            const bookListOfRepository = await MongoHelper.loadBookList(fakeUserId)
+            const result = await sut.loadAll(fakeAccessToken)
+            const bookListOfRepository = await MongoHelper.loadBookList(fakeAccessToken)
 
             expect(result).toStrictEqual(bookListOfRepository)
         })
@@ -66,7 +67,7 @@ describe('BookMongoRepository', () => {
         test('should throw if loadOneBook method on MongoHelper throws', async () => {
             const sut = new BookMongoRepository();
             const fakeDataRequest = { 
-                userId: faker.datatype.uuid(),
+                accessToken: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
             }
             jest.spyOn(MongoHelper, 'loadOneBook').mockImplementationOnce(throwError)
@@ -80,7 +81,7 @@ describe('BookMongoRepository', () => {
             const sut = new BookMongoRepository();
             const fakeBook = mockAddBookParams()
             const fakeDataRequest = { 
-                userId: fakeBook.userId,
+                accessToken: fakeBook.accessToken,
                 bookId: faker.datatype.uuid(),
             }
             jest.spyOn(MongoHelper, 'loadOneBook').mockReturnValueOnce(fakeBook as any)

@@ -2,47 +2,47 @@ import { gql } from "apollo-server";
 
 export const typeDefs = gql`
   type UserType {
-    name: String,
-    email: String,
+    name: string,
+    email: string,
   }
 
   type BookType {
-    id: String
-    title: String
-    author: String
-    description: String
-    currentPage: String
-    pages: String
+    id: string
+    title: string
+    author: string
+    description: string
+    currentPage: string
+    pages: string
     notes: [NoteType]
-    created_by: String
-    created_at: String
+    created_by: string
+    created_at: string
   }
 
   type TokenType {
-    token: String
+    token: string
   }
 
   type NoteType {
-    bookID: String
-    id: String
-    text: String
+    bookID: string
+    id: string
+    text: string
   }
 
   type Mutation {
-    signUpUser(name: String, email: String, password: String): TokenType
-    addBook(title: String, author: String, description: String, currentPage: String, pages: String): BookType
-    updateBook(id: String, newTitle: String, newAuthor: String, newDescription: String, newCurrentPage: String, newPages: String): BookType
-    deleteBook(id: String): BookType
-    addNote(bookID: String, note: String): NoteType
-    deleteNote(bookID: String, noteID: String): NoteType
-    updateNote(bookID: String, noteID: String, newNote: String): Boolean
+    signUpUser(name: string, email: string, password: string): TokenType
+    addBook(title: string, author: string, description: string, currentPage: string, pages: string): BookType
+    updateBook(id: string, newTitle: string, newAuthor: string, newDescription: string, newCurrentPage: string, newPages: string): BookType
+    deleteBook(id: string): BookType
+    addNote(bookID: string, note: string): NoteType
+    deleteNote(bookID: string, noteID: string): NoteType
+    updateNote(bookID: string, noteID: string, newNote: string): Boolean
   }
 
   type Query {
     getAllBooks: [BookType]
-    getBook(id: String): BookType
-    loginUser(email: String, password: String): TokenType
+    getBook(id: string): BookType
+    loginUser(email: string, password: string): TokenType
     autoLogin: UserType
-    getNotes(bookID: String): [NoteType]
+    getNotes(bookID: string): [NoteType]
   }
 `;

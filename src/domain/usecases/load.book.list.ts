@@ -1,7 +1,7 @@
 import { BookModel } from "../models";
 
 export interface LoadBookList {
-    load: (userId: string) => Promise<LoadBookList.Result>;
+    load: (accessToken: string) => Promise<LoadBookList.Result>;
 };
 
 export namespace LoadBookList {

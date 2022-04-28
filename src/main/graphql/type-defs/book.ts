@@ -2,19 +2,19 @@ import { gql } from "apollo-server-express";
 
 export default gql`
     type Query {
-        loadAllBooks (userId: String!): [Book]
-        loadOneBook (userId: String!, bookId: String!): Book
+        loadAllBooks (accessToken: String!): [Book]
+        loadOneBook (accessToken: String!, bookId: String!): Book
     }
 
     type Mutation {
-        addBook (title: String!, author: String!, description: String, currentPage: String, pages: String!, userId: String!): Book!
+        addBook (title: String!, author: String!, description: String, currentPage: String, pages: String!, accessToken: String!): Book!
         updateBook (
             title: String, 
             author: String, 
             description: String, 
             currentPage: String, 
             pages: String, 
-            userId: String, 
+            accessToken: String, 
             bookId: String
         ): Boolean
     }
@@ -27,5 +27,6 @@ export default gql`
         currentPage: String
         pages: String
         created_at: String
+        userId: String
     }
 `

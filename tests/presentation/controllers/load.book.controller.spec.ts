@@ -22,7 +22,7 @@ describe('LoadBookController', () => {
     test('should return 500 if LoadBook throws', async () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
         jest.spyOn(loadBookSpy, 'load').mockImplementationOnce(throwError)
@@ -35,7 +35,7 @@ describe('LoadBookController', () => {
     test('should return 200 on success', async () => {
         const { sut } = makeSut()
         const fakeRequest = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
 
@@ -47,7 +47,7 @@ describe('LoadBookController', () => {
     test('should return book on success', async () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
 
@@ -59,7 +59,7 @@ describe('LoadBookController', () => {
     test('should return 204 if not found book', async () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
         loadBookSpy.result = null
@@ -72,7 +72,7 @@ describe('LoadBookController', () => {
     test('should return null on boby if not found book', async () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
-            userId: faker.datatype.uuid(),
+            accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
         loadBookSpy.result = null

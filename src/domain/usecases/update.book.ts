@@ -9,7 +9,7 @@ export namespace UpdateBook {
         description?: string
         currentPage?: number
         pages?: number
-        userId: string
+        accessToken: string
         bookId: string
     }
 };
