@@ -1,9 +1,10 @@
-import { Decrypter, LoadAccountByTokenRepository } from "@/data/protocols";
-import { LoadAccountByToken } from "@/domain/usecases";
-import faker from "@faker-js/faker";
-import { mockUserModel } from "tests/domain/mocks";
-import { throwError } from "tests/domain/mocks/test.helpers";
-import { DecrypterSpy, LoadAccountByTokenRepositorySpy } from "../mocks";
+import { Decrypter, LoadAccountByTokenRepository } from "@/data/protocols"
+import { LoadAccountByToken } from "@/domain/usecases"
+import { mockUserModel } from "tests/domain/mocks"
+import { throwError } from "tests/domain/mocks/test.helpers"
+import { DecrypterSpy, LoadAccountByTokenRepositorySpy } from "../mocks"
+
+import faker from "@faker-js/faker"
 
 export class DbLoadAccountByToken implements LoadAccountByToken {
     constructor (
