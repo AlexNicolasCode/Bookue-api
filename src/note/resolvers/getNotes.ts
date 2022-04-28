@@ -8,5 +8,5 @@ export const getNotes = async (token, bookID) => {
         return
     }
 
-    return await Note.find({ bookID: bookID });
+    return await Note.find({ bookID: bookID })
 } 

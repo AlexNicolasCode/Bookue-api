@@ -1,6 +1,6 @@
 export interface UpdateBookRepository {
-    update: (bookData: UpdateBookRepository.Params) => Promise<void>;
-};
+    update: (bookData: UpdateBookRepository.Params) => Promise<void>
+}
 
 export namespace UpdateBookRepository {
     export type Params = {

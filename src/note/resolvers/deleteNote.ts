@@ -1,5 +1,5 @@
-import { verifyToken } from "../../user/tools/validadeUser";
-import { Note } from "../schema";
+import { verifyToken } from "../../user/tools/validadeUser"
+import { Note } from "../schema"
 
 export const deleteNote = async (token, bookID, noteID) => {
   const user: any = verifyToken(token)

@@ -1,5 +1,5 @@
-import { adaptResolver } from "@/main/adapters";
-import { makeAddBookController, makeLoadBookController, makeLoadBookListController, makeUpdateBookController } from "@/main/factories/controllers";
+import { adaptResolver } from "@/main/adapters"
+import { makeAddBookController, makeLoadBookController, makeLoadBookListController, makeUpdateBookController } from "@/main/factories/controllers"
 
 export default {
     Query: {

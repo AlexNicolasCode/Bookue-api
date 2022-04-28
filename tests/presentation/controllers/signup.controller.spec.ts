@@ -1,10 +1,10 @@
-import { EmailAlreadyUsed, MissingParamError } from "@/presentation/errors";
-import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers";
-import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from "../mocks";
-import { throwError } from "tests/domain/mocks/test.helpers";
+import { EmailAlreadyUsed, MissingParamError } from "@/presentation/errors"
+import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers"
+import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from "../mocks"
+import { throwError } from "tests/domain/mocks/test.helpers"
 
-import faker from "@faker-js/faker";
-import { SignUpController } from "@/presentation/controllers";
+import faker from "@faker-js/faker"
+import { SignUpController } from "@/presentation/controllers"
 
 const mockRequest = (): SignUpController.Request => {
     const password = faker.internet.password()

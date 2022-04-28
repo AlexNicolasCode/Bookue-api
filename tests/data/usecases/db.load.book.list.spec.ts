@@ -1,8 +1,8 @@
-import { DbLoadBookList } from "@/data/usecases";
-import { throwError } from "tests/domain/mocks/test.helpers";
-import { LoadBookListRepositorySpy } from "../mocks";
+import { DbLoadBookList } from "@/data/usecases"
+import { throwError } from "tests/domain/mocks/test.helpers"
+import { LoadBookListRepositorySpy } from "../mocks"
 
-import faker from "@faker-js/faker";
+import faker from "@faker-js/faker"
 
 type SutType = {
     sut: DbLoadBookList

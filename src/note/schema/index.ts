@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from "mongoose"
 
 const NoteSchema = new Schema({
     bookID: string,
@@ -6,4 +6,4 @@ const NoteSchema = new Schema({
     created_at: Date
 })
 
-export const Note = model("notes", NoteSchema);
+export const Note = model("notes", NoteSchema)

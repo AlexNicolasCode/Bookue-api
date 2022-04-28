@@ -1,5 +1,5 @@
-import { verifyToken } from "../../user/tools/validadeUser";
-import { Book } from "../schema/book";
+import { verifyToken } from "../../user/tools/validadeUser"
+import { Book } from "../schema/book"
 
 export const updateBook = async (token, id, newTitle, newAuthor, newDescription, newCurrentPage, newPages) => {
   const user: any = verifyToken(token)
@@ -16,8 +16,8 @@ export const updateBook = async (token, id, newTitle, newAuthor, newDescription,
     pages: newPages,
   }
 
-  await Book.findOneAndUpdate({ _id: id }, bookProps);
-  const updatedBook = await Book.findOne({ _id: id, created_by: user.email });
+  await Book.findOneAndUpdate({ _id: id }, bookProps)
+  const updatedBook = await Book.findOne({ _id: id, created_by: user.email })
 
   return updatedBook
 }

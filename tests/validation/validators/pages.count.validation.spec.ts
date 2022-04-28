@@ -1,5 +1,5 @@
-import { InvalidPageCountError } from "@/presentation/errors";
-import { PageCountValidation } from "@/validation/validators";
+import { InvalidPageCountError } from "@/presentation/errors"
+import { PageCountValidation } from "@/validation/validators"
 
 describe('PageCountValidation', () => {
     test('should return undefined if pages is more than or or equal currentPage', async () => {

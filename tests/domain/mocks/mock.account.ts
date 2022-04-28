@@ -1,7 +1,7 @@
-import { UserModel } from "@/domain/models";
-import { AddAccount, Authentication } from "@/domain/usecases";
+import { UserModel } from "@/domain/models"
+import { AddAccount, Authentication } from "@/domain/usecases"
 
-import faker from "@faker-js/faker";
+import faker from "@faker-js/faker"
 
 export const mockUserModel = (): UserModel => ({
     id: faker.datatype.uuid(),

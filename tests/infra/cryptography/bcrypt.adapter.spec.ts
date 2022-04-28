@@ -1,5 +1,5 @@
-import { BcryptAdapter } from "@/infra";
-import { throwError } from "tests/domain/mocks/test.helpers";
+import { BcryptAdapter } from "@/infra"
+import { throwError } from "tests/domain/mocks/test.helpers"
 
 import * as bcrypt from 'bcrypt'
 

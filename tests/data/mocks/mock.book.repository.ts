@@ -1,5 +1,5 @@
-import { AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols";
-import { mockBookModel } from "tests/domain/mocks";
+import { AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols"
+import { mockBookModel } from "tests/domain/mocks"
 
 export class AddBookRepositorySpy implements AddBookRepository {
     bookData: AddBookRepository.Params

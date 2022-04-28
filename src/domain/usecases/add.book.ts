@@ -1,6 +1,6 @@
 export interface AddBook {
-    add: (bookData: AddBook.Params) => Promise<void>;
-};
+    add: (bookData: AddBook.Params) => Promise<void>
+}
 
 export namespace AddBook {
     export type Params = {
@@ -11,4 +11,4 @@ export namespace AddBook {
         pages: number,
         accessToken: string
     }
-};
+}

@@ -1,9 +1,9 @@
-import { serverError } from "@/presentation/helpers";
-import { LoadBookListSpy } from "../mocks";
-import { throwError } from "tests/domain/mocks/test.helpers";
-import { LoadBookListController } from "@/presentation/controllers";
+import { serverError } from "@/presentation/helpers"
+import { LoadBookListSpy } from "../mocks"
+import { throwError } from "tests/domain/mocks/test.helpers"
+import { LoadBookListController } from "@/presentation/controllers"
 
-import faker from "@faker-js/faker";
+import faker from "@faker-js/faker"
 
 type SutType = {
     sut: LoadBookListController
