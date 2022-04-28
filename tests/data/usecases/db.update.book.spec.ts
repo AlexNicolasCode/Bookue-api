@@ -58,4 +58,14 @@ describe('DbUpdateBook', () => {
 
         expect(result).toBeUndefined()
     })
+
+    test('should throw if CheckAccountByAccessTokenRepository throws', async () => {
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
+        const fakeBook = mockUpdateBookRequest()
+        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockImplementationOnce(throwError)
+
+        const promise = sut.update(fakeBook)
+
+        expect(promise).rejects.toThrowError()
+    })
 })
