@@ -93,4 +93,14 @@ describe('AccountMongoRepository', () => {
 
         expect(result).toBe(false)
     })
+
+    test('should return account id if access token is valid', async () => {
+        const sut = makeSut()
+        const fakeAccount = mockUserModel()
+        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(fakeAccount)
+        
+        const result = await sut.loadByToken(fakeAccount.accessToken)
+
+        expect(result).toStrictEqual({ id: fakeAccount.id })
+    })
 })
