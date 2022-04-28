@@ -4,6 +4,10 @@ import env from "@/env";
 
 import faker from "@faker-js/faker";
 
+const makeSut = (): AccountMongoRepository => {
+    return new AccountMongoRepository();
+}
+
 describe('AccountMongoRepository', () => {
     beforeAll(async () => {
         await MongoHelper.connect(env.MONGO_URL);
@@ -14,7 +18,7 @@ describe('AccountMongoRepository', () => {
     })
 
     test('should add one only user', async () => {
-        const sut = new AccountMongoRepository();
+        const sut = makeSut()
         const accountData = mockAddAccountParams();
         
         await sut.add(accountData);
@@ -24,7 +28,7 @@ describe('AccountMongoRepository', () => {
     })
 
     test('should return true when account exists', async () => {
-        const sut = new AccountMongoRepository();
+        const sut = makeSut()
         const accountData = mockAddAccountParams();
 
         await sut.add(accountData);        
@@ -34,7 +38,7 @@ describe('AccountMongoRepository', () => {
     })
     
     test('should return false when account not exists', async () => {
-        const sut = new AccountMongoRepository();
+        const sut = makeSut()
         const accountData = mockAddAccountParams();
         
         const result = await sut.checkByEmail(accountData.email);
@@ -43,7 +47,7 @@ describe('AccountMongoRepository', () => {
     })
     
     test('should return data account on success', async () => {
-        const sut = new AccountMongoRepository();
+        const sut = makeSut()
         const accountData = mockAddAccountParams();
         
         await sut.add(accountData);
@@ -57,7 +61,7 @@ describe('AccountMongoRepository', () => {
     })
     
     test('should call updateAccessToken to update token on success', async () => {
-        const sut = new AccountMongoRepository();
+        const sut = makeSut()
         const accountDataMock = mockAddAccountParams();
         const token = faker.datatype.uuid();
         
@@ -71,7 +75,7 @@ describe('AccountMongoRepository', () => {
     })
 
     test('should return true when account exists', async () => {
-        const sut = new AccountMongoRepository();
+        const sut = makeSut()
         const fakeAccount = mockUserModel()
         jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(fakeAccount)
         
@@ -81,7 +85,7 @@ describe('AccountMongoRepository', () => {
     })
 
     test('should return false when account exists', async () => {
-        const sut = new AccountMongoRepository();
+        const sut = makeSut()
         const fakeAccount = mockUserModel()
         jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(undefined)
         
