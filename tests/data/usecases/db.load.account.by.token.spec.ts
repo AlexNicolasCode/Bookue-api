@@ -49,6 +49,18 @@ describe('DbLoadAccountByToken', () => {
         expect(loadAccountByTokenRepositorySpy.token).toBe(fakeAccessToken)
     })
 
+    test('should call LoadAccountByTokenRepository with correct token and role', async () => {
+        const decrypterSpy = new DecrypterSpy()
+        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
+        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const fakeAccessToken = faker.internet.password()
+
+        await sut.load(fakeAccessToken, 'any_role')
+
+        expect(loadAccountByTokenRepositorySpy.role).toBe('any_role')
+        expect(loadAccountByTokenRepositorySpy.token).toBe(fakeAccessToken)
+    })
+
     test('should return null if LoadAccountByTokenRepository throws', async () => {
         const decrypterSpy = new DecrypterSpy()
         const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
