@@ -26,8 +26,10 @@ export class AuthenticationSpy implements Authentication {
 
 export class UpdateBookSpy implements UpdateBook {
     params: UpdateBook.Params
+    result = true
   
-    async update (params: UpdateBook.Params): Promise<void> {
+    async update (params: UpdateBook.Params): Promise<UpdateBook.Result> {
       this.params = params
+      return this.result
     }
 }
