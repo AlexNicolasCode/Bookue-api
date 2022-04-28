@@ -1,4 +1,4 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from "@/data/protocols";
+import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByIdRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from "@/data/protocols";
 
 import faker from "@faker-js/faker";
 
@@ -8,6 +8,16 @@ export class CheckAccountByEmailRepositorySpy implements CheckAccountByEmailRepo
 
     async checkByEmail (email: string): Promise<CheckAccountByEmailRepository.Result> {
         this.email = email
+        return this.result
+    }
+}
+
+export class CheckAccountByIdRepositorySpy implements CheckAccountByIdRepository {
+    userId: string
+    result = true
+
+    async checkById (userId: string): Promise<boolean> {
+        this.userId = userId
         return this.result
     }
 }
