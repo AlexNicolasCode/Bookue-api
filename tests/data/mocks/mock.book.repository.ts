@@ -10,7 +10,7 @@ export class AddBookRepositorySpy implements AddBookRepository {
 }
 
 export class LoadBookListRepositorySpy implements LoadBookListRepository {
-    userId: string
+    accessToken: string
     result = [
         mockBookModel(),
         mockBookModel(),
@@ -18,19 +18,19 @@ export class LoadBookListRepositorySpy implements LoadBookListRepository {
         mockBookModel(),
     ]
 
-    async loadAll (userId: string): Promise<LoadBookListRepository.Result> {
-        this.userId = userId
+    async loadAll (accessToken: string): Promise<LoadBookListRepository.Result> {
+        this.accessToken = accessToken
         return this.result
     }
 }
 
 export class LoadBookRepositorySpy implements LoadBookRepository {
-    userId: string
+    accessToken: string
     bookId: string
     result = mockBookModel()
     
     async loadOne (data: LoadBookRepository.Request): Promise<LoadBookRepository.Result> {
-        this.userId = data.userId
+        this.accessToken = data.accessToken
         this.bookId = data.bookId
         return this.result
     }

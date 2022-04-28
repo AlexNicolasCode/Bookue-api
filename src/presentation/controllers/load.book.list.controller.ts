@@ -7,7 +7,7 @@ export class LoadBookListController implements Controller {
 
     async handle (request: LoadBookListController.Request): Promise<HttpResponse> {
         try {
-            const bookList = await this.loadBookList.load(request.userId)
+            const bookList = await this.loadBookList.load(request.accessToken)
             return bookList.length ? ok(bookList) : noContent()
         } catch (error) {
             return serverError(error)
@@ -17,6 +17,6 @@ export class LoadBookListController implements Controller {
 
 export namespace LoadBookListController {
     export type Request = {
-        userId: string
+        accessToken: string
     }
 }

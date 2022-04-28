@@ -4,7 +4,7 @@ import { LoadBookListRepository } from "../protocols";
 export class DbLoadBookList implements LoadBookList {
     constructor (private readonly loadBookListRepository: LoadBookListRepository) {}
 
-    async load (userId: string): Promise<LoadBookList.Result> {
-        return await this.loadBookListRepository.loadAll(userId)
+    async load (accessToken: string): Promise<LoadBookList.Result> {
+        return await this.loadBookListRepository.loadAll(accessToken)
     }
 }

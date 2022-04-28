@@ -3,7 +3,7 @@ import { PageCountValidation, RequiredFieldValidation, ValidationComposite } fro
 
 export const makeUpdateBookValidation = (): ValidationComposite => {
     const validations: Validation[] = []
-    for (const field of ['userId', 'bookId']) {
+    for (const field of ['accessToken', 'bookId']) {
         validations.push(new RequiredFieldValidation(field))
     }
     validations.push(new PageCountValidation())

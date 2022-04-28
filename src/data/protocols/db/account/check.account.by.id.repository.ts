@@ -1,7 +1,7 @@
-export interface CheckAccountByIdRepository {
-    checkById: (userId: string) => Promise<CheckAccountByIdRepository.Result>
+export interface CheckAccountByAccessTokenRepository {
+    checkByAccessToken: (accessToken: string) => Promise<CheckAccountByAccessTokenRepository.Result>
 }
 
-export namespace CheckAccountByIdRepository {
+export namespace CheckAccountByAccessTokenRepository {
     export type Result = boolean
   }

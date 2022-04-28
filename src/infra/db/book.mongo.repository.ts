@@ -5,15 +5,16 @@ import { MongoHelper } from "./mongo.helper";
 export class BookMongoRepository implements AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository {
     async add (bookData: AddBookRepository.Params): Promise<void> {
         try {
-            await MongoHelper.addOneOn('book', bookData);
+            const account = await MongoHelper.findUserByAccessToken(bookData.accessToken)
+            await MongoHelper.addOneOn('book', { ...bookData, userId: account.id });
         } catch (e) {
             throw new Error(e);
         }
     }
 
-    async loadAll (userId: string): Promise<LoadBookListRepository.Result> {
+    async loadAll (accessToken: string): Promise<LoadBookListRepository.Result> {
         try {
-            return await MongoHelper.loadBookList(userId)
+            return await MongoHelper.loadBookList(accessToken)
         } catch (error) {
             throw new Error(error)
         }
