@@ -1,7 +1,6 @@
 import { UpdateBookController } from "@/presentation/controllers"
 import { InvalidParamError, ServerError } from "@/presentation/errors"
 import { serverError } from "@/presentation/helpers"
-import { CheckAccountByAccessTokenRepositorySpy } from "tests/data/mocks"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { UpdateBookSpy, ValidationSpy } from "../mocks"
@@ -10,19 +9,16 @@ type SutType = {
     sut: UpdateBookController
     validationSpy: ValidationSpy
     updateBookSpy: UpdateBookSpy
-    checkAccountByAccessToken: CheckAccountByAccessTokenRepositorySpy
 }
 
 const makeSut = (): SutType => {
-    const checkAccountByAccessToken = new CheckAccountByAccessTokenRepositorySpy()
     const validationSpy = new ValidationSpy()
     const updateBookSpy = new UpdateBookSpy()
-    const sut = new UpdateBookController(checkAccountByAccessToken, validationSpy, updateBookSpy)
+    const sut = new UpdateBookController(validationSpy, updateBookSpy)
     return {
         sut,
         validationSpy,
         updateBookSpy,
-        checkAccountByAccessToken,
     }
 }
 
@@ -103,45 +99,5 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.body).toBeNull()
-    })
-
-    test('should return 500 on status code if checkAccountByAccessToken throws', async () => {
-        const { sut, checkAccountByAccessToken, } = makeSut()
-        const fakeRequest = mockUpdateBookRequest()
-        jest.spyOn(checkAccountByAccessToken, 'checkByAccessToken').mockImplementationOnce(throwError)
-
-        const httpResponse = await sut.handle(fakeRequest)
-
-        expect(httpResponse.statusCode).toStrictEqual(500)
-    })
-
-    test('should return ServerError on body if checkAccountByAccessToken throws', async () => {
-        const { sut, checkAccountByAccessToken, } = makeSut()
-        const fakeRequest = mockUpdateBookRequest()
-        jest.spyOn(checkAccountByAccessToken, 'checkByAccessToken').mockImplementationOnce(throwError)
-
-        const httpResponse = await sut.handle(fakeRequest)
-
-        expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
-    })
-
-    test('should return 403 on status code if checkAccountByAccessToken returns false', async () => {
-        const { sut, checkAccountByAccessToken, } = makeSut()
-        const fakeRequest = mockUpdateBookRequest()
-        jest.spyOn(checkAccountByAccessToken, 'checkByAccessToken').mockResolvedValueOnce(false)
-
-        const httpResponse = await sut.handle(fakeRequest)
-
-        expect(httpResponse.statusCode).toStrictEqual(403)
-    })
-
-    test('should return InvalidParamError on body if checkAccountByAccessToken returns false', async () => {
-        const { sut, checkAccountByAccessToken, } = makeSut()
-        const fakeRequest = mockUpdateBookRequest()
-        jest.spyOn(checkAccountByAccessToken, 'checkByAccessToken').mockResolvedValueOnce(false)
-
-        const httpResponse = await sut.handle(fakeRequest)
-
-        expect(httpResponse.body).toStrictEqual(new InvalidParamError('accessToken'))
     })
 })
