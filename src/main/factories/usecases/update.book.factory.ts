@@ -1,8 +1,9 @@
 import { DbUpdateBook } from "@/data/usecases"
 import { UpdateBook } from "@/domain/usecases"
-import { BookMongoRepository } from "@/infra"
+import { AccountMongoRepository, BookMongoRepository } from "@/infra"
 
 export const makeDbUpdateBook = (): UpdateBook => {
+    const accountMongoRepository = new AccountMongoRepository()
     const bookMongoRepository = new BookMongoRepository()
-    return new DbUpdateBook(bookMongoRepository)
+    return new DbUpdateBook(accountMongoRepository, bookMongoRepository)
 }

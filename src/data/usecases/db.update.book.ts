@@ -1,10 +1,17 @@
 import { UpdateBook } from "@/domain/usecases/update.book"
-import { UpdateBookRepository } from "../protocols"
+import { CheckAccountByAccessTokenRepository, UpdateBookRepository } from "../protocols"
 
 export class DbUpdateBook implements UpdateBook {
-    constructor (private readonly updateBookRepository: UpdateBookRepository) {}
+    constructor (
+        private readonly checkAccountByAccessToken: CheckAccountByAccessTokenRepository,
+        private readonly updateBookRepository: UpdateBookRepository,
+    ) {}
 
-    async update (bookData: UpdateBook.Params): Promise<void> {
-        await this.updateBookRepository.update(bookData)
+    async update (data: UpdateBook.Params): Promise<UpdateBook.Result> {
+        const hasAccount = await this.checkAccountByAccessToken.checkByAccessToken(data.accessToken)
+        if (hasAccount) {
+            await this.updateBookRepository.update(data)
+            return true
+        }
     }
 }
