@@ -37,6 +37,17 @@ describe('DbLoadAccountByToken', () => {
 
         expect(result).toBeNull()
     })
+    
+    test('should call Decrypt with corrent token', async () => {
+        const decrypterSpy = new DecrypterSpy()
+        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
+        const sut = new DbLoadAccountByToken(decrypterSpy, loadAccountByTokenRepositorySpy)
+        const fakeAccessToken = faker.internet.password()
+
+        await sut.load(fakeAccessToken)
+
+        expect(loadAccountByTokenRepositorySpy.token).toBe(fakeAccessToken)
+    })
 
     test('should return null if LoadAccountByTokenRepository throws', async () => {
         const decrypterSpy = new DecrypterSpy()
