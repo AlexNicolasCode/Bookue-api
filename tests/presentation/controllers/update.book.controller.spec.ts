@@ -56,7 +56,18 @@ describe('UpdateBookController', () => {
         expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
     })
 
-    test('should return 204 if UpdateBook return true', async () => {
+    test('should return 403 if UpdateBook returns false', async () => {
+        const { sut, updateBookSpy, } = makeSut()
+        const fakeRequest = mockUpdateBookRequest() 
+        jest.spyOn(updateBookSpy, 'update').mockResolvedValue(false)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(403)
+        expect(httpResponse.body).toStrictEqual(new InvalidParamError('accessToken'))
+    })
+
+    test('should return 204 if UpdateBook returns true', async () => {
         const { sut, updateBookSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
         jest.spyOn(updateBookSpy, 'update').mockResolvedValue(true)
