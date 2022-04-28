@@ -6,6 +6,7 @@ import { mockUpdateBookRequest } from "tests/domain/mocks"
 type SutType = {
     sut: DbUpdateBook
     updateBookRepositorySpy: UpdateBookRepositorySpy
+    checkAccountByAccessTokenRepositorySpy: CheckAccountByAccessTokenRepositorySpy
 }
 
 const makeSut = (): SutType => {
@@ -15,6 +16,7 @@ const makeSut = (): SutType => {
     return {
         sut,
         updateBookRepositorySpy,
+        checkAccountByAccessTokenRepositorySpy,
     }
 }
 
@@ -45,5 +47,15 @@ describe('DbUpdateBook', () => {
         const result = await sut.update(fakeBook)
 
         expect(result).toBe(true)
+    })
+
+    test('should return undefined if CheckAccountByAccessTokenRepository returns false', async () => {
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
+        const fakeBook = mockUpdateBookRequest()
+        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockResolvedValueOnce(false)
+
+        const result = await sut.update(fakeBook)
+
+        expect(result).toBeUndefined()
     })
 })
