@@ -3,6 +3,7 @@ import { mockAddAccountParams, mockUserModel } from "tests/domain/mocks"
 import env from "@/env"
 
 import faker from "@faker-js/faker"
+import { throwError } from "tests/domain/mocks/test.helpers"
 
 const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
@@ -102,5 +103,15 @@ describe('AccountMongoRepository', () => {
         const result = await sut.loadByToken(fakeAccount.accessToken)
 
         expect(result).toStrictEqual({ id: fakeAccount.id })
+    })
+
+    test('should throw if MongoHelper on findUserByAccessToken method throws', async () => {
+        const sut = makeSut()
+        const fakeAccount = mockUserModel()
+        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockImplementationOnce(throwError)
+        
+        const Promise = sut.loadByToken(fakeAccount.accessToken)
+
+        expect(Promise).rejects.toThrowError()
     })
 })
