@@ -1,30 +1,9 @@
-import { Decrypter, LoadAccountByTokenRepository } from "@/data/protocols"
-import { LoadAccountByToken } from "@/domain/usecases"
 import { mockUserModel } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DecrypterSpy, LoadAccountByTokenRepositorySpy } from "../mocks"
+import { DbLoadAccountByToken } from "@/data/usecases"
 
 import faker from "@faker-js/faker"
-
-export class DbLoadAccountByToken implements LoadAccountByToken {
-    constructor (
-        private readonly decrypter: Decrypter,
-        private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository,
-    ) {}
-
-    async load (accessToken: string, role?: string): Promise<LoadAccountByToken.Result> {
-        let token: string
-        try {
-            token = await this.decrypter.decrypt(accessToken)
-            if (token) {
-                const account = await this.loadAccountByTokenRepository.loadByToken(accessToken, role)
-                return account ?? null
-            }
-        } catch (error) {
-            return null
-        }
-    }
-}
 
 type SutType = {
     decrypterSpy: DecrypterSpy
