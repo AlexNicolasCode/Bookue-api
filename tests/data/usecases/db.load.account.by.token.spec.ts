@@ -54,12 +54,12 @@ describe('DbLoadAccountByToken', () => {
     })
     
     test('should call Decrypt with corrent token', async () => {
-        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        const { sut, decrypterSpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
 
         await sut.load(fakeAccessToken)
 
-        expect(loadAccountByTokenRepositorySpy.token).toBe(fakeAccessToken)
+        expect(decrypterSpy.ciphertext).toBe(fakeAccessToken)
     })
 
     test('should call LoadAccountByTokenRepository with correct token and role', async () => {
