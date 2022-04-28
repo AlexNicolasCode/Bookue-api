@@ -1,5 +1,5 @@
 import { UpdateBookController } from "@/presentation/controllers"
-import { ServerError } from "@/presentation/errors"
+import { InvalidParamError, ServerError } from "@/presentation/errors"
 import { serverError } from "@/presentation/helpers"
 import { CheckAccountByIdRepositorySpy } from "tests/data/mocks"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
@@ -133,5 +133,15 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toStrictEqual(403)
+    })
+
+    test('should return InvalidParamError on body if CheckAccountById returns false', async () => {
+        const { sut, checkAccountById, } = makeSut()
+        const fakeRequest = mockUpdateBookRequest()
+        jest.spyOn(checkAccountById, 'checkById').mockResolvedValueOnce(false)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.body).toStrictEqual(new InvalidParamError('userId'))
     })
 })
