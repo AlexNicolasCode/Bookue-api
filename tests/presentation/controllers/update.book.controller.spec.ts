@@ -1,6 +1,7 @@
 import { UpdateBookController } from "@/presentation/controllers"
 import { ServerError } from "@/presentation/errors"
 import { serverError } from "@/presentation/helpers"
+import { CheckAccountByIdRepositorySpy } from "tests/data/mocks"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { UpdateBookSpy, ValidationSpy } from "../mocks"
@@ -9,16 +10,19 @@ type SutType = {
     sut: UpdateBookController
     validationSpy: ValidationSpy
     updateBookSpy: UpdateBookSpy
+    checkAccountById: CheckAccountByIdRepositorySpy
 }
 
 const makeSut = (): SutType => {
+    const checkAccountById = new CheckAccountByIdRepositorySpy()
     const validationSpy = new ValidationSpy()
     const updateBookSpy = new UpdateBookSpy()
-    const sut = new UpdateBookController(validationSpy, updateBookSpy)
+    const sut = new UpdateBookController(checkAccountById, validationSpy, updateBookSpy)
     return {
         sut,
         validationSpy,
         updateBookSpy,
+        checkAccountById,
     }
 }
 
@@ -99,5 +103,15 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.body).toBeNull()
+    })
+
+    test('should return 500 on status code if CheckAccountById throws', async () => {
+        const { sut, checkAccountById, } = makeSut()
+        const fakeRequest = mockUpdateBookRequest()
+        jest.spyOn(checkAccountById, 'checkById').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(500)
     })
 })
