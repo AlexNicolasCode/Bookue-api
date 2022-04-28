@@ -4,11 +4,12 @@ import {
     CheckAccountByAccessTokenRepository, 
     LoadAccountByEmailRepository,
     UpdateAccessTokenRepository,
+    LoadAccountByTokenRepository,
 } from "@/data/protocols"
 import { serverError } from "@/presentation/helpers"
 import { MongoHelper } from "./mongo.helper"
 
-export class AccountMongoRepository implements AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, CheckAccountByAccessTokenRepository {
+export class AccountMongoRepository implements AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, CheckAccountByAccessTokenRepository, LoadAccountByTokenRepository {
     async add (accountData: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
         const isAdded = await MongoHelper.addOneOn('user', accountData)
         return isAdded
@@ -37,5 +38,10 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
 
     async updateAccessToken (id: string, token: string): Promise<void> {
         await MongoHelper.updateAccessToken(id, token)
+    }
+
+    async loadByToken (token: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
+        const account = await MongoHelper.findUserByAccessToken(token)
+        return { id: account.id }
     }
 }
