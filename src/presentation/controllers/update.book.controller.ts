@@ -6,7 +6,6 @@ import { Controller, Validation, HttpResponse } from "../protocols"
 
 export class UpdateBookController implements Controller {
     constructor (
-        private readonly checkAccountByAccessToken: CheckAccountByAccessTokenRepository,
         private readonly validation: Validation,
         private readonly updateBook: UpdateBook,
     ) {}
@@ -17,11 +16,10 @@ export class UpdateBookController implements Controller {
             if (error) {
                 return badRequest(error)
             }
-            const hasAccount = await this.checkAccountByAccessToken.checkByAccessToken(request.accessToken)
-            if (!hasAccount) {
+            const isValid = await this.updateBook.update(request)
+            if (!isValid) {
                 return forbidden(new InvalidParamError('accessToken'))
             }
-            await this.updateBook.update(request)
             return noContent()
         } catch (error) {
             return serverError(error)
