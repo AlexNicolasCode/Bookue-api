@@ -33,9 +33,9 @@ export const MongoHelper = {
         return account
     },
 
-    async findUserById (userId: string): Promise<UserModel> {
+    async findUserByAccessToken (accessToken: string): Promise<UserModel> {
         const userModel = await this.findModel('user')
-        const account = await userModel.findOne({ id: userId })
+        const account = await userModel.findOne({ accessToken: accessToken })
         return account
     },
     
@@ -78,10 +78,12 @@ export const MongoHelper = {
         }
     },
 
-    async loadBookList (userId: string): Promise<LoadBookList.Result> {
+    async loadBookList (accessToken: string): Promise<LoadBookList.Result> {
         try {
+            const userModel = await this.findModel('user')
+            const account = await userModel.findOne({ accessToken: accessToken })
             const bookModel = await this.findModel('book')
-            return await bookModel.find({ userId: userId })
+            return await bookModel.find({ userId: account.id })
         } catch (error) {
             new Error(error)
         }
@@ -90,7 +92,7 @@ export const MongoHelper = {
     async loadOneBook (data: LoadBook.Request): Promise<LoadBook.Result> {
         try {
             const bookModel = await this.findModel('book')
-            return await bookModel.findOne({ userId: data.userId, bookId: data.bookId })
+            return await bookModel.findOne({ accessToken: data.accessToken, bookId: data.bookId })
         } catch (error) {
             new Error(error)
         }
@@ -98,9 +100,13 @@ export const MongoHelper = {
 
     async updateBook (data: UpdateBook.Params): Promise<void> {
         try {
-            const model = await this.findModel('book')
-            await model.findOneAndUpdate({ userId: data, bookId: data }, {
-                ...data
+            const userModel = await this.findModel('user')
+            const account = await userModel.findOne({ accessToken: data.accessToken })
+            const bookModel = await this.findModel('book')
+            await bookModel.findOneAndUpdate({ userId: account.id, bookId: data.bookId }, {
+                ...data,
+                userId: account.id, 
+                bookId: data.bookId,
             })
         } catch (e) {
             new Error(e)
