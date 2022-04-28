@@ -1,1 +1,1 @@
-export * from './apollo.server.resolver.adapter';
+export * from './apollo.server.resolver.adapter'

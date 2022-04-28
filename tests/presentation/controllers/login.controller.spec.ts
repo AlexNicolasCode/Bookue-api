@@ -1,10 +1,10 @@
-import { MissingParamError } from "@/presentation/errors";
-import { badRequest, unauthorized } from "@/presentation/helpers";
-import { throwError } from "tests/domain/mocks/test.helpers";
-import { AuthenticationSpy, ValidationSpy } from "../mocks";
-import { LoginController } from "@/presentation/controllers";
+import { MissingParamError } from "@/presentation/errors"
+import { badRequest, unauthorized } from "@/presentation/helpers"
+import { throwError } from "tests/domain/mocks/test.helpers"
+import { AuthenticationSpy, ValidationSpy } from "../mocks"
+import { LoginController } from "@/presentation/controllers"
 
-import faker from "@faker-js/faker";
+import faker from "@faker-js/faker"
 
 const mockRequest = (): LoginController.Request => {
     return {

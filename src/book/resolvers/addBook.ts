@@ -1,5 +1,5 @@
-import { verifyToken } from "../../user/tools/validadeUser";
-import { Book } from "../schema/book";
+import { verifyToken } from "../../user/tools/validadeUser"
+import { Book } from "../schema/book"
 
 export const addBook = async (token, title, author, description, currentPage, pages) => {
   const user: any = await verifyToken(token)
@@ -18,9 +18,9 @@ export const addBook = async (token, title, author, description, currentPage, pa
     created_at: Date.now()
   }      
 
-  const book = await Book.findOne(bookProps);
+  const book = await Book.findOne(bookProps)
 
   if (!book) {
-    return Book.create(bookProps);
+    return Book.create(bookProps)
   }
 }

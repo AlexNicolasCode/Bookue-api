@@ -1,42 +1,42 @@
-import { BookMongoRepository } from "@/infra/db/book.mongo.repository";
-import { MongoHelper } from "@/infra";
-import { mockAddBookParams, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks";
-import { throwError } from "tests/domain/mocks/test.helpers";
+import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
+import { MongoHelper } from "@/infra"
+import { mockAddBookParams, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
+import { throwError } from "tests/domain/mocks/test.helpers"
 import env from '@/env'
 
-import faker from "@faker-js/faker";
+import faker from "@faker-js/faker"
 
 const makeSut = (): BookMongoRepository => {
-    return new BookMongoRepository();
+    return new BookMongoRepository()
 }
 
 describe('BookMongoRepository', () => {
     beforeAll(async () => {
-        await MongoHelper.connect(env.MONGO_URL);
-    });
+        await MongoHelper.connect(env.MONGO_URL)
+    })
 
     beforeEach(async () => {
         await MongoHelper.deleteManyOn('book')
-    });
+    })
 
     describe('add book system', () => {
         test('should add one only book', async () => {
-            const sut = makeSut();
-            const bookData = mockAddBookParams();
+            const sut = makeSut()
+            const bookData = mockAddBookParams()
             jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValue(mockUserModel())
             
-            await sut.add(bookData);
+            await sut.add(bookData)
             
-            const count = await MongoHelper.countDocuments('book', bookData);
+            const count = await MongoHelper.countDocuments('book', bookData)
             expect(count).toBe(1)
         })
     
         test('should throw if addOneOn method on MongoHelper throws', async () => {
             const sut = makeSut()
-            const bookData = mockAddBookParams();
+            const bookData = mockAddBookParams()
             jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
             
-            const promise = sut.add(bookData);
+            const promise = sut.add(bookData)
             
             expect(promise).rejects.toThrowError()
         })
@@ -48,7 +48,7 @@ describe('BookMongoRepository', () => {
             const fakeAccessToken = faker.datatype.uuid()
             jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
             
-            const promise = sut.loadAll(fakeAccessToken);
+            const promise = sut.loadAll(fakeAccessToken)
             
             expect(promise).rejects.toThrowError()
         })
@@ -76,7 +76,7 @@ describe('BookMongoRepository', () => {
             }
             jest.spyOn(MongoHelper, 'loadOneBook').mockImplementationOnce(throwError)
             
-            const promise = sut.loadOne(fakeDataRequest);
+            const promise = sut.loadOne(fakeDataRequest)
             
             expect(promise).rejects.toThrowError()
         })
@@ -90,7 +90,7 @@ describe('BookMongoRepository', () => {
             }
             jest.spyOn(MongoHelper, 'loadOneBook').mockReturnValueOnce(fakeBook as any)
             
-            const book = await sut.loadOne(fakeDataRequest);
+            const book = await sut.loadOne(fakeDataRequest)
             
             expect(book).toBe(fakeBook)
         })

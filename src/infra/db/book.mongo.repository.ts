@@ -1,14 +1,14 @@
-import { AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols";
-import { BookModel } from "@/domain/models";
-import { MongoHelper } from "./mongo.helper";
+import { AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols"
+import { BookModel } from "@/domain/models"
+import { MongoHelper } from "./mongo.helper"
 
 export class BookMongoRepository implements AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository {
     async add (bookData: AddBookRepository.Params): Promise<void> {
         try {
             const account = await MongoHelper.findUserByAccessToken(bookData.accessToken)
-            await MongoHelper.addOneOn('book', { ...bookData, userId: account.id });
+            await MongoHelper.addOneOn('book', { ...bookData, userId: account.id })
         } catch (e) {
-            throw new Error(e);
+            throw new Error(e)
         }
     }
 

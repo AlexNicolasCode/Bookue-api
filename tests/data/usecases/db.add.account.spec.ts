@@ -1,7 +1,7 @@
-import { DbAddAccount } from "@/data/usecases";
-import { mockAddAccountParams } from "tests/domain/mocks";
-import { throwError } from "tests/domain/mocks/test.helpers";
-import { AddAccountRepositorySpy, CheckAccountByEmailRepositorySpy, HasherSpy } from "../mocks";
+import { DbAddAccount } from "@/data/usecases"
+import { mockAddAccountParams } from "tests/domain/mocks"
+import { throwError } from "tests/domain/mocks/test.helpers"
+import { AddAccountRepositorySpy, CheckAccountByEmailRepositorySpy, HasherSpy } from "../mocks"
 
 type SutTypes = {
     sut: DbAddAccount

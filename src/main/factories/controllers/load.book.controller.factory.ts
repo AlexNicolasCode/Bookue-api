@@ -1,6 +1,6 @@
-import { LoadBookController } from "@/presentation/controllers";
-import { Controller } from "@/presentation/protocols";
-import { makeDbLoadBook } from "../usecases";
+import { LoadBookController } from "@/presentation/controllers"
+import { Controller } from "@/presentation/protocols"
+import { makeDbLoadBook } from "../usecases"
 
 export const makeLoadBookController = (): Controller => {
     const dbLoadBook = makeDbLoadBook()

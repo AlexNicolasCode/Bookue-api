@@ -1,15 +1,15 @@
-import { addBook } from "../book/resolvers/addBook";
-import { deleteBook } from "../book/resolvers/deleteBook";
-import { getAllBooks } from "../book/resolvers/getAllBooks";
-import { getBook } from "../book/resolvers/getBook";
-import { updateBook } from "../book/resolvers/updateBook";
-import { loginUser } from "../user/resolvers/loginResolver";
-import { signUpUser } from "../user/resolvers/signUpResolver";
-import { autoLogin } from "../user/resolvers/autoLoginResolver";
-import { addNote } from "../note/resolvers/addNote";
-import { deleteNote } from "../note/resolvers/deleteNote";
-import { getNotes } from "../note/resolvers/getNotes";
-import { updateNote } from "../note/resolvers/updateNote";
+import { addBook } from "../book/resolvers/addBook"
+import { deleteBook } from "../book/resolvers/deleteBook"
+import { getAllBooks } from "../book/resolvers/getAllBooks"
+import { getBook } from "../book/resolvers/getBook"
+import { updateBook } from "../book/resolvers/updateBook"
+import { loginUser } from "../user/resolvers/loginResolver"
+import { signUpUser } from "../user/resolvers/signUpResolver"
+import { autoLogin } from "../user/resolvers/autoLoginResolver"
+import { addNote } from "../note/resolvers/addNote"
+import { deleteNote } from "../note/resolvers/deleteNote"
+import { getNotes } from "../note/resolvers/getNotes"
+import { updateNote } from "../note/resolvers/updateNote"
 
 export const resolvers = {
   Query: {

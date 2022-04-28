@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from "mongoose"
 
 const UserSchema = new Schema({
     name: String, 
@@ -7,4 +7,4 @@ const UserSchema = new Schema({
     accessToken: String,
 })
 
-export const User = model("bookue-users", UserSchema);
+export const User = model("bookue-users", UserSchema)

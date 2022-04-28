@@ -1,5 +1,5 @@
-import { LoadBook } from "@/domain/usecases";
-import { LoadBookRepository } from "../protocols";
+import { LoadBook } from "@/domain/usecases"
+import { LoadBookRepository } from "../protocols"
 
 export class DbLoadBook implements LoadBook {
     constructor (private readonly loadBookRepository: LoadBookRepository) {}

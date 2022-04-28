@@ -1,5 +1,5 @@
-import { InvalidPageCountError } from "@/presentation/errors";
-import { Validation } from "@/presentation/protocols";
+import { InvalidPageCountError } from "@/presentation/errors"
+import { Validation } from "@/presentation/protocols"
 
 export class PageCountValidation implements Validation {
     validate (input: any): Error {

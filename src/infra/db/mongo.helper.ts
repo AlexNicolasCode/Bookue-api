@@ -1,16 +1,16 @@
-import { Book } from "@/book/schema/book";
-import { UserModel } from "@/domain/models";
-import { User } from "./mongoose.schemas";
-import { LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases";
+import { Book } from "@/book/schema/book"
+import { UserModel } from "@/domain/models"
+import { User } from "./mongoose.schemas"
+import { LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases"
 
-import * as mongoose from "mongoose";
+import * as mongoose from "mongoose"
 
 export const MongoHelper = {
     client: null,
 
     async connect (uri: string): Promise<void> {
-        this.client = mongoose.connect(uri);
-        this.checkConnection();
+        this.client = mongoose.connect(uri)
+        this.checkConnection()
     },
 
     async checkConnection (): Promise<void> {
@@ -19,11 +19,11 @@ export const MongoHelper = {
     
     async addOneOn (modelName: string, data): Promise<boolean> {
         try {
-            const model = await this.findModel(modelName);
-            await model.create(data);
+            const model = await this.findModel(modelName)
+            await model.create(data)
             return true
         } catch (e) {
-            throw new Error(e);
+            throw new Error(e)
         }
     },
 
@@ -41,16 +41,16 @@ export const MongoHelper = {
     
     async countDocuments (modelName: string, data: any): Promise<number> {
         try {
-            const model = await this.findModel(modelName);
-            const count = await model.countDocuments(data);
+            const model = await this.findModel(modelName)
+            const count = await model.countDocuments(data)
             return count
         } catch (e) {
-            throw new Error(e);
+            throw new Error(e)
         }
     },
     
     async deleteManyOn(modelName: string): Promise<void> {
-        const findModel = await this.findModel(modelName);
+        const findModel = await this.findModel(modelName)
         await findModel.deleteMany({})
     },
 
@@ -59,12 +59,12 @@ export const MongoHelper = {
             const modelMapper = {
                 'book': Book,
                 'user': User,
-            };
-            const model = modelMapper[modelName];
+            }
+            const model = modelMapper[modelName]
             return model
         } catch (e) {
-            throw new Error(e);
-        };
+            throw new Error(e)
+        }
     },
 
     async updateAccessToken (id: string, token: string): Promise<void> {

@@ -1,6 +1,6 @@
-import { BookModel } from "@/domain/models";
-import { AddBook, LoadBook, LoadBookList } from "@/domain/usecases";
-import { mockBookModel } from "tests/domain/mocks";
+import { BookModel } from "@/domain/models"
+import { AddBook, LoadBook, LoadBookList } from "@/domain/usecases"
+import { mockBookModel } from "tests/domain/mocks"
 
 export class AddBookSpy implements AddBook {
     params: AddBook.Params

@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from "mongoose"
 
 const BookSchema = new Schema({
     title: String,
@@ -10,4 +10,4 @@ const BookSchema = new Schema({
     created_at: Date
 })
 
-export const Book = model("books", BookSchema);
+export const Book = model("books", BookSchema)

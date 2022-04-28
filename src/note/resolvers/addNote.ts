@@ -1,5 +1,5 @@
-import { verifyToken } from "../../user/tools/validadeUser";
-import { Note } from "../schema";
+import { verifyToken } from "../../user/tools/validadeUser"
+import { Note } from "../schema"
 
 export const addNote = async (token, bookID, note) => {
     const user: any = await verifyToken(token)
@@ -8,7 +8,7 @@ export const addNote = async (token, bookID, note) => {
         return
     }
 
-    const checkNotes = await Note.findOne({ bookID: bookID, text: note });
+    const checkNotes = await Note.findOne({ bookID: bookID, text: note })
     if (checkNotes)  {
         return
     }

@@ -1,6 +1,6 @@
 export interface AddBookRepository {
-    add: (bookData: AddBookRepository.Params) => Promise<void>;
-};
+    add: (bookData: AddBookRepository.Params) => Promise<void>
+}
 
 export namespace AddBookRepository {
     export type Params = {

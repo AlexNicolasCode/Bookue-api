@@ -1,8 +1,8 @@
-import { verifyToken } from "../../user/tools/validadeUser";
-import { Note } from "../schema";
+import { verifyToken } from "../../user/tools/validadeUser"
+import { Note } from "../schema"
 
 export const updateNote = async (token, bookID, noteID, newNote) => {
-  const user: any = verifyToken(token);
+  const user: any = verifyToken(token)
 
   if (!user) {
     return

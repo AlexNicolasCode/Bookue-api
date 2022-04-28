@@ -1,6 +1,6 @@
 export interface UpdateBook {
-    update: (bookData: UpdateBook.Params) => Promise<void>;
-};
+    update: (bookData: UpdateBook.Params) => Promise<void>
+}
 
 export namespace UpdateBook {
     export type Params = {
@@ -12,4 +12,4 @@ export namespace UpdateBook {
         accessToken: string
         bookId: string
     }
-};
+}

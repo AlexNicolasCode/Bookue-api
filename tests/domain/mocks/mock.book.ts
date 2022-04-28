@@ -1,8 +1,8 @@
-import { UpdateBookRepository } from "@/data/protocols";
-import { BookModel } from "@/domain/models";
-import { AddBook } from "@/domain/usecases";
+import { UpdateBookRepository } from "@/data/protocols"
+import { BookModel } from "@/domain/models"
+import { AddBook } from "@/domain/usecases"
 
-import faker from '@faker-js/faker';
+import faker from '@faker-js/faker'
 
 export const mockBookModel = (): BookModel => {
     return {
@@ -11,8 +11,8 @@ export const mockBookModel = (): BookModel => {
         description: faker.random.words(),
         currentPage: faker.datatype.number(),
         pages: faker.datatype.number(),
-    };
-};
+    }
+}
 
 export const mockAddBookParams = (): AddBook.Params => {
     return {
@@ -22,8 +22,8 @@ export const mockAddBookParams = (): AddBook.Params => {
         currentPage: faker.datatype.number(),
         pages: faker.datatype.number(),
         accessToken: faker.datatype.uuid(),
-    };
-};
+    }
+}
 
 export const mockUpdateBookRequest = (): UpdateBookRepository.Params => {
     const currentPage = faker.datatype.number()

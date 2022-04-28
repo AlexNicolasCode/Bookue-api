@@ -1,4 +1,4 @@
-import { Encrypter } from "@/data/protocols";
+import { Encrypter } from "@/data/protocols"
 
 import * as jwt from 'jsonwebtoken'
 

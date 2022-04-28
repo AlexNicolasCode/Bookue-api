@@ -1,6 +1,6 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from "@/data/protocols";
+import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from "@/data/protocols"
 
-import faker from "@faker-js/faker";
+import faker from "@faker-js/faker"
 
 export class CheckAccountByEmailRepositorySpy implements CheckAccountByEmailRepository {
     email: string
