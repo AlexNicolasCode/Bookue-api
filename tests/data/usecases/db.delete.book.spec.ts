@@ -75,4 +75,13 @@ describe('DbDeleteBook', () => {
         expect(deleteBookRepositorySpy.accessBook).toBe(fakeRequest.accessToken)
         expect(deleteBookRepositorySpy.bookId).toBe(fakeRequest.bookId)
     })
+    
+    test('should return true on success', async () => {
+        const { sut } = makeSut()
+        const fakeRequest = mockDeleteBookRequest()
+        
+        const result = await sut.delete(fakeRequest)
+        
+        expect(result).toBe(true)
+    })
 })
