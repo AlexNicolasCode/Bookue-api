@@ -1,8 +1,14 @@
-import { AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols"
+import { 
+    AddBookRepository, 
+    DeleteBookRepository, 
+    LoadBookListRepository, 
+    LoadBookRepository, 
+    UpdateBookRepository,
+} from "@/data/protocols"
 import { BookModel } from "@/domain/models"
 import { MongoHelper } from "./mongo.helper"
 
-export class BookMongoRepository implements AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository {
+export class BookMongoRepository implements AddBookRepository, LoadBookListRepository, LoadBookRepository, UpdateBookRepository, DeleteBookRepository {
     async add (bookData: AddBookRepository.Params): Promise<void> {
         try {
             const account = await MongoHelper.findUserByAccessToken(bookData.accessToken)
@@ -34,5 +40,10 @@ export class BookMongoRepository implements AddBookRepository, LoadBookListRepos
         } catch (error) {
             throw new Error(error)
         }
+    }
+
+    async delete (data: DeleteBookRepository.Params): Promise<void> {
+        await MongoHelper.deleteBook(data)
+        return
     }
 }

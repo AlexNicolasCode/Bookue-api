@@ -1,7 +1,7 @@
 import { Book } from "@/book/schema/book"
 import { UserModel } from "@/domain/models"
 import { User } from "./mongoose.schemas"
-import { LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases"
+import { DeleteBook, LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases"
 
 import * as mongoose from "mongoose"
 
@@ -110,6 +110,17 @@ export const MongoHelper = {
             })
         } catch (e) {
             new Error(e)
+        }
+    },
+
+    async deleteBook (data: DeleteBook.Params): Promise<void> {
+        try {
+            const userModel = await this.findModel('user')
+            const account = await userModel.findOne({ accessToken: data.accessToken })
+            const bookModel = await this.findModel('book')
+            await bookModel.deleteOne({ userId: account.id, bookId: data.bookId })
+        } catch (error) {
+            new Error(error)
         }
     },
 }
