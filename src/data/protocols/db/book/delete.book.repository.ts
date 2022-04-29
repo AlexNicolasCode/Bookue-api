@@ -4,7 +4,7 @@ export interface DeleteBookRepository {
 
 export namespace DeleteBookRepository {
     export type Params = {
-        userId: string
+        accessToken: string
         bookId: string
     }
 }
