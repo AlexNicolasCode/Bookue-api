@@ -1,4 +1,5 @@
 import { LoadAccountByToken } from "@/domain/usecases";
+import { AccessDeniedError } from "@/presentation/errors";
 import { forbidden, ok, serverError } from "@/presentation/helpers";
 import { HttpResponse, Middleware } from "@/presentation/protocols";
 import faker from "@faker-js/faker";
@@ -21,7 +22,7 @@ export class AuthMiddleware implements Middleware {
                     return ok({ id: account.id })
                 }
             }
-            return
+            return forbidden(new AccessDeniedError())
         } catch (error) {
             return serverError(error)
         }
@@ -71,5 +72,15 @@ describe('AuthMiddleware', () => {
 
         expect(loadAccountByTokenSpy.accessToken).toStrictEqual(fakeRequest.accessToken)
         expect(loadAccountByTokenSpy.role).toStrictEqual('any_role')
+    })
+
+    test('should return 403 if access token is invalid', async () => {
+        const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
+        const sut = new AuthMiddleware(loadAccountByTokenSpy)
+
+        const httpResponse = await sut.handle({ accessToken: null })
+
+        expect(httpResponse.statusCode).toStrictEqual(403)
+        expect(httpResponse.body).toStrictEqual(new AccessDeniedError())
     })
 })
