@@ -1,23 +1,7 @@
-import { DeleteBook } from "@/domain/usecases"
-import { CheckAccountByAccessTokenRepository, DeleteBookRepository } from "@/data/protocols"
 import { CheckAccountByAccessTokenRepositorySpy, DeleteBookRepositorySpy } from "../mocks"
 import { mockDeleteBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
-
-export class DbDeleteBook implements DeleteBook {
-    constructor (
-        private readonly checkAccountByAccessTokenRepository: CheckAccountByAccessTokenRepository,
-        private readonly deleteBookRepository: DeleteBookRepository,
-    ) {}
-
-    async delete (data: DeleteBook.Params): Promise<boolean> {
-        const hasAccount = await this.checkAccountByAccessTokenRepository.checkByAccessToken(data.accessToken)
-        if (hasAccount) {
-            await this.deleteBookRepository.delete(data)
-            return true
-        }
-    }
-}
+import { DbDeleteBook } from "@/data/usecases"
 
 type SutType = {
     sut: DbDeleteBook
