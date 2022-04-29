@@ -19,11 +19,26 @@ export class DbDeleteBook implements DeleteBook {
     }
 }
 
+type SutType = {
+    sut: DbDeleteBook
+    checkAccountByAccessTokenRepositorySpy: CheckAccountByAccessTokenRepositorySpy
+    deleteBookRepositorySpy: DeleteBookRepositorySpy
+}
+
+const makeSut = (): SutType => {
+    const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+    const deleteBookRepositorySpy = new DeleteBookRepositorySpy()
+    const sut = new DbDeleteBook(checkAccountByAccessTokenRepositorySpy, deleteBookRepositorySpy)
+    return {
+        sut,
+        checkAccountByAccessTokenRepositorySpy,
+        deleteBookRepositorySpy,
+    }
+}
+
 describe('DbDeleteBook', () => {
     test('should throws if CheckAccountByAccessTokenRepository throws', async () => {
-        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
-        const deleteBookRepositorySpy = new DeleteBookRepositorySpy()
-        const sut = new DbDeleteBook(checkAccountByAccessTokenRepositorySpy, deleteBookRepositorySpy)
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
         jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockImplementationOnce(throwError)
         
@@ -33,9 +48,7 @@ describe('DbDeleteBook', () => {
     })
 
     test('should call CheckAccountByAccessTokenRepository with correct values', async () => {
-        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
-        const deleteBookRepositorySpy = new DeleteBookRepositorySpy()
-        const sut = new DbDeleteBook(checkAccountByAccessTokenRepositorySpy, deleteBookRepositorySpy)
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
         
         await sut.delete(fakeRequest)
@@ -44,9 +57,7 @@ describe('DbDeleteBook', () => {
     })
 
     test('should throws if DeleteBookRepository throws', async () => {
-        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
-        const deleteBookRepositorySpy = new DeleteBookRepositorySpy()
-        const sut = new DbDeleteBook(checkAccountByAccessTokenRepositorySpy, deleteBookRepositorySpy)
+        const { sut, deleteBookRepositorySpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
         jest.spyOn(deleteBookRepositorySpy, 'delete').mockImplementationOnce(throwError)
 
@@ -56,9 +67,7 @@ describe('DbDeleteBook', () => {
     })
     
     test('should call DeleteBookRepository with correct values', async () => {
-        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
-        const deleteBookRepositorySpy = new DeleteBookRepositorySpy()
-        const sut = new DbDeleteBook(checkAccountByAccessTokenRepositorySpy, deleteBookRepositorySpy)
+        const { sut, deleteBookRepositorySpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
         
         await sut.delete(fakeRequest)
