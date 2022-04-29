@@ -54,4 +54,16 @@ describe('DbDeleteBook', () => {
 
         expect(promise).rejects.toThrowError()
     })
+    
+    test('should call DeleteBookRepository with correct values', async () => {
+        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+        const deleteBookRepositorySpy = new DeleteBookRepositorySpy()
+        const sut = new DbDeleteBook(checkAccountByAccessTokenRepositorySpy, deleteBookRepositorySpy)
+        const fakeRequest = mockDeleteBookRequest()
+        
+        await sut.delete(fakeRequest)
+        
+        expect(deleteBookRepositorySpy.accessBook).toBe(fakeRequest.accessToken)
+        expect(deleteBookRepositorySpy.bookId).toBe(fakeRequest.bookId)
+    })
 })
