@@ -56,6 +56,16 @@ describe('DbDeleteBook', () => {
         expect(checkAccountByAccessTokenRepositorySpy.accessToken).toBe(fakeRequest.accessToken)
     })
 
+    test('should return undefined if access token is invalid', async () => {
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
+        const fakeRequest = mockDeleteBookRequest()
+        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockResolvedValueOnce(false)
+        
+        const result = await sut.delete(fakeRequest)
+        
+        expect(result).toBeUndefined()
+    })
+
     test('should throws if DeleteBookRepository throws', async () => {
         const { sut, deleteBookRepositorySpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
