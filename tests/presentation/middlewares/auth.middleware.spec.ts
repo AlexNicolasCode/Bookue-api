@@ -1,39 +1,11 @@
-import { LoadAccountByToken } from "@/domain/usecases";
 import { AccessDeniedError } from "@/presentation/errors";
-import { forbidden, ok, serverError } from "@/presentation/helpers";
-import { HttpResponse, Middleware } from "@/presentation/protocols";
-import faker from "@faker-js/faker";
+import { serverError } from "@/presentation/helpers";
 import { mockUserModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadAccountByTokenSpy } from "../mocks";
+import { AuthMiddleware } from "@/presentation/middlewares";
 
-export class AuthMiddleware implements Middleware {
-    constructor (
-        private readonly loadAccountByToken: LoadAccountByToken,
-        private readonly role?: string,
-    ) {}
-
-    async handle (request: AuthMiddleware.Request): Promise<HttpResponse> {
-        try {
-            const { accessToken } = request
-            if (accessToken) {
-                const account = await this.loadAccountByToken.load(accessToken, this.role)  
-                if (account) {
-                    return ok({ id: account.id })
-                }
-            }
-            return forbidden(new AccessDeniedError())
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-} 
-
-export namespace AuthMiddleware {
-    export type Request = {
-        accessToken?: string
-    }
-}
+import faker from "@faker-js/faker";
 
 const mockRequest = () => ({
     accessToken: faker.datatype.uuid()
