@@ -20,45 +20,45 @@ describe('AccountMongoRepository', () => {
 
     test('should add one only user', async () => {
         const sut = makeSut()
-        const account = mockAddAccountParams()
+        const fakeAccount = mockAddAccountParams()
         
-        await sut.add(account)
-        const count = await MongoHelper.countDocuments('user', account)
+        await sut.add(fakeAccount)
+        const count = await MongoHelper.countDocuments('user', fakeAccount)
         
         expect(count).toBe(1)
     })
 
     test('should return true when account exists', async () => {
         const sut = makeSut()
-        const account = mockAddAccountParams()
+        const fakeAccount = mockAddAccountParams()
 
-        await sut.add(account)        
-        const result = await sut.checkByEmail(account.email)
+        await sut.add(fakeAccount)        
+        const result = await sut.checkByEmail(fakeAccount.email)
         
         expect(result).toBe(true)
     })
     
     test('should return false when account not exists', async () => {
         const sut = makeSut()
-        const account = mockAddAccountParams()
+        const fakeAccount = mockAddAccountParams()
         
-        const result = await sut.checkByEmail(account.email)
+        const result = await sut.checkByEmail(fakeAccount.email)
         
         expect(result).toBe(false)
     })
     
     test('should return data account on success', async () => {
         const sut = makeSut()
-        const account = mockAddAccountParams()
+        const fakeAccount = mockAddAccountParams()
         
-        await sut.add(account)
-        const result = await sut.loadByEmail(account.email)
+        await sut.add(fakeAccount)
+        const result = await sut.loadByEmail(fakeAccount.email)
         
         expect({
             name: result.name,
             email: result.email,
             password: result.password,
-        }).toStrictEqual(account)
+        }).toStrictEqual(fakeAccount)
     })
     
     test('should call updateAccessToken to update token on success', async () => {
