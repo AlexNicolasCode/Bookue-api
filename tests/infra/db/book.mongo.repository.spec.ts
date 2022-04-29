@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { MongoHelper } from "@/infra"
-import { mockAddBookParams, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
+import { mockAddBookParams, mockDeleteBookRequest, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import env from '@/env'
 
@@ -124,6 +124,18 @@ describe('BookMongoRepository', () => {
             await sut.update(fakeBook)
 
             expect(MongoHelperSpy).toBeCalledWith(fakeBook)
+        })
+    })
+
+    describe('delete method', () => {
+        test('should call MongoHelper with correct values', async () => {
+            const sut = makeSut()
+            const fakeData = mockDeleteBookRequest()
+            const MongoHelperSpy = jest.spyOn(MongoHelper, 'deleteBook')
+
+            await sut.delete(fakeData)
+
+            expect(MongoHelperSpy).toBeCalledWith(fakeData)
         })
     })
 })
