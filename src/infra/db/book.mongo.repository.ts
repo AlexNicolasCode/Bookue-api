@@ -43,7 +43,10 @@ export class BookMongoRepository implements AddBookRepository, LoadBookListRepos
     }
 
     async delete (data: DeleteBookRepository.Params): Promise<void> {
-        await MongoHelper.deleteBook(data)
-        return
+        try {
+            await MongoHelper.deleteBook(data)
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 }

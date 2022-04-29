@@ -137,5 +137,15 @@ describe('BookMongoRepository', () => {
 
             expect(MongoHelperSpy).toBeCalledWith(fakeData)
         })
+
+        test('should throw if MongoHelper throws', async () => {
+            const sut = makeSut()
+            const fakeData = mockDeleteBookRequest()
+            jest.spyOn(MongoHelper, 'deleteBook').mockImplementationOnce(throwError)
+
+            const promise = sut.delete(fakeData)
+
+            expect(promise).rejects.toThrowError()
+        })
     })
 })
