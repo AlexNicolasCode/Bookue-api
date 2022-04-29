@@ -4,7 +4,7 @@ export interface DeleteBook {
 
 export namespace DeleteBook {
     export type Params = {
-        userId: string
+        accessToken: string
         bookId: string
     }
     export type Result = boolean
