@@ -147,5 +147,14 @@ describe('BookMongoRepository', () => {
 
             expect(promise).rejects.toThrowError()
         })
+
+        test('should return undefined on success', async () => {
+            const sut = makeSut()
+            const fakeData = mockDeleteBookRequest()
+
+            const result = await sut.delete(fakeData)
+
+            expect(result).toBeUndefined()
+        })
     })
 })
