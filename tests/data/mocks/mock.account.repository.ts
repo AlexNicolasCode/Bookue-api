@@ -1,4 +1,4 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository } from "@/data/protocols"
+import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, DeleteBookRepository } from "@/data/protocols"
 
 import faker from "@faker-js/faker"
 
@@ -71,5 +71,15 @@ export class UpdateAccessTokenRepositorySpy implements UpdateAccessTokenReposito
     async updateAccessToken (id: string, token: string): Promise<void> {
         this.id = id
         this.token = token
+    }
+}
+
+export class DeleteBookRepositorySpy implements DeleteBookRepository {
+    accessBook: string
+    bookId: string
+
+    async delete (data: DeleteBookRepository.Params): Promise<void> {
+        this.accessBook = data.accessToken
+        this.bookId = data.bookId
     }
 }
