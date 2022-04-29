@@ -1,7 +1,8 @@
 import { LoadAccountByToken } from "@/domain/usecases";
-import { serverError } from "@/presentation/helpers";
+import { forbidden, ok, serverError } from "@/presentation/helpers";
 import { HttpResponse, Middleware } from "@/presentation/protocols";
 import faker from "@faker-js/faker";
+import { mockUserModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadAccountByTokenSpy } from "../mocks";
 
@@ -17,9 +18,10 @@ export class AuthMiddleware implements Middleware {
             if (accessToken) {
                 const account = await this.loadAccountByToken.load(accessToken, this.role)  
                 if (account) {
-                    return
+                    return ok({ id: account.id })
                 }
             }
+            return
         } catch (error) {
             return serverError(error)
         }
@@ -46,5 +48,17 @@ describe('AuthMiddleware', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(500)
         expect(httpResponse.body).toStrictEqual(serverError(new Error).body)
+    })
+
+    test('should return 200 on success', async () => {
+        const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
+        const sut = new AuthMiddleware(loadAccountByTokenSpy)
+        const fakeAccount = mockUserModel()
+        jest.spyOn(loadAccountByTokenSpy, 'load').mockResolvedValueOnce(fakeAccount)
+
+        const httpResponse = await sut.handle(mockRequest())
+
+        expect(httpResponse.statusCode).toStrictEqual(200)
+        expect(httpResponse.body).toStrictEqual({ id: fakeAccount.id })
     })
 })
