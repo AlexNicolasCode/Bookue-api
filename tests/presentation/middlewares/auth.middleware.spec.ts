@@ -61,4 +61,15 @@ describe('AuthMiddleware', () => {
         expect(httpResponse.statusCode).toStrictEqual(200)
         expect(httpResponse.body).toStrictEqual({ id: fakeAccount.id })
     })
+
+    test('should call LoadAccountByToken with correct values', async () => {
+        const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
+        const sut = new AuthMiddleware(loadAccountByTokenSpy, 'any_role')
+        const fakeRequest = mockRequest()
+
+        await sut.handle(fakeRequest)
+
+        expect(loadAccountByTokenSpy.accessToken).toStrictEqual(fakeRequest.accessToken)
+        expect(loadAccountByTokenSpy.role).toStrictEqual('any_role')
+    })
 })
