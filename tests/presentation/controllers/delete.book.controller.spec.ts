@@ -29,11 +29,27 @@ export class DeleteBookController implements Controller {
     }
 }
 
+type SutType = {
+    sut: DeleteBookController
+    validationSpy: ValidationSpy
+    deleteBookSpy: DeleteBookSpy
+}
+
+const makeSut = (): SutType => {
+    const validationSpy = new ValidationSpy()
+    const deleteBookSpy = new DeleteBookSpy()
+    const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+    return {
+        sut,
+        validationSpy,
+        deleteBookSpy,
+    }
+}
+
+
 describe('DeleteBookController', () => {
     test('should return 400 if Validation return error', async () => {
-        const validationSpy = new ValidationSpy()
-        const deleteBookSpy = new DeleteBookSpy()
-        const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+        const { sut, validationSpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
         jest.spyOn(validationSpy, 'validate').mockReturnValueOnce(new Error())
 
@@ -44,9 +60,7 @@ describe('DeleteBookController', () => {
     })
     
     test('should return 403 if DeleteBook return false', async () => {
-        const validationSpy = new ValidationSpy()
-        const deleteBookSpy = new DeleteBookSpy()
-        const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+        const { sut, deleteBookSpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
         jest.spyOn(deleteBookSpy, 'delete').mockResolvedValueOnce(false)
         
@@ -57,9 +71,7 @@ describe('DeleteBookController', () => {
     })
 
     test('should return 500 if DeleteBook throws', async () => {
-        const validationSpy = new ValidationSpy()
-        const deleteBookSpy = new DeleteBookSpy()
-        const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+        const { sut, deleteBookSpy } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
         jest.spyOn(deleteBookSpy, 'delete').mockImplementationOnce(throwError)
 
@@ -70,9 +82,7 @@ describe('DeleteBookController', () => {
     })
 
     test('should return 204 on success', async () => {
-        const validationSpy = new ValidationSpy()
-        const deleteBookSpy = new DeleteBookSpy()
-        const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+        const { sut } = makeSut()
         const fakeRequest = mockDeleteBookRequest()
 
         const httpResponse = await sut.handle(fakeRequest)
