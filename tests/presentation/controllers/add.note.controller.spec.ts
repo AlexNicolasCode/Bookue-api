@@ -77,6 +77,15 @@ describe('AddNoteController', () => {
         expect(httpResponse.statusCode).toBe(500)
         expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
     })
+    
+    test('should call AddNote with correct values', async () => {
+        const { sut, addNoteSpy } = makeSut()
+        const fakeRequest = mockNoteModel()
+
+        await sut.handle(fakeRequest)
+
+        expect(addNoteSpy.params).toBe(fakeRequest)
+    })
 
     test('should return 403 if AddNote returns false', async () => {
         const { sut, addNoteSpy } = makeSut()
