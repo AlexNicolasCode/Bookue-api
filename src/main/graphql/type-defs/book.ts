@@ -17,6 +17,7 @@ export default gql`
             accessToken: String, 
             bookId: String
         ): Boolean
+        deleteBook (accessToken: String!, bookId: String!): Boolean
     }
 
     type Book {
