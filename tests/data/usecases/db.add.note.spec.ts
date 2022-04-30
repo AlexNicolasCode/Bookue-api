@@ -64,4 +64,15 @@ describe('DbAddNote', () => {
 
         expect(addNoteRepositorySpy.params).toBe(fakeNote)
     })
+
+    test('should return true on success', async () => {
+        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+        const addNoteRepositorySpy = new AddNoteRepositorySpy()
+        const sut = new DbAddNote(checkAccountByAccessTokenRepositorySpy, addNoteRepositorySpy)
+        const fakeNote = mockNoteModel()
+
+        const result = await sut.add(fakeNote)
+
+        expect(result).toBe(true)
+    })
 })
