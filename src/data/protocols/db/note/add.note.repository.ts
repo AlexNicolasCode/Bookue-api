@@ -1,7 +1,7 @@
 import { AddNote } from "@/domain/usecases"
 
 export interface AddNoteRepository {
-    add: (data: AddNoteRepository.Params) => Promise<void>
+    add: (data: AddNoteRepository.Params) => Promise<boolean>
 }
 
 export namespace AddNoteRepository {
