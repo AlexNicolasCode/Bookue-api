@@ -1,6 +1,6 @@
 import { DeleteBook } from "@/domain/usecases";
 import { AccessDeniedError, ServerError } from "@/presentation/errors";
-import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers";
+import { badRequest, forbidden, noContent, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockDeleteBookRequest } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -22,10 +22,10 @@ export class DeleteBookController implements Controller {
             if (!isValid) {
                 return forbidden(new AccessDeniedError())
             }
+            return noContent()
         } catch (error) {
             return serverError(error)
         } 
-        return
     }
 }
 
@@ -67,5 +67,17 @@ describe('DeleteBookController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(500)
         expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
+    })
+
+    test('should return 204 on success', async () => {
+        const validationSpy = new ValidationSpy()
+        const deleteBookSpy = new DeleteBookSpy()
+        const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+        const fakeRequest = mockDeleteBookRequest()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(204)
+        expect(httpResponse.body).toBeNull()
     })
 })
