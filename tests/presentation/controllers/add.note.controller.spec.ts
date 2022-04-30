@@ -1,5 +1,6 @@
 import { AddNote } from "@/domain/usecases";
-import { badRequest, serverError } from "@/presentation/helpers";
+import { AccessDeniedError } from "@/presentation/errors";
+import { badRequest, forbidden, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockNoteModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -18,18 +19,36 @@ class AddNoteController implements Controller {
             if (error) {
                 return badRequest(error)
             }
-            await this.addNote.add(request)
+            const isValid = await this.addNote.add(request)
+            if (!isValid) {
+                return forbidden(new AccessDeniedError())
+            }
         } catch (error) {
             return serverError(error)
         }
     }
 }
 
+type SutType = {
+    sut: AddNoteController
+    addNoteSpy: AddNoteSpy
+    validationSpy: ValidationSpy
+}
+
+const makeSut = (): SutType => {
+    const validationSpy = new ValidationSpy()
+    const addNoteSpy = new AddNoteSpy()
+    const sut = new AddNoteController(validationSpy, addNoteSpy)
+    return {
+        sut,
+        addNoteSpy,
+        validationSpy,
+    }
+}
+
 describe('AddNoteController', () => {
     test('should return 400 if Validation return error', async () => {
-        const validationSpy = new ValidationSpy()
-        const addNoteSpy = new AddNoteSpy()
-        const sut = new AddNoteController(validationSpy, addNoteSpy)
+        const { sut, validationSpy } = makeSut()
         const fakeRequest = mockNoteModel()
         validationSpy.error = new Error()
 
@@ -40,9 +59,7 @@ describe('AddNoteController', () => {
     })
 
     test('should return 500 if AddNote throws', async () => {
-        const validationSpy = new ValidationSpy()
-        const addNoteSpy = new AddNoteSpy()
-        const sut = new AddNoteController(validationSpy, addNoteSpy)
+        const { sut, addNoteSpy } = makeSut()
         const fakeRequest = mockNoteModel()
         jest.spyOn(addNoteSpy, 'add').mockImplementationOnce(throwError)
 
@@ -50,5 +67,16 @@ describe('AddNoteController', () => {
 
         expect(httpResponse.statusCode).toBe(500)
         expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
+    })
+
+    test('should return 403 if AddNote returns false', async () => {
+        const { sut, addNoteSpy } = makeSut()
+        const fakeRequest = mockNoteModel()
+        addNoteSpy.result = false
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(403)
+        expect(httpResponse.body).toStrictEqual(new AccessDeniedError())
     })
 })
