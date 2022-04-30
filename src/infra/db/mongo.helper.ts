@@ -1,7 +1,6 @@
-import { Book } from "@/book/schema/book"
 import { UserModel } from "@/domain/models"
-import { User } from "./mongoose.schemas"
 import { DeleteBook, LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases"
+import { Book, User } from "./mongoose.schemas"
 
 import * as mongoose from "mongoose"
 
