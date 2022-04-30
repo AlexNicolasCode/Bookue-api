@@ -1,8 +1,9 @@
 import { DeleteBook } from "@/domain/usecases";
-import { AccessDeniedError } from "@/presentation/errors";
+import { AccessDeniedError, ServerError } from "@/presentation/errors";
 import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockDeleteBookRequest } from "tests/domain/mocks";
+import { throwError } from "tests/domain/mocks/test.helpers";
 import { DeleteBookSpy, ValidationSpy } from "../mocks";
 
 export class DeleteBookController implements Controller {
@@ -41,17 +42,30 @@ describe('DeleteBookController', () => {
         expect(httpResponse.statusCode).toStrictEqual(400)
         expect(httpResponse.body).toStrictEqual(new Error())
     })
-
+    
     test('should return 403 if DeleteBook return false', async () => {
         const validationSpy = new ValidationSpy()
         const deleteBookSpy = new DeleteBookSpy()
         const sut = new DeleteBookController(validationSpy, deleteBookSpy)
         const fakeRequest = mockDeleteBookRequest()
         jest.spyOn(deleteBookSpy, 'delete').mockResolvedValueOnce(false)
-
+        
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toStrictEqual(403)
         expect(httpResponse.body).toStrictEqual(new AccessDeniedError())
+    })
+
+    test('should return 500 if DeleteBook throws', async () => {
+        const validationSpy = new ValidationSpy()
+        const deleteBookSpy = new DeleteBookSpy()
+        const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+        const fakeRequest = mockDeleteBookRequest()
+        jest.spyOn(deleteBookSpy, 'delete').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toStrictEqual(500)
+        expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
     })
 })
