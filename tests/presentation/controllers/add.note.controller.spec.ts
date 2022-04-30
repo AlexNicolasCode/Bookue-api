@@ -58,6 +58,15 @@ describe('AddNoteController', () => {
         expect(httpResponse.body).toStrictEqual(new Error())
     })
 
+    test('should call Validation with correct values', async () => {
+        const { sut, validationSpy } = makeSut()
+        const fakeRequest = mockNoteModel()
+
+        await sut.handle(fakeRequest)
+
+        expect(validationSpy.input).toBe(fakeRequest)
+    })
+
     test('should return 500 if AddNote throws', async () => {
         const { sut, addNoteSpy } = makeSut()
         const fakeRequest = mockNoteModel()
