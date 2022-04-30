@@ -2,6 +2,7 @@ module.exports = {
   roots: ['<rootDir>/tests'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/infra/db/mongo.helper.ts',
     '!<rootDir>/src/main/**'
   ],
   coverageDirectory: 'coverage',
