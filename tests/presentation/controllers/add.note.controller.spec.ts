@@ -1,34 +1,10 @@
-import { AddNote } from "@/domain/usecases";
+import { AddNoteController } from "@/presentation/controllers";
 import { AccessDeniedError } from "@/presentation/errors";
-import { badRequest, forbidden, noContent, serverError } from "@/presentation/helpers";
-import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
+import { serverError } from "@/presentation/helpers";
 import { mockNoteModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { ValidationSpy } from "../mocks";
 import { AddNoteSpy } from "../mocks/note.mock";
-
-class AddNoteController implements Controller {
-    constructor (
-        private readonly validation: Validation,
-        private readonly addNote: AddNote,
-    ) {}
-
-    async handle (request: AddNote.Params): Promise<HttpResponse> {
-        try {
-            const error = this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            const isValid = await this.addNote.add(request)
-            if (!isValid) {
-                return forbidden(new AccessDeniedError())
-            }
-            return noContent()
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
 
 type SutType = {
     sut: AddNoteController
