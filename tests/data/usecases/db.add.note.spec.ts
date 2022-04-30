@@ -75,4 +75,16 @@ describe('DbAddNote', () => {
 
         expect(result).toBe(true)
     })
+
+    test('should return undefined if access token is invalid', async () => {
+        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+        const addNoteRepositorySpy = new AddNoteRepositorySpy()
+        const sut = new DbAddNote(checkAccountByAccessTokenRepositorySpy, addNoteRepositorySpy)
+        const fakeNote = mockNoteModel()
+        checkAccountByAccessTokenRepositorySpy.result = false
+
+        const result = await sut.add(fakeNote)
+
+        expect(result).toBeUndefined()
+    })
 })
