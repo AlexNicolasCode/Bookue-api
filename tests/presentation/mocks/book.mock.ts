@@ -1,5 +1,5 @@
 import { BookModel } from "@/domain/models"
-import { AddBook, LoadBook, LoadBookList } from "@/domain/usecases"
+import { AddBook, DeleteBook, LoadBook, LoadBookList } from "@/domain/usecases"
 import { mockBookModel } from "tests/domain/mocks"
 
 export class AddBookSpy implements AddBook {
@@ -31,6 +31,17 @@ export class LoadBookSpy implements LoadBook {
     async load (data: LoadBook.Request): Promise<BookModel> {
         this.accessToken = data.accessToken
         this.bookId = data.bookId
+        return this.result
+    }
+}
+
+
+export class DeleteBookSpy implements DeleteBook {
+    params: DeleteBook.Params
+    result = true
+
+    async delete (params: DeleteBook.Params): Promise<boolean> {
+        this.params = params
         return this.result
     }
 }
