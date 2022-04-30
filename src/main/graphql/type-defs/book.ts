@@ -7,14 +7,21 @@ export default gql`
     }
 
     type Mutation {
-        addBook (title: String!, author: String!, description: String, currentPage: String, pages: String!, accessToken: String!): Book!
+        addBook (
+            title: String!,
+            author: String!,
+            description: String,
+            currentPage: String,
+            pages: String!,
+            accessToken: String!
+        ): Book!
         updateBook (
-            title: String, 
-            author: String, 
-            description: String, 
-            currentPage: String, 
-            pages: String, 
-            accessToken: String, 
+            title: String,
+            author: String,
+            description: String,
+            currentPage: String,
+            pages: String,
+            accessToken: String,
             bookId: String
         ): Boolean
         deleteBook (accessToken: String!, bookId: String!): Boolean
