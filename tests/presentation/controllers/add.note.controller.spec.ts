@@ -1,6 +1,6 @@
 import { AddNote } from "@/domain/usecases";
 import { AccessDeniedError } from "@/presentation/errors";
-import { badRequest, forbidden, serverError } from "@/presentation/helpers";
+import { badRequest, forbidden, noContent, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockNoteModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -23,6 +23,7 @@ class AddNoteController implements Controller {
             if (!isValid) {
                 return forbidden(new AccessDeniedError())
             }
+            return noContent()
         } catch (error) {
             return serverError(error)
         }
@@ -96,5 +97,15 @@ describe('AddNoteController', () => {
 
         expect(httpResponse.statusCode).toBe(403)
         expect(httpResponse.body).toStrictEqual(new AccessDeniedError())
+    })
+
+    test('should return 204 on success', async () => {
+        const { sut } = makeSut()
+        const fakeRequest = mockNoteModel()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(204)
+        expect(httpResponse.body).toBeNull()
     })
 })
