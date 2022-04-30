@@ -42,4 +42,15 @@ describe('DbAddNote', () => {
 
         await expect(promise).rejects.toThrowError()
     })
+
+    test('should call CheckAccountByAccessTokenRepository with correct values', async () => {
+        const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+        const addNoteRepositorySpy = new AddNoteRepositorySpy()
+        const sut = new DbAddNote(checkAccountByAccessTokenRepositorySpy, addNoteRepositorySpy)
+        const fakeNote = mockNoteModel()
+
+        await sut.add(fakeNote)
+
+        expect(checkAccountByAccessTokenRepositorySpy.accessToken).toBe(fakeNote.accessToken)
+    })
 })
