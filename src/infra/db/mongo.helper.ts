@@ -1,6 +1,6 @@
 import { UserModel } from "@/domain/models"
-import { DeleteBook, LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases"
-import { Book, User } from "./mongoose.schemas"
+import { AddNote, DeleteBook, LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases"
+import { Book, Note, User } from "./mongoose.schemas"
 
 import * as mongoose from "mongoose"
 
@@ -58,6 +58,7 @@ export const MongoHelper = {
             const modelMapper = {
                 'book': Book,
                 'user': User,
+                'note': Note,
             }
             const model = modelMapper[modelName]
             return model
@@ -118,6 +119,20 @@ export const MongoHelper = {
             const account = await userModel.findOne({ accessToken: data.accessToken })
             const bookModel = await this.findModel('book')
             await bookModel.deleteOne({ userId: account.id, bookId: data.bookId })
+        } catch (error) {
+            new Error(error)
+        }
+    },
+
+    async addNote (data: AddNote.Params): Promise<void> {
+        try {
+            const account = await this.findUserByAccessToken({ accessToken: data.accessToken })
+            await this.addOneOn('note', {
+                userId: account.id,
+                bookId: data.bookID,
+                text: data.text,
+                createdAt: new Date()
+            })
         } catch (error) {
             new Error(error)
         }

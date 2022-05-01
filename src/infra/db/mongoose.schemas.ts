@@ -7,8 +7,6 @@ const UserSchema = new Schema({
     accessToken: String,
 })
 
-export const User = model("bookue-users", UserSchema)
-
 const BookSchema = new Schema({
     title: String,
     author: String,
@@ -19,4 +17,13 @@ const BookSchema = new Schema({
     created_at: Date
 })
 
+const NoteSchema = new Schema({
+    userId: String,
+    bookID: String,
+    text: String,
+    createdAt: Date
+})
+
 export const Book = model("books", BookSchema)
+export const User = model("bookue-users", UserSchema)
+export const Note = model("notes", NoteSchema)
