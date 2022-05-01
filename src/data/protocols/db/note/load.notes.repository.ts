@@ -9,5 +9,5 @@ export namespace LoadNotesRepository {
         accessToken: string
         bookId: string
     }
-    export type Result = NoteResultModel
+    export type Result = NoteResultModel[]
 }
