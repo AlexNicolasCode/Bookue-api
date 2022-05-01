@@ -1,6 +1,6 @@
 import { LoadNotes } from "@/domain/usecases";
 import { AccessDeniedError } from "@/presentation/errors";
-import { badRequest, forbidden, serverError } from "@/presentation/helpers";
+import { badRequest, forbidden, noContent, ok, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -22,6 +22,7 @@ export class LoadNotesController implements Controller {
             if (!notes) {
                 return forbidden(new AccessDeniedError())
             }
+            return ok(notes)
         } catch (error) {
             return serverError(error)
         }
@@ -66,5 +67,17 @@ describe('LoadNotesController', () => {
 
         expect(httpResponse.statusCode).toBe(403)
         expect(httpResponse.body).toStrictEqual(new AccessDeniedError())
+    })
+
+    test('should return 200 on success', async () => {
+        const validationSpy = new ValidationSpy()
+        const loadNotesSpy = new LoadNotesSpy()
+        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const fakeRequest = mockLoadNotesParams()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(200)
+        expect(httpResponse.body).toStrictEqual(loadNotesSpy.result)
     })
 })
