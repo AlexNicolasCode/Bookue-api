@@ -1,6 +1,6 @@
 import { LoadNotesRepository } from "@/data/protocols";
 import { MongoHelper, NoteMongoRepository } from "@/infra";
-import { mockNoteModel } from "tests/domain/mocks";
+import { mockLoadNotes, mockNoteModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 import faker from "@faker-js/faker";
@@ -55,6 +55,17 @@ describe('NoteMongoRepository', () => {
             await sut.loadAll(fakeData)
 
             expect(MongoHelperSpy).toHaveBeenCalledWith(fakeData)
+        })
+
+        test('should return notes list on success', async () => {
+            const sut = makeSut()
+            const fakeData = mockLoadNotesParams()
+            const fakeNotes = mockLoadNotes()
+            jest.spyOn(MongoHelper, 'loadNotes').mockResolvedValueOnce(fakeNotes)
+
+            const notes = await sut.loadAll(fakeData)
+
+            expect(notes).toBe(fakeNotes)
         })
     })
 })
