@@ -1,25 +1,35 @@
 import { LoadNotes } from "@/domain/usecases";
-import { badRequest } from "@/presentation/helpers";
+import { AccessDeniedError } from "@/presentation/errors";
+import { badRequest, forbidden, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockLoadNotesParams } from "tests/domain/mocks";
-import { ValidationSpy } from "../mocks";
+import { throwError } from "tests/domain/mocks/test.helpers";
+import { LoadNotesSpy, ValidationSpy } from "../mocks";
 
 export class LoadNotesController implements Controller {
-    constructor (private readonly validation: Validation) {}
+    constructor (
+        private readonly validation: Validation,
+        private readonly loadNotes: LoadNotes,
+    ) {}
 
     async handle (request: LoadNotes.Params): Promise<HttpResponse> {
-        const error = this.validation.validate(request)
-        if (error) {
-            return badRequest(error)
+        try {
+            const error = this.validation.validate(request)
+            if (error) {
+                return badRequest(error)
+            }
+            await this.loadNotes.loadAll(request)
+        } catch (error) {
+            return serverError(error)
         }
-        return
     }
 }
 
 describe('LoadNotesController', () => {
     test('should return 400 if Vadalition returns error', async () => {
         const validationSpy = new ValidationSpy()
-        const sut = new LoadNotesController(validationSpy)
+        const loadNotesSpy = new LoadNotesSpy()
+        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
         const fakeRequest = mockLoadNotesParams()
         validationSpy.error = new Error()
 
@@ -27,5 +37,18 @@ describe('LoadNotesController', () => {
 
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toStrictEqual(new Error())
+    })
+
+    test('should return 500 if LoadNotes throws', async () => {
+        const validationSpy = new ValidationSpy()
+        const loadNotesSpy = new LoadNotesSpy()
+        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const fakeRequest = mockLoadNotesParams()
+        jest.spyOn(loadNotesSpy, 'loadAll').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(500)
+        expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
     })
 })
