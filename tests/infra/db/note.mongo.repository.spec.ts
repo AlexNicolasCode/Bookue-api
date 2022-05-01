@@ -1,18 +1,10 @@
-import { LoadNotesRepository } from "@/data/protocols";
 import { MongoHelper, NoteMongoRepository } from "@/infra";
-import { mockLoadNotes, mockNoteModel } from "tests/domain/mocks";
+import { mockLoadNotes, mockLoadNotesParams, mockNoteModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-
-import faker from "@faker-js/faker";
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
 }
-
-const mockLoadNotesParams = (): LoadNotesRepository.Params => ({
-    accessToken: faker.datatype.uuid(),
-    bookId: faker.datatype.uuid(),
-})
 
 describe('NoteMongoRepository', () => {
     describe('add()', () => {
