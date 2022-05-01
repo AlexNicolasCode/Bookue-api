@@ -1,2 +1,2 @@
 export * from './add.note'
-export * from './load.note.list'
+export * from './load.notes'
