@@ -10,7 +10,8 @@ export class DbAddNote implements AddNote {
     async add (data: AddNoteRepository.Params): Promise<boolean> {
         const hasAccount = await this.checkAccountByAccessTokenRepository.checkByAccessToken(data.accessToken)
         if (hasAccount) {
-            return await this.addNoteRepository.add(data)          
+            await this.addNoteRepository.add(data)
+            return true         
         } 
     }
 }
