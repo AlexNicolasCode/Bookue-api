@@ -18,7 +18,10 @@ export class LoadNotesController implements Controller {
             if (error) {
                 return badRequest(error)
             }
-            await this.loadNotes.loadAll(request)
+            const notes = await this.loadNotes.loadAll(request)
+            if (!notes) {
+                return forbidden(new AccessDeniedError())
+            }
         } catch (error) {
             return serverError(error)
         }
@@ -50,5 +53,18 @@ describe('LoadNotesController', () => {
 
         expect(httpResponse.statusCode).toBe(500)
         expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
+    })
+
+    test('should return 403 if LoadNotes return null', async () => {
+        const validationSpy = new ValidationSpy()
+        const loadNotesSpy = new LoadNotesSpy()
+        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const fakeRequest = mockLoadNotesParams()
+        loadNotesSpy.result = null
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(403)
+        expect(httpResponse.body).toStrictEqual(new AccessDeniedError())
     })
 })
