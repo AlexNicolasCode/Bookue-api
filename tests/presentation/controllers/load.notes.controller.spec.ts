@@ -1,33 +1,9 @@
-import { LoadNotes } from "@/domain/usecases";
+import { LoadNotesController } from "@/presentation/controllers";
 import { AccessDeniedError } from "@/presentation/errors";
-import { badRequest, forbidden, noContent, ok, serverError } from "@/presentation/helpers";
-import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
+import { serverError } from "@/presentation/helpers";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadNotesSpy, ValidationSpy } from "../mocks";
-
-export class LoadNotesController implements Controller {
-    constructor (
-        private readonly validation: Validation,
-        private readonly loadNotes: LoadNotes,
-    ) {}
-
-    async handle (request: LoadNotes.Params): Promise<HttpResponse> {
-        try {
-            const error = this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            const notes = await this.loadNotes.loadAll(request)
-            if (!notes) {
-                return forbidden(new AccessDeniedError())
-            }
-            return notes.length ? ok(notes) : noContent()
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
 
 type SutType = {
     sut: LoadNotesController
