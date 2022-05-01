@@ -1,4 +1,4 @@
-import { BookModel } from "../models"
+import { BookModel } from "@/domain/models"
 
 export interface LoadBook {
     load: (data: LoadBook.Request) => Promise<LoadBook.Result>

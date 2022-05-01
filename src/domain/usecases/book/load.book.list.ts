@@ -1,4 +1,4 @@
-import { BookModel } from "../models"
+import { BookModel } from "@/domain/models"
 
 export interface LoadBookList {
     load: (accessToken: string) => Promise<LoadBookList.Result>
