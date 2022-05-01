@@ -46,5 +46,15 @@ describe('NoteMongoRepository', () => {
 
             await expect(promise).rejects.toThrowError()
         })
+
+        test('should call MongoHelper with correct values', async () => {
+            const sut = makeSut()
+            const fakeData = mockLoadNotesParams()
+            const MongoHelperSpy = jest.spyOn(MongoHelper, 'loadNotes')
+
+            await sut.loadAll(fakeData)
+
+            expect(MongoHelperSpy).toHaveBeenCalledWith(fakeData)
+        })
     })
 })
