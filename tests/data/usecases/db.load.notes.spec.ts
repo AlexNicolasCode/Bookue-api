@@ -47,4 +47,15 @@ describe('DbLoadNotes', () => {
 
         await expect(promise).rejects.toThrowError()
     })
+
+    test('should return an array of notes on succcess', async () => {
+        const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
+        const loadNotesRepositorySpy = new LoadNotesRepositorySpy()
+        const sut = new DbLoadNotes(checkAccountByAccessTokenSpy, loadNotesRepositorySpy)
+        const fakeRequest = mockRequest()
+
+        const notes = await sut.loadAll(fakeRequest)
+
+        expect(notes).toBe(loadNotesRepositorySpy.result)
+    })
 })
