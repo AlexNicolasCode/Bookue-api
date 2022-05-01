@@ -22,7 +22,7 @@ export class LoadNotesController implements Controller {
             if (!notes) {
                 return forbidden(new AccessDeniedError())
             }
-            return ok(notes)
+            return notes.length ? ok(notes) : noContent()
         } catch (error) {
             return serverError(error)
         }
@@ -79,5 +79,18 @@ describe('LoadNotesController', () => {
 
         expect(httpResponse.statusCode).toBe(200)
         expect(httpResponse.body).toStrictEqual(loadNotesSpy.result)
+    })
+
+    test('should return 204 if not found notes', async () => {
+        const validationSpy = new ValidationSpy()
+        const loadNotesSpy = new LoadNotesSpy()
+        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const fakeRequest = mockLoadNotesParams()
+        loadNotesSpy.result = []
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(204)
+        expect(httpResponse.body).toBeNull()
     })
 })
