@@ -1,6 +1,10 @@
 import { gql } from "apollo-server-express"
 
 export default gql`
+    type Query {
+        loadNotes (accessToken: String!, bookId: String!): [Notes]
+    }
+
     type Mutation {
         addNote (
             accessToken: String!,
@@ -9,8 +13,10 @@ export default gql`
         ): Boolean
     }
 
-    type Book {
-        created_at: String
-        userId: String
+    type Notes {
+        id: String
+        bookId: String
+        text: String
+        createdAt: String
     }
 `
