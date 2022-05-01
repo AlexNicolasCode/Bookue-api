@@ -29,11 +29,26 @@ export class LoadNotesController implements Controller {
     }
 }
 
+type SutType = {
+    sut: LoadNotesController
+    validationSpy: ValidationSpy
+    loadNotesSpy: LoadNotesSpy
+}
+
+const makeSut = (): SutType => {
+    const validationSpy = new ValidationSpy()
+    const loadNotesSpy = new LoadNotesSpy()
+    const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+    return {
+        sut,
+        validationSpy,
+        loadNotesSpy,
+    }
+}
+
 describe('LoadNotesController', () => {
     test('should return 400 if Vadalition returns error', async () => {
-        const validationSpy = new ValidationSpy()
-        const loadNotesSpy = new LoadNotesSpy()
-        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const { sut, validationSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()
         validationSpy.error = new Error()
 
@@ -44,9 +59,7 @@ describe('LoadNotesController', () => {
     })
 
     test('should return 500 if LoadNotes throws', async () => {
-        const validationSpy = new ValidationSpy()
-        const loadNotesSpy = new LoadNotesSpy()
-        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const { sut, loadNotesSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()
         jest.spyOn(loadNotesSpy, 'loadAll').mockImplementationOnce(throwError)
 
@@ -57,9 +70,7 @@ describe('LoadNotesController', () => {
     })
 
     test('should return 403 if LoadNotes return null', async () => {
-        const validationSpy = new ValidationSpy()
-        const loadNotesSpy = new LoadNotesSpy()
-        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const { sut, loadNotesSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()
         loadNotesSpy.result = null
 
@@ -70,9 +81,7 @@ describe('LoadNotesController', () => {
     })
 
     test('should return 200 on success', async () => {
-        const validationSpy = new ValidationSpy()
-        const loadNotesSpy = new LoadNotesSpy()
-        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const { sut, loadNotesSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -82,9 +91,7 @@ describe('LoadNotesController', () => {
     })
 
     test('should return 204 if not found notes', async () => {
-        const validationSpy = new ValidationSpy()
-        const loadNotesSpy = new LoadNotesSpy()
-        const sut = new LoadNotesController(validationSpy, loadNotesSpy)
+        const { sut, loadNotesSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()
         loadNotesSpy.result = []
 
