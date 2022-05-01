@@ -51,6 +51,15 @@ describe('DbLoadNotes', () => {
         await expect(promise).rejects.toThrowError()
     })
 
+    test('should call CheckAccountByAccessToken with correct values', async () => {
+        const { sut, checkAccountByAccessTokenSpy } = makeSut()
+        const fakeRequest = mockRequest()
+
+        await sut.loadAll(fakeRequest)
+
+        expect(checkAccountByAccessTokenSpy.accessToken).toBe(fakeRequest.accessToken)
+    })
+
     test('should throw if LoadNotesRepository throws', async () => {
         const { sut, loadNotesRepositorySpy } = makeSut()
         jest.spyOn(loadNotesRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
