@@ -1,4 +1,4 @@
-import { LoadNoteList } from "@/domain/usecases"
+import { NoteResultModel } from "@/domain/models"
 
 export interface LoadNotesRepository {
     loadAll: (data: LoadNotesRepository.Params) => Promise<LoadNotesRepository.Result>
@@ -9,5 +9,5 @@ export namespace LoadNotesRepository {
         accessToken: string
         noteId: string
     }
-    export type Result = LoadNoteList.Params
+    export type Result = NoteResultModel
 }
