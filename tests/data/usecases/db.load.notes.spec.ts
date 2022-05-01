@@ -23,11 +23,26 @@ const mockRequest = (): LoadNotesRepository.Params => ({
     bookId: faker.datatype.uuid(),
 })
 
+type SutType = {
+    sut,
+    checkAccountByAccessTokenSpy,
+    loadNotesRepositorySpy,
+}
+
+const makeSut = (): SutType => {
+    const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
+    const loadNotesRepositorySpy = new LoadNotesRepositorySpy()
+    const sut = new DbLoadNotes(checkAccountByAccessTokenSpy, loadNotesRepositorySpy)
+    return {
+        sut,
+        checkAccountByAccessTokenSpy,
+        loadNotesRepositorySpy,
+    }
+}
+
 describe('DbLoadNotes', () => {
     test('should throw if CheckAccountByAccessToken throws', async () => {
-        const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
-        const loadNotesRepositorySpy = new LoadNotesRepositorySpy()
-        const sut = new DbLoadNotes(checkAccountByAccessTokenSpy, loadNotesRepositorySpy)
+        const { sut, checkAccountByAccessTokenSpy } = makeSut()
         jest.spyOn(checkAccountByAccessTokenSpy, 'checkByAccessToken').mockImplementationOnce(throwError)
         const fakeRequest = mockRequest()
 
@@ -37,9 +52,7 @@ describe('DbLoadNotes', () => {
     })
 
     test('should throw if LoadNotesRepository throws', async () => {
-        const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
-        const loadNotesRepositorySpy = new LoadNotesRepositorySpy()
-        const sut = new DbLoadNotes(checkAccountByAccessTokenSpy, loadNotesRepositorySpy)
+        const { sut, loadNotesRepositorySpy } = makeSut()
         jest.spyOn(loadNotesRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
         const fakeRequest = mockRequest()
 
@@ -49,9 +62,7 @@ describe('DbLoadNotes', () => {
     })
 
     test('should return an array of notes on succcess', async () => {
-        const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
-        const loadNotesRepositorySpy = new LoadNotesRepositorySpy()
-        const sut = new DbLoadNotes(checkAccountByAccessTokenSpy, loadNotesRepositorySpy)
+        const { sut, loadNotesRepositorySpy } = makeSut()
         const fakeRequest = mockRequest()
 
         const notes = await sut.loadAll(fakeRequest)
