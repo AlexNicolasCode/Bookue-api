@@ -69,6 +69,15 @@ describe('DbLoadNotes', () => {
 
         await expect(promise).rejects.toThrowError()
     })
+    
+    test('should call LoadNotesRepository with correct values', async () => {
+        const { sut, loadNotesRepositorySpy } = makeSut()
+        const fakeRequest = mockRequest()
+
+        await sut.loadAll(fakeRequest)
+
+        expect(loadNotesRepositorySpy.params).toBe(fakeRequest)
+    })
 
     test('should return an array of notes on succcess', async () => {
         const { sut, loadNotesRepositorySpy } = makeSut()
