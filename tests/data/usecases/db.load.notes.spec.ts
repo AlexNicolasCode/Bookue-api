@@ -1,14 +1,7 @@
-import { LoadNotesRepository } from "@/data/protocols";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { CheckAccountByAccessTokenRepositorySpy, LoadNotesRepositorySpy } from "../mocks";
 import { DbLoadNotes } from "@/data/usecases";
-
-import faker from "@faker-js/faker";
-
-const mockRequest = (): LoadNotesRepository.Params => ({
-    accessToken: faker.datatype.uuid(),
-    bookId: faker.datatype.uuid(),
-})
+import { mockLoadNotesParams } from "tests/domain/mocks";
 
 type SutType = {
     sut,
@@ -31,7 +24,7 @@ describe('DbLoadNotes', () => {
     test('should throw if CheckAccountByAccessToken throws', async () => {
         const { sut, checkAccountByAccessTokenSpy } = makeSut()
         jest.spyOn(checkAccountByAccessTokenSpy, 'checkByAccessToken').mockImplementationOnce(throwError)
-        const fakeRequest = mockRequest()
+        const fakeRequest = mockLoadNotesParams()
 
         const promise = sut.loadAll(fakeRequest)
 
@@ -40,7 +33,7 @@ describe('DbLoadNotes', () => {
 
     test('should call CheckAccountByAccessToken with correct values', async () => {
         const { sut, checkAccountByAccessTokenSpy } = makeSut()
-        const fakeRequest = mockRequest()
+        const fakeRequest = mockLoadNotesParams()
 
         await sut.loadAll(fakeRequest)
 
@@ -50,7 +43,7 @@ describe('DbLoadNotes', () => {
     test('should throw if LoadNotesRepository throws', async () => {
         const { sut, loadNotesRepositorySpy } = makeSut()
         jest.spyOn(loadNotesRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
-        const fakeRequest = mockRequest()
+        const fakeRequest = mockLoadNotesParams()
 
         const promise = sut.loadAll(fakeRequest)
 
@@ -59,7 +52,7 @@ describe('DbLoadNotes', () => {
     
     test('should call LoadNotesRepository with correct values', async () => {
         const { sut, loadNotesRepositorySpy } = makeSut()
-        const fakeRequest = mockRequest()
+        const fakeRequest = mockLoadNotesParams()
 
         await sut.loadAll(fakeRequest)
 
@@ -68,7 +61,7 @@ describe('DbLoadNotes', () => {
 
     test('should return an array of notes on succcess', async () => {
         const { sut, loadNotesRepositorySpy } = makeSut()
-        const fakeRequest = mockRequest()
+        const fakeRequest = mockLoadNotesParams()
 
         const notes = await sut.loadAll(fakeRequest)
 
