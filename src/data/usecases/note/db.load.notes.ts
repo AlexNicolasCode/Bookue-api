@@ -1,7 +1,8 @@
 import { LoadNotesRepository, CheckAccountByAccessTokenRepository } from "@/data/protocols"
 import { NoteResultModel } from "@/domain/models"
+import { LoadNotes } from "@/domain/usecases"
 
-export class DbLoadNotes implements LoadNotesRepository {
+export class DbLoadNotes implements LoadNotes {
     constructor (
         private readonly checkAccountByAccessToken: CheckAccountByAccessTokenRepository,
         private readonly loadNotesRepository: LoadNotesRepository,
