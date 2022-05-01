@@ -24,4 +24,13 @@ describe('NoteMongoRepository', () => {
 
         await expect(promise).rejects.toThrowError()
     })
+
+    test('should return undefined on success', async () => {
+        const sut = new NoteMongoRepository()
+        const fakeData = mockNoteModel()
+
+        const result = await sut.add(fakeData)
+
+        expect(result).toBeUndefined()
+    })
 })
