@@ -1,5 +1,5 @@
 import { UserModel } from "@/domain/models"
-import { AddNote, DeleteBook, LoadBook, LoadBookList, UpdateBook } from "@/domain/usecases"
+import { AddNote, DeleteBook, LoadBook, LoadBookList, LoadNotes, UpdateBook } from "@/domain/usecases"
 import { Book, Note, User } from "./mongoose.schemas"
 
 import * as mongoose from "mongoose"
@@ -133,6 +133,16 @@ export const MongoHelper = {
                 text: data.text,
                 createdAt: new Date()
             })
+        } catch (error) {
+            new Error(error)
+        }
+    },
+
+    async loadNotes (data: LoadNotes.Params): Promise<LoadNotes.Result> {
+        try {
+            const account = await this.findUserByAccessToken({ accessToken: data.accessToken })
+            const noteModel = await this.findModel('note')
+            return await noteModel.find({ userId: account.id, bookId: data.bookId })
         } catch (error) {
             new Error(error)
         }
