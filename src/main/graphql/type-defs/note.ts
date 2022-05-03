@@ -15,7 +15,6 @@ export default gql`
 
     type Notes {
         id: String
-        bookId: String
         text: String
         createdAt: String
     }
