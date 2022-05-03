@@ -126,7 +126,7 @@ export const MongoHelper = {
 
     async addNote (data: AddNote.Params): Promise<void> {
         try {
-            const account = await this.findUserByAccessToken({ accessToken: data.accessToken })
+            const account = await this.findUserByAccessToken(data.accessToken)
             await this.addOneOn('note', {
                 userId: account.id,
                 bookId: data.bookID,
@@ -140,9 +140,10 @@ export const MongoHelper = {
 
     async loadNotes (data: LoadNotes.Params): Promise<LoadNotes.Result> {
         try {
-            const account = await this.findUserByAccessToken({ accessToken: data.accessToken })
+            const account = await this.findUserByAccessToken(data.accessToken)
             const noteModel = await this.findModel('note')
-            return await noteModel.find({ userId: account.id, bookId: data.bookId })
+            const notes = await noteModel.find({ userId: account.id, bookId: data.bookId })
+            return notes
         } catch (error) {
             new Error(error)
         }
