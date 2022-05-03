@@ -11,7 +11,7 @@ export class DbLoadNotes implements LoadNotes {
     async loadAll (data: LoadNotesRepository.Params): Promise<NoteResultModel[]> {
         const hasAccount = await this.checkAccountByAccessToken.checkByAccessToken(data.accessToken)
         if (hasAccount) {
-            return this.loadNotesRepository.loadAll(data)
+            return await this.loadNotesRepository.loadAll(data)
         }
     }
 }
