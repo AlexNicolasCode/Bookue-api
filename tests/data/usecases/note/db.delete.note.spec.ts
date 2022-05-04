@@ -13,12 +13,25 @@ class DbDeleteNote implements DeleteNote {
     }
 }
 
+type SutType = {
+    sut: DbDeleteNote
+    checkAccountByAccessTokenRepositorySpy: CheckAccountByAccessTokenRepositorySpy
+}
+
+const makeSut = (): SutType => {
+    const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+    const sut = new DbDeleteNote(checkAccountByAccessTokenRepositorySpy)
+    return {
+        sut,
+        checkAccountByAccessTokenRepositorySpy,
+    }
+} 
+
 describe('DbDeleteNote', () => {
     test('should throw if CheckAccountByAccessToken throws', async () => {
-        const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
-        const sut = new DbDeleteNote(checkAccountByAccessTokenSpy)
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
         const fakeData = mockLoadNotesParams() 
-        jest.spyOn(checkAccountByAccessTokenSpy, 'checkByAccessToken').mockImplementationOnce(throwError)
+        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockImplementationOnce(throwError)
         
         const promise = sut.delete(fakeData)
 
@@ -26,12 +39,11 @@ describe('DbDeleteNote', () => {
     })
 
     test('should call CheckAccountByAccessToken with correct values', async () => {
-        const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
-        const sut = new DbDeleteNote(checkAccountByAccessTokenSpy)
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
         const fakeData = mockLoadNotesParams() 
         
         await sut.delete(fakeData)
 
-        expect(checkAccountByAccessTokenSpy.accessToken).toBe(fakeData.accessToken)
+        expect(checkAccountByAccessTokenRepositorySpy.accessToken).toBe(fakeData.accessToken)
     })
 })
