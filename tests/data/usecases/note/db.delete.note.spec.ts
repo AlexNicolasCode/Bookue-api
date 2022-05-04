@@ -65,4 +65,14 @@ describe('DbDeleteNote', () => {
         expect(deleteNoteRepositorySpy.params.accessToken).toBe(fakeData.accessToken)
         expect(deleteNoteRepositorySpy.params.bookId).toBe(fakeData.bookId)
     })
+
+    test('should throw if DeleteNoteRepository throws', async () => {
+        const { sut, deleteNoteRepositorySpy } = makeSut()
+        const fakeData = mockLoadNotesParams()
+        jest.spyOn(deleteNoteRepositorySpy, 'delete').mockImplementationOnce(throwError)
+        
+        const promise = sut.delete(fakeData)
+
+        await expect(promise).rejects.toThrowError()
+    })
 })
