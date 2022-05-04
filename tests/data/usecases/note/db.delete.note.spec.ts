@@ -24,4 +24,14 @@ describe('DbDeleteNote', () => {
 
         await expect(promise).rejects.toThrowError()
     })
+
+    test('should call CheckAccountByAccessToken with correct values', async () => {
+        const checkAccountByAccessTokenSpy = new CheckAccountByAccessTokenRepositorySpy()
+        const sut = new DbDeleteNote(checkAccountByAccessTokenSpy)
+        const fakeData = mockLoadNotesParams() 
+        
+        await sut.delete(fakeData)
+
+        expect(checkAccountByAccessTokenSpy.accessToken).toBe(fakeData.accessToken)
+    })
 })
