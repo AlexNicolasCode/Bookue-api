@@ -1,4 +1,4 @@
-import { CheckAccountByAccessTokenRepositorySpy, DeleteBookRepositorySpy } from "../mocks"
+import { CheckAccountByAccessTokenRepositorySpy, DeleteBookRepositorySpy } from "../../mocks"
 import { mockDeleteBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbDeleteBook } from "@/data/usecases"

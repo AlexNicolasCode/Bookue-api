@@ -1,5 +1,5 @@
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { CheckAccountByAccessTokenRepositorySpy, LoadNotesRepositorySpy } from "../mocks";
+import { CheckAccountByAccessTokenRepositorySpy, LoadNotesRepositorySpy } from "../../mocks";
 import { DbLoadNotes } from "@/data/usecases";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 

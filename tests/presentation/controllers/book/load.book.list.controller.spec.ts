@@ -1,5 +1,5 @@
 import { serverError } from "@/presentation/helpers"
-import { LoadBookListSpy } from "../mocks"
+import { LoadBookListSpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadBookListController } from "@/presentation/controllers"
 

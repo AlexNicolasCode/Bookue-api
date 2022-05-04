@@ -1,7 +1,7 @@
 import { DbAddBook } from "@/data/usecases"
 import { mockAddBookParams } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { AddBookRepositorySpy } from "../mocks"
+import { AddBookRepositorySpy } from "../../mocks"
 
 type SutTypes = {
     sut: DbAddBook

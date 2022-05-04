@@ -1,7 +1,7 @@
 import { MissingParamError } from "@/presentation/errors"
 import { badRequest, unauthorized } from "@/presentation/helpers"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { AuthenticationSpy, ValidationSpy } from "../mocks"
+import { AuthenticationSpy, ValidationSpy } from "../../mocks"
 import { LoginController } from "@/presentation/controllers"
 
 import faker from "@faker-js/faker"

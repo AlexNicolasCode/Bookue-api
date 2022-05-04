@@ -1,4 +1,4 @@
-import { AddNoteRepositorySpy, CheckAccountByAccessTokenRepositorySpy } from "../mocks"
+import { AddNoteRepositorySpy, CheckAccountByAccessTokenRepositorySpy } from "../../mocks"
 import { mockNoteModel } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbAddNote } from "@/data/usecases"
