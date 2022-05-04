@@ -1,23 +1,7 @@
-import { CheckAccountByAccessTokenRepository, DeleteNoteRepository } from "@/data/protocols";
-import { DeleteNote } from "@/domain/usecases";
+import { DbDeleteNote } from "@/data/usecases/note/db.delete.note";
 import { CheckAccountByAccessTokenRepositorySpy, DeleteNoteRepositorySpy } from "tests/data/mocks";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-
-class DbDeleteNote implements DeleteNote {
-    constructor (
-        private readonly checkAccountByAccessTokenRepository: CheckAccountByAccessTokenRepository,
-        private readonly deleteNoteRepository: DeleteNoteRepository,
-    ) {}
-
-    async delete (data: DeleteNote.Params): Promise<boolean> {
-        const hasAccount = await this.checkAccountByAccessTokenRepository.checkByAccessToken(data.accessToken)
-        if (hasAccount) {
-            await this.deleteNoteRepository.delete(data)
-            return true
-        }
-    }
-}
 
 type SutType = {
     sut: DbDeleteNote
