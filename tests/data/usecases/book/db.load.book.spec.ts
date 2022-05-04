@@ -1,5 +1,5 @@
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { LoadBookRepositorySpy } from "../mocks"
+import { LoadBookRepositorySpy } from "../../mocks"
 import { DbLoadBook } from "@/data/usecases"
 
 import faker from "@faker-js/faker"

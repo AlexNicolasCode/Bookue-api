@@ -2,7 +2,7 @@ import { DeleteBookController } from "@/presentation/controllers";
 import { AccessDeniedError, ServerError } from "@/presentation/errors";
 import { mockDeleteBookRequest } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { DeleteBookSpy, ValidationSpy } from "../mocks";
+import { DeleteBookSpy, ValidationSpy } from "../../mocks";
 
 type SutType = {
     sut: DeleteBookController

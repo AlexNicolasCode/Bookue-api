@@ -1,4 +1,4 @@
-import { CheckAccountByAccessTokenRepositorySpy, UpdateBookRepositorySpy } from "../mocks"
+import { CheckAccountByAccessTokenRepositorySpy, UpdateBookRepositorySpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbUpdateBook } from "@/data/usecases"
 import { mockUpdateBookRequest } from "tests/domain/mocks"

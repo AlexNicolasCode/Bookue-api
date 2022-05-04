@@ -3,7 +3,7 @@ import { InvalidParamError, ServerError } from "@/presentation/errors"
 import { serverError } from "@/presentation/helpers"
 import { mockUpdateBookRequest } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { UpdateBookSpy, ValidationSpy } from "../mocks"
+import { UpdateBookSpy, ValidationSpy } from "../../mocks"
 
 type SutType = {
     sut: UpdateBookController

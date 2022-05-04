@@ -3,7 +3,7 @@ import { AccessDeniedError } from "@/presentation/errors";
 import { serverError } from "@/presentation/helpers";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { LoadNotesSpy, ValidationSpy } from "../mocks";
+import { LoadNotesSpy, ValidationSpy } from "../../mocks";
 
 type SutType = {
     sut: LoadNotesController

@@ -1,6 +1,6 @@
 import { EmailAlreadyUsed, MissingParamError } from "@/presentation/errors"
 import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers"
-import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from "../mocks"
+import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 
 import faker from "@faker-js/faker"
