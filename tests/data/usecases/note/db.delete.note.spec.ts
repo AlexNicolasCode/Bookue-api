@@ -1,29 +1,38 @@
-import { CheckAccountByAccessTokenRepository } from "@/data/protocols";
+import { CheckAccountByAccessTokenRepository, DeleteNoteRepository } from "@/data/protocols";
 import { DeleteNote } from "@/domain/usecases";
-import { CheckAccountByAccessTokenRepositorySpy } from "tests/data/mocks";
+import { CheckAccountByAccessTokenRepositorySpy, DeleteNoteRepositorySpy } from "tests/data/mocks";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 class DbDeleteNote implements DeleteNote {
-    constructor (private readonly checkAccountByAccessToken: CheckAccountByAccessTokenRepository) {}
+    constructor (
+        private readonly checkAccountByAccessTokenRepository: CheckAccountByAccessTokenRepository,
+        private readonly deleteNoteRepository: DeleteNoteRepository,
+    ) {}
 
     async delete (data: DeleteNote.Params): Promise<boolean> {
-        await this.checkAccountByAccessToken.checkByAccessToken(data.accessToken)
-        return
+        const hasAccount = await this.checkAccountByAccessTokenRepository.checkByAccessToken(data.accessToken)
+        if (hasAccount) {
+            await this.deleteNoteRepository.delete(data)
+            return
+        }
     }
 }
 
 type SutType = {
     sut: DbDeleteNote
     checkAccountByAccessTokenRepositorySpy: CheckAccountByAccessTokenRepositorySpy
+    deleteNoteRepositorySpy: DeleteNoteRepositorySpy
 }
 
 const makeSut = (): SutType => {
+    const deleteNoteRepositorySpy = new DeleteNoteRepositorySpy()
     const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
-    const sut = new DbDeleteNote(checkAccountByAccessTokenRepositorySpy)
+    const sut = new DbDeleteNote(checkAccountByAccessTokenRepositorySpy, deleteNoteRepositorySpy)
     return {
         sut,
         checkAccountByAccessTokenRepositorySpy,
+        deleteNoteRepositorySpy,
     }
 } 
 
@@ -45,5 +54,15 @@ describe('DbDeleteNote', () => {
         await sut.delete(fakeData)
 
         expect(checkAccountByAccessTokenRepositorySpy.accessToken).toBe(fakeData.accessToken)
+    })
+
+    test('should call DeleteNoteRepository with correct values', async () => {
+        const { sut, deleteNoteRepositorySpy } = makeSut()
+        const fakeData = mockLoadNotesParams() 
+        
+        await sut.delete(fakeData)
+
+        expect(deleteNoteRepositorySpy.params.accessToken).toBe(fakeData.accessToken)
+        expect(deleteNoteRepositorySpy.params.bookId).toBe(fakeData.bookId)
     })
 })
