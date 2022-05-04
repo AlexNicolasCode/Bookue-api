@@ -1,12 +1,21 @@
 import { MongoHelper, NoteMongoRepository } from "@/infra";
-import { mockLoadNotes, mockLoadNotesParams, mockNoteModel } from "tests/domain/mocks";
+import { mockLoadNotes, mockLoadNotesParams, mockNoteModel, mockUserModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
+import env from "@/env";
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
 }
 
 describe('NoteMongoRepository', () => {
+    beforeAll(async () => {
+        await MongoHelper.connect(env.MONGO_URL)
+    })
+
+    beforeEach(async () => {
+        await MongoHelper.deleteManyOn('note')
+    })
+
     describe('add()', () => {
         test('should throw if MongoHelper throws', async () => {
             const sut = makeSut()
