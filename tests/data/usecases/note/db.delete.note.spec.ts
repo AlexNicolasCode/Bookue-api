@@ -84,4 +84,14 @@ describe('DbDeleteNote', () => {
 
         expect(result).toBe(true)
     })
+
+    test('should return undefined if account not found', async () => {
+        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
+        const fakeData = mockLoadNotesParams()
+        checkAccountByAccessTokenRepositorySpy.result = undefined
+        
+        const result = await sut.delete(fakeData)
+
+        expect(result).toBeUndefined()
+    })
 })
