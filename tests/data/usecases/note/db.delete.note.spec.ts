@@ -14,7 +14,7 @@ class DbDeleteNote implements DeleteNote {
         const hasAccount = await this.checkAccountByAccessTokenRepository.checkByAccessToken(data.accessToken)
         if (hasAccount) {
             await this.deleteNoteRepository.delete(data)
-            return
+            return true
         }
     }
 }
@@ -74,5 +74,14 @@ describe('DbDeleteNote', () => {
         const promise = sut.delete(fakeData)
 
         await expect(promise).rejects.toThrowError()
+    })
+
+    test('should return true on success', async () => {
+        const { sut } = makeSut()
+        const fakeData = mockLoadNotesParams()
+        
+        const result = await sut.delete(fakeData)
+
+        expect(result).toBe(true)
     })
 })
