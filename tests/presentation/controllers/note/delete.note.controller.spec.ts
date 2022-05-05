@@ -30,4 +30,14 @@ describe('DeleteNoteController', () => {
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toBe(validationSpy.error)
     })
+
+    test('should call Validation with correct values', async () => {
+        const validationSpy = new ValidationSpy()
+        const sut = new DeleteNoteController(validationSpy)
+        const fakeRequest = mockLoadNotesParams()
+
+        await sut.handle(fakeRequest)
+
+        expect(validationSpy.input).toBe(fakeRequest)
+    })
 })
