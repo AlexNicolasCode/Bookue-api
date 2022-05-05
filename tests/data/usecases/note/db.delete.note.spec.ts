@@ -1,6 +1,6 @@
 import { DbDeleteNote } from "@/data/usecases/note/db.delete.note";
 import { CheckAccountByAccessTokenRepositorySpy, DeleteNoteRepositorySpy } from "tests/data/mocks";
-import { mockLoadNotesParams } from "tests/domain/mocks";
+import { mockDeleteNotesParams, mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 type SutType = {
@@ -23,7 +23,7 @@ const makeSut = (): SutType => {
 describe('DbDeleteNote', () => {
     test('should throw if CheckAccountByAccessToken throws', async () => {
         const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeData = mockLoadNotesParams() 
+        const fakeData = mockDeleteNotesParams() 
         jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockImplementationOnce(throwError)
         
         const promise = sut.delete(fakeData)
@@ -33,7 +33,7 @@ describe('DbDeleteNote', () => {
 
     test('should call CheckAccountByAccessToken with correct values', async () => {
         const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeData = mockLoadNotesParams() 
+        const fakeData = mockDeleteNotesParams() 
         
         await sut.delete(fakeData)
 
@@ -42,7 +42,7 @@ describe('DbDeleteNote', () => {
 
     test('should call DeleteNoteRepository with correct values', async () => {
         const { sut, deleteNoteRepositorySpy } = makeSut()
-        const fakeData = mockLoadNotesParams() 
+        const fakeData = mockDeleteNotesParams() 
         
         await sut.delete(fakeData)
 
@@ -52,7 +52,7 @@ describe('DbDeleteNote', () => {
 
     test('should throw if DeleteNoteRepository throws', async () => {
         const { sut, deleteNoteRepositorySpy } = makeSut()
-        const fakeData = mockLoadNotesParams()
+        const fakeData = mockDeleteNotesParams()
         jest.spyOn(deleteNoteRepositorySpy, 'delete').mockImplementationOnce(throwError)
         
         const promise = sut.delete(fakeData)
@@ -62,7 +62,7 @@ describe('DbDeleteNote', () => {
 
     test('should return true on success', async () => {
         const { sut } = makeSut()
-        const fakeData = mockLoadNotesParams()
+        const fakeData = mockDeleteNotesParams()
         
         const result = await sut.delete(fakeData)
 
@@ -71,7 +71,7 @@ describe('DbDeleteNote', () => {
 
     test('should return undefined if account not found', async () => {
         const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeData = mockLoadNotesParams()
+        const fakeData = mockDeleteNotesParams()
         checkAccountByAccessTokenRepositorySpy.result = undefined
         
         const result = await sut.delete(fakeData)

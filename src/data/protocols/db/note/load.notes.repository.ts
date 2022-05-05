@@ -8,7 +8,6 @@ export namespace LoadNotesRepository {
     export type Params = {
         accessToken: string
         bookId: string
-        noteId: string
     }
     export type Result = NoteResultModel[]
 }

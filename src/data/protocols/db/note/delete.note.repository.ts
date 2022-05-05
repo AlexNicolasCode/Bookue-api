@@ -6,5 +6,6 @@ export namespace DeleteNoteRepository {
     export type Params = {
         accessToken: string
         bookId: string
+        noteId: string
     }
 }
