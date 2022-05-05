@@ -20,7 +20,7 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
 
     async loadAll (accessToken: string): Promise<LoadBooksRepository.Result> {
         try {
-            return await MongoHelper.loadBookList(accessToken)
+            return await MongoHelper.loadBooks(accessToken)
         } catch (error) {
             throw new Error(error)
         }
