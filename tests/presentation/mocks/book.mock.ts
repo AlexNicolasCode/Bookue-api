@@ -1,5 +1,5 @@
 import { BookModel } from "@/domain/models"
-import { AddBook, DeleteBook, LoadBook, LoadBookList } from "@/domain/usecases"
+import { AddBook, DeleteBook, LoadBook, LoadBooks } from "@/domain/usecases"
 import { mockBookModel } from "tests/domain/mocks"
 
 export class AddBookSpy implements AddBook {
