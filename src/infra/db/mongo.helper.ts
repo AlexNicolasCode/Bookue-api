@@ -1,5 +1,5 @@
 import { UserModel } from "@/domain/models"
-import { AddNote, DeleteBook, LoadBook, LoadBookList, LoadNotes, UpdateBook } from "@/domain/usecases"
+import { AddNote, DeleteBook, LoadBook, LoadBooks, LoadNotes, UpdateBook } from "@/domain/usecases"
 import { Book, Note, User } from "./mongoose.schemas"
 
 import * as mongoose from "mongoose"
@@ -78,7 +78,7 @@ export const MongoHelper = {
         }
     },
 
-    async loadBookList (accessToken: string): Promise<LoadBookList.Result> {
+    async loadBookList (accessToken: string): Promise<LoadBooks.Result> {
         try {
             const userModel = await this.findModel('user')
             const account = await userModel.findOne({ accessToken: accessToken })

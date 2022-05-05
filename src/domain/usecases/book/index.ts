@@ -1,5 +1,5 @@
 export * from './add.book'
-export * from './load.book.list'
+export * from './load.books'
 export * from './load.book'
 export * from './update.book'
 export * from './delete.book'
