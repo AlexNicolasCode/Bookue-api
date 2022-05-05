@@ -1,5 +1,5 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
-import { MongoHelper } from "@/infra"
+import { MongoHelper, User } from "@/infra"
 import { mockAddBookParams, mockDeleteBookRequest, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import env from '@/env'
@@ -23,7 +23,7 @@ describe('BookMongoRepository', () => {
         test('should add one only book', async () => {
             const sut = makeSut()
             const bookData = mockAddBookParams()
-            jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValue(mockUserModel())
+            jest.spyOn(User, 'findOne').mockResolvedValue(mockUserModel())
             
             await sut.add(bookData)
             
