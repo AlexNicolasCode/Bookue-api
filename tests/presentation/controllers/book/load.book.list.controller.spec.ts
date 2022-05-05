@@ -1,25 +1,25 @@
 import { serverError } from "@/presentation/helpers"
 import { LoadBookListSpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { LoadBookListController } from "@/presentation/controllers"
+import { LoadBooksController } from "@/presentation/controllers"
 
 import faker from "@faker-js/faker"
 
 type SutType = {
-    sut: LoadBookListController
+    sut: LoadBooksController
     loadBookListSpy: LoadBookListSpy
 }
 
 const makeSut = (): SutType => {
     const loadBookListSpy = new LoadBookListSpy()
-    const sut = new LoadBookListController(loadBookListSpy)
+    const sut = new LoadBooksController(loadBookListSpy)
     return {
         sut,
         loadBookListSpy,
     }
 }
 
-describe('LoadBookListController', () => {
+describe('LoadBooksController', () => {
     test('should return 500 if LoadBookList throws', async () => {
         const { sut, loadBookListSpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
