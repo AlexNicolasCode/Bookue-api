@@ -1,9 +1,9 @@
-import { LoadBookList } from "@/domain/usecases"
+import { LoadBooks } from "@/domain/usecases"
 import { ok, noContent, serverError } from "@/presentation/helpers"
 import { Controller, HttpResponse } from "@/presentation/protocols"
 
 export class LoadBookListController implements Controller {
-    constructor (private readonly loadBookList: LoadBookList) {}
+    constructor (private readonly loadBookList: LoadBooks) {}
 
     async handle (request: LoadBookListController.Request): Promise<HttpResponse> {
         try {

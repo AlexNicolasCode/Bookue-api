@@ -10,14 +10,14 @@ export class AddBookSpy implements AddBook {
     }
 }
 
-export class LoadBookListSpy implements LoadBookList {
+export class LoadBookListSpy implements LoadBooks {
     accessToken: string
     result = [
         mockBookModel(),
         mockBookModel(),
     ]
 
-    async load (accessToken: string): Promise<LoadBookList.Result> {
+    async load (accessToken: string): Promise<LoadBooks.Result> {
         this.accessToken = accessToken
         return this.result
     }
