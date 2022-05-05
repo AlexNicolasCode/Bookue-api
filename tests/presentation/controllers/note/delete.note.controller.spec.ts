@@ -3,11 +3,12 @@ import { badRequest } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { ValidationSpy } from "tests/presentation/mocks";
+import { DeleteNoteSpy, ValidationSpy } from "tests/presentation/mocks";
 
 export class DeleteNoteController implements Controller {
     constructor (
-        private readonly validation: Validation
+        private readonly validation: Validation,
+        private readonly deleteNote: DeleteNote,
     ) {}
 
     async handle (request: DeleteNote.Params): Promise<HttpResponse> {
@@ -15,20 +16,24 @@ export class DeleteNoteController implements Controller {
         if (error) {
             return badRequest(error)
         }
+        await this.deleteNote.delete(request)
     }
 }
 
 type SutType = {
     sut: DeleteNoteController
     validationSpy: ValidationSpy
+    deleteNoteSpy: DeleteNoteSpy
 }
 
 const makeSut = (): SutType => {
+    const deleteNoteSpy = new DeleteNoteSpy()
     const validationSpy = new ValidationSpy()
-    const sut = new DeleteNoteController(validationSpy)
+    const sut = new DeleteNoteController(validationSpy, deleteNoteSpy)
     return {
         sut,
         validationSpy,
+        deleteNoteSpy,
     }
 }
 
@@ -51,5 +56,14 @@ describe('DeleteNoteController', () => {
         await sut.handle(fakeRequest)
 
         expect(validationSpy.input).toBe(fakeRequest)
+    })
+
+    test('should call DeleteNote with correct values', async () => {
+        const { sut, deleteNoteSpy } = makeSut()
+        const fakeRequest = mockLoadNotesParams()
+
+        await sut.handle(fakeRequest)
+
+        expect(deleteNoteSpy.params).toBe(fakeRequest)
     })
 })
