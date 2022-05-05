@@ -1,24 +1,24 @@
-import { DbLoadBookList } from "@/data/usecases"
+import { DbLoadBooks } from "@/data/usecases"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadBooksRepositorySpy } from "../../mocks"
 
 import faker from "@faker-js/faker"
 
 type SutType = {
-    sut: DbLoadBookList
+    sut: DbLoadBooks
     LoadBooksRepositorySpy: LoadBooksRepositorySpy
 }
 
 const makeSut = (): SutType => {
     const LoadBooksRepositorySpy = new LoadBooksRepositorySpy()
-    const sut = new DbLoadBookList(LoadBooksRepositorySpy)
+    const sut = new DbLoadBooks(LoadBooksRepositorySpy)
     return {
         sut,
         LoadBooksRepositorySpy,
     }
 }
 
-describe('DbLoadBookList', () => {
+describe('DbLoadBooks', () => {
     test('should throw if LoadBooksRepository throws', async () => {
         const { sut, LoadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
