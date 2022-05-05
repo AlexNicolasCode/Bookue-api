@@ -1,33 +1,9 @@
-import { DeleteNote } from "@/domain/usecases";
+import { DeleteNoteController } from "@/presentation/controllers/note/delete.note";
 import { AccessDeniedError } from "@/presentation/errors";
-import { badRequest, forbidden, noContent, ok, serverError } from "@/presentation/helpers";
-import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
+import { serverError } from "@/presentation/helpers";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { DeleteNoteSpy, ValidationSpy } from "tests/presentation/mocks";
-
-export class DeleteNoteController implements Controller {
-    constructor (
-        private readonly validation: Validation,
-        private readonly deleteNote: DeleteNote,
-    ) {}
-
-    async handle (request: DeleteNote.Params): Promise<HttpResponse> {
-        try {
-            const error = this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            const isDeleted = await this.deleteNote.delete(request)
-            if (!isDeleted) {
-                return forbidden(new AccessDeniedError())
-            }
-            return noContent()
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
 
 type SutType = {
     sut: DeleteNoteController
