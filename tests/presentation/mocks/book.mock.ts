@@ -10,7 +10,7 @@ export class AddBookSpy implements AddBook {
     }
 }
 
-export class LoadBookListSpy implements LoadBooks {
+export class LoadBooksSpy implements LoadBooks {
     accessToken: string
     result = [
         mockBookModel(),
