@@ -16,6 +16,7 @@ describe('BookMongoRepository', () => {
     })
 
     beforeEach(async () => {
+        await MongoHelper.deleteManyOn('user')
         await MongoHelper.deleteManyOn('book')
     })
 
