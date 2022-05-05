@@ -31,14 +31,14 @@ describe('BookMongoRepository', () => {
             expect(count).toBe(1)
         })
     
-        test('should throw if addOneOn method on MongoHelper throws', async () => {
+        test('should throw if User schema throws', async () => {
             const sut = makeSut()
             const bookData = mockAddBookParams()
-            jest.spyOn(MongoHelper, 'addOneOn').mockImplementationOnce(throwError)
+            jest.spyOn(User, 'findOne').mockImplementationOnce(throwError)
             
             const promise = sut.add(bookData)
             
-            expect(promise).rejects.toThrowError()
+            await expect(promise).rejects.toThrowError()
         })
     })
 
