@@ -1,5 +1,5 @@
 import { serverError } from "@/presentation/helpers"
-import { LoadBookListSpy } from "../../mocks"
+import { LoadBooksSpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadBooksController } from "@/presentation/controllers"
 
@@ -7,33 +7,33 @@ import faker from "@faker-js/faker"
 
 type SutType = {
     sut: LoadBooksController
-    loadBookListSpy: LoadBookListSpy
+    loadBooksSpy: LoadBooksSpy
 }
 
 const makeSut = (): SutType => {
-    const loadBookListSpy = new LoadBookListSpy()
-    const sut = new LoadBooksController(loadBookListSpy)
+    const loadBooksSpy = new LoadBooksSpy()
+    const sut = new LoadBooksController(loadBooksSpy)
     return {
         sut,
-        loadBookListSpy,
+        loadBooksSpy,
     }
 }
 
 describe('LoadBooksController', () => {
-    test('should return 500 if LoadBookList throws', async () => {
-        const { sut, loadBookListSpy } = makeSut()
+    test('should return 500 if loadBooks throws', async () => {
+        const { sut, loadBooksSpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
-        jest.spyOn(loadBookListSpy, 'load').mockImplementationOnce(throwError)
+        jest.spyOn(loadBooksSpy, 'load').mockImplementationOnce(throwError)
 
         const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
 
         expect(httpResponse.statusCode).toStrictEqual(500)
     })
 
-    test('should return error on body if LoadBookList throws', async () => {
-        const { sut, loadBookListSpy } = makeSut()
+    test('should return error on body if loadBooks throws', async () => {
+        const { sut, loadBooksSpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
-        jest.spyOn(loadBookListSpy, 'load').mockImplementationOnce(throwError)
+        jest.spyOn(loadBooksSpy, 'load').mockImplementationOnce(throwError)
 
         const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
 
@@ -50,18 +50,18 @@ describe('LoadBooksController', () => {
     })
 
     test('should return book list on success', async () => {
-        const { sut, loadBookListSpy, } = makeSut()
+        const { sut, loadBooksSpy, } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
 
         const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
 
-        expect(httpResponse.body).toStrictEqual(loadBookListSpy.result)
+        expect(httpResponse.body).toStrictEqual(loadBooksSpy.result)
     })
 
     test('should return 204 on success if not have book', async () => {
-        const { sut, loadBookListSpy, } = makeSut()
+        const { sut, loadBooksSpy, } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
-        loadBookListSpy.result = []
+        loadBooksSpy.result = []
 
         const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
 
@@ -69,9 +69,9 @@ describe('LoadBooksController', () => {
     })
 
     test('should return null on success if not have book', async () => {
-        const { sut, loadBookListSpy, } = makeSut()
+        const { sut, loadBooksSpy, } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
-        loadBookListSpy.result = []
+        loadBooksSpy.result = []
 
         const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
 

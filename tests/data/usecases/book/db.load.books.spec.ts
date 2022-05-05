@@ -6,23 +6,23 @@ import faker from "@faker-js/faker"
 
 type SutType = {
     sut: DbLoadBooks
-    LoadBooksRepositorySpy: LoadBooksRepositorySpy
+    loadBooksRepositorySpy: LoadBooksRepositorySpy
 }
 
 const makeSut = (): SutType => {
-    const LoadBooksRepositorySpy = new LoadBooksRepositorySpy()
-    const sut = new DbLoadBooks(LoadBooksRepositorySpy)
+    const loadBooksRepositorySpy = new LoadBooksRepositorySpy()
+    const sut = new DbLoadBooks(loadBooksRepositorySpy)
     return {
         sut,
-        LoadBooksRepositorySpy,
+        loadBooksRepositorySpy,
     }
 }
 
 describe('DbLoadBooks', () => {
     test('should throw if LoadBooksRepository throws', async () => {
-        const { sut, LoadBooksRepositorySpy } = makeSut()
+        const { sut, loadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
-        jest.spyOn(LoadBooksRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
+        jest.spyOn(loadBooksRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
 
         const promise = sut.load(fakeAccessToken)
 
@@ -30,20 +30,20 @@ describe('DbLoadBooks', () => {
     })
 
     test('should call LoadBooksRepository with correct userId', async () => {
-        const { sut, LoadBooksRepositorySpy } = makeSut()
+        const { sut, loadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
 
         await sut.load(fakeAccessToken)
 
-        expect(LoadBooksRepositorySpy.accessToken).toBe(fakeAccessToken)
+        expect(loadBooksRepositorySpy.accessToken).toBe(fakeAccessToken)
     })
 
     test('should return book list on success', async () => {
-        const { sut, LoadBooksRepositorySpy } = makeSut()
+        const { sut, loadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
 
         const books = await sut.load(fakeAccessToken)
 
-        expect(books).toBe(LoadBooksRepositorySpy.result)
+        expect(books).toBe(loadBooksRepositorySpy.result)
     })
 })
