@@ -1,5 +1,6 @@
 import { DeleteNote } from "@/domain/usecases";
-import { badRequest } from "@/presentation/helpers";
+import { AccessDeniedError } from "@/presentation/errors";
+import { badRequest, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -12,11 +13,18 @@ export class DeleteNoteController implements Controller {
     ) {}
 
     async handle (request: DeleteNote.Params): Promise<HttpResponse> {
-        const error = this.validation.validate(request)
-        if (error) {
-            return badRequest(error)
+        try {
+            const error = this.validation.validate(request)
+            if (error) {
+                return badRequest(error)
+            }
+            const isDeleted = await this.deleteNote.delete(request)
+            if (!isDeleted) {
+                return
+            }
+        } catch (error) {
+            return serverError(error)
         }
-        await this.deleteNote.delete(request)
     }
 }
 
@@ -65,5 +73,16 @@ describe('DeleteNoteController', () => {
         await sut.handle(fakeRequest)
 
         expect(deleteNoteSpy.params).toBe(fakeRequest)
+    })
+
+    test('should return 500 if DeleteNote throws', async () => {
+        const { sut, deleteNoteSpy } = makeSut()
+        const fakeRequest = mockLoadNotesParams()
+        jest.spyOn(deleteNoteSpy, 'delete').mockImplementationOnce(throwError)
+
+        const httpReponse = await sut.handle(fakeRequest)
+
+        expect(httpReponse.statusCode).toBe(500)
+        expect(httpReponse.body).toStrictEqual(serverError(new Error).body)
     })
 })
