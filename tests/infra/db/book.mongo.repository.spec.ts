@@ -1,5 +1,5 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
-import { MongoHelper, User } from "@/infra"
+import { Book, MongoHelper, User } from "@/infra"
 import { mockAddBookParams, mockDeleteBookRequest, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import env from '@/env'
@@ -35,6 +35,16 @@ describe('BookMongoRepository', () => {
             const sut = makeSut()
             const bookData = mockAddBookParams()
             jest.spyOn(User, 'findOne').mockImplementationOnce(throwError)
+            
+            const promise = sut.add(bookData)
+            
+            await expect(promise).rejects.toThrowError()
+        })
+    
+        test('should throw if Book schema throws', async () => {
+            const sut = makeSut()
+            const bookData = mockAddBookParams()
+            jest.spyOn(Book, 'create').mockImplementationOnce(throwError)
             
             const promise = sut.add(bookData)
             

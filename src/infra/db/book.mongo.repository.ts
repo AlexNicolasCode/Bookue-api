@@ -7,12 +7,13 @@ import {
 } from "@/data/protocols"
 import { BookModel } from "@/domain/models"
 import { MongoHelper } from "./mongo.helper"
+import { Book, User } from "./mongoose.schemas"
 
 export class BookMongoRepository implements AddBookRepository, LoadBooksRepository, LoadBookRepository, UpdateBookRepository, DeleteBookRepository {
-    async add (bookData: AddBookRepository.Params): Promise<void> {
+    async add (data: AddBookRepository.Params): Promise<void> {
         try {
-            const account = await MongoHelper.findUserByAccessToken(bookData.accessToken)
-            await MongoHelper.addOneOn('book', { ...bookData, userId: account.id })
+            const account = await User.findOne({ accessToken: data.accessToken })
+            await Book.create({ ...data, userId: account.id })
         } catch (e) {
             throw new Error(e)
         }
@@ -41,7 +42,7 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
             throw new Error(error)
         }
     }
-
+    
     async delete (data: DeleteBookRepository.Params): Promise<void> {
         try {
             await MongoHelper.deleteBook(data)
