@@ -1,4 +1,4 @@
-import { AddNote, LoadNotes } from "@/domain/usecases"
+import { AddNote, DeleteNote, LoadNotes } from "@/domain/usecases"
 import { mockLoadNotes } from "tests/domain/mocks"
 
 export class AddNoteSpy implements AddNote {
@@ -16,6 +16,16 @@ export class LoadNotesSpy implements LoadNotes {
     result = mockLoadNotes()
 
     async loadAll (params: LoadNotes.Params): Promise<LoadNotes.Result> {
+        this.params = params
+        return this.result
+    }
+}
+
+export class DeleteNoteSpy implements DeleteNote {
+    params: DeleteNote.Params
+    result = true
+
+    async delete (params: DeleteNote.Params): Promise<DeleteNote.Result> {
         this.params = params
         return this.result
     }
