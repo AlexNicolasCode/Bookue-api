@@ -18,10 +18,23 @@ export class DeleteNoteController implements Controller {
     }
 }
 
+type SutType = {
+    sut: DeleteNoteController
+    validationSpy: ValidationSpy
+}
+
+const makeSut = (): SutType => {
+    const validationSpy = new ValidationSpy()
+    const sut = new DeleteNoteController(validationSpy)
+    return {
+        sut,
+        validationSpy,
+    }
+}
+
 describe('DeleteNoteController', () => {
     test('should return 400 if Validation returns error', async () => {
-        const validationSpy = new ValidationSpy()
-        const sut = new DeleteNoteController(validationSpy)
+        const { sut, validationSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()
         validationSpy.error = new Error()
 
@@ -32,8 +45,7 @@ describe('DeleteNoteController', () => {
     })
 
     test('should call Validation with correct values', async () => {
-        const validationSpy = new ValidationSpy()
-        const sut = new DeleteNoteController(validationSpy)
+        const { sut, validationSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()
 
         await sut.handle(fakeRequest)
