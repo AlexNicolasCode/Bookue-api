@@ -43,10 +43,10 @@ describe('BookMongoRepository', () => {
     })
 
     describe('load book list system', () => {
-        test('should throw if loadBookList method on MongoHelper throws', async () => {
+        test('should throw if loadBooks method on MongoHelper throws', async () => {
             const sut = makeSut()
             const fakeAccessToken = faker.datatype.uuid()
-            jest.spyOn(MongoHelper, 'loadBookList').mockImplementationOnce(throwError)
+            jest.spyOn(MongoHelper, 'loadBooks').mockImplementationOnce(throwError)
             
             const promise = sut.loadAll(fakeAccessToken)
             
@@ -61,7 +61,7 @@ describe('BookMongoRepository', () => {
                 await sut.add({ ...mockAddBookParams(), accessToken: fakeAccessToken })
             }
             const result = await sut.loadAll(fakeAccessToken)
-            const bookListOfRepository = await MongoHelper.loadBookList(fakeAccessToken)
+            const bookListOfRepository = await MongoHelper.loadBooks(fakeAccessToken)
 
             expect(result).toStrictEqual(bookListOfRepository)
         })

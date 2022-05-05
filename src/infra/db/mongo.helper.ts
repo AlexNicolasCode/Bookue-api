@@ -78,7 +78,7 @@ export const MongoHelper = {
         }
     },
 
-    async loadBookList (accessToken: string): Promise<LoadBooks.Result> {
+    async loadBooks (accessToken: string): Promise<LoadBooks.Result> {
         try {
             const userModel = await this.findModel('user')
             const account = await userModel.findOne({ accessToken: accessToken })
