@@ -1,49 +1,49 @@
 import { DbLoadBookList } from "@/data/usecases"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { LoadBookListRepositorySpy } from "../../mocks"
+import { LoadBooksRepositorySpy } from "../../mocks"
 
 import faker from "@faker-js/faker"
 
 type SutType = {
     sut: DbLoadBookList
-    loadBookListRepositorySpy: LoadBookListRepositorySpy
+    LoadBooksRepositorySpy: LoadBooksRepositorySpy
 }
 
 const makeSut = (): SutType => {
-    const loadBookListRepositorySpy = new LoadBookListRepositorySpy()
-    const sut = new DbLoadBookList(loadBookListRepositorySpy)
+    const LoadBooksRepositorySpy = new LoadBooksRepositorySpy()
+    const sut = new DbLoadBookList(LoadBooksRepositorySpy)
     return {
         sut,
-        loadBookListRepositorySpy,
+        LoadBooksRepositorySpy,
     }
 }
 
 describe('DbLoadBookList', () => {
-    test('should throw if LoadBookListRepository throws', async () => {
-        const { sut, loadBookListRepositorySpy } = makeSut()
+    test('should throw if LoadBooksRepository throws', async () => {
+        const { sut, LoadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
-        jest.spyOn(loadBookListRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
+        jest.spyOn(LoadBooksRepositorySpy, 'loadAll').mockImplementationOnce(throwError)
 
         const promise = sut.load(fakeAccessToken)
 
         expect(promise).rejects.toThrowError()
     })
 
-    test('should call LoadBookListRepository with correct userId', async () => {
-        const { sut, loadBookListRepositorySpy } = makeSut()
+    test('should call LoadBooksRepository with correct userId', async () => {
+        const { sut, LoadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
 
         await sut.load(fakeAccessToken)
 
-        expect(loadBookListRepositorySpy.accessToken).toBe(fakeAccessToken)
+        expect(LoadBooksRepositorySpy.accessToken).toBe(fakeAccessToken)
     })
 
     test('should return book list on success', async () => {
-        const { sut, loadBookListRepositorySpy } = makeSut()
+        const { sut, LoadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
 
         const books = await sut.load(fakeAccessToken)
 
-        expect(books).toBe(loadBookListRepositorySpy.result)
+        expect(books).toBe(LoadBooksRepositorySpy.result)
     })
 })
