@@ -1,6 +1,6 @@
 import { DeleteNote } from "@/domain/usecases";
 import { AccessDeniedError } from "@/presentation/errors";
-import { badRequest, forbidden, serverError } from "@/presentation/helpers";
+import { badRequest, forbidden, noContent, ok, serverError } from "@/presentation/helpers";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { mockLoadNotesParams } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -22,6 +22,7 @@ export class DeleteNoteController implements Controller {
             if (!isDeleted) {
                 return forbidden(new AccessDeniedError())
             }
+            return noContent()
         } catch (error) {
             return serverError(error)
         }
@@ -95,5 +96,15 @@ describe('DeleteNoteController', () => {
 
         expect(httpReponse.statusCode).toBe(403)
         expect(httpReponse.body).toStrictEqual(new AccessDeniedError())
+    })
+
+    test('should return 204 on success', async () => {
+        const { sut } = makeSut()
+        const fakeRequest = mockLoadNotesParams()
+
+        const httpReponse = await sut.handle(fakeRequest)
+
+        expect(httpReponse.statusCode).toBe(204)
+        expect(httpReponse.body).toBeNull()
     })
 })
