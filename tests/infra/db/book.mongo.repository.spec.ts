@@ -16,8 +16,8 @@ describe('BookMongoRepository', () => {
     })
 
     beforeEach(async () => {
-        await MongoHelper.deleteManyOn('user')
-        await MongoHelper.deleteManyOn('book')
+        await Book.deleteMany()
+        await User.deleteMany()
     })
 
     describe('add book system', () => {
@@ -67,14 +67,12 @@ describe('BookMongoRepository', () => {
         test('should return book list on success', async () => {
             const sut = makeSut()
             const fakeAccessToken = faker.datatype.uuid()
+            const bookData = mockAddBookParams()
+            jest.spyOn(MongoHelper, 'loadBooks').mockResolvedValueOnce([bookData])
             
-            for (let count = 0; count < 5; count++) {
-                await sut.add({ ...mockAddBookParams(), accessToken: fakeAccessToken })
-            }
             const result = await sut.loadAll(fakeAccessToken)
-            const bookListOfRepository = await MongoHelper.loadBooks(fakeAccessToken)
 
-            expect(result).toStrictEqual(bookListOfRepository)
+            expect(result).toStrictEqual([bookData])
         })
     })
 
