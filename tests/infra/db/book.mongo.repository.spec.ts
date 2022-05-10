@@ -24,7 +24,7 @@ describe('BookMongoRepository', () => {
         test('should add one only book', async () => {
             const sut = makeSut()
             const bookData = mockAddBookParams()
-            jest.spyOn(User, 'findOne').mockResolvedValue(mockUserModel())
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
             
             await sut.add(bookData)
             
