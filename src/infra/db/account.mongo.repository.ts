@@ -16,7 +16,7 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
     }
 
     async checkByEmail (email: string): Promise<CheckAccountByEmailRepository.Result> {
-        const hasAccount = await MongoHelper.findUserByEmail(email)
+        const hasAccount = await User.findOne({ email: email })
         return hasAccount ? true : false
     }
     
