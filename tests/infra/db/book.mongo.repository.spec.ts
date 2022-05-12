@@ -74,6 +74,25 @@ describe('BookMongoRepository', () => {
 
             expect(book).toBe(fakeBook)
         })
+
+        test('should call Book with correct values', async () => {
+            const sut = makeSut()
+            const fakeBook = mockAddBookParams()
+            const fakeDataRequest = { 
+                accessToken: fakeBook.accessToken,
+                bookId: faker.datatype.uuid(),
+            }
+            const fakeUser = mockUserModel()
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
+            const BookSpy = jest.spyOn(Book, 'findOne')
+            
+            await sut.loadOne(fakeDataRequest)
+
+            expect(BookSpy).toHaveBeenCalledWith({ 
+                userId: fakeUser.id, 
+                bookId: fakeDataRequest.bookId, 
+            })
+        })
     })
 
     describe('updateBook method', () => {
