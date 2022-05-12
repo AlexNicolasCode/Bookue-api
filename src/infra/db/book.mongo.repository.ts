@@ -50,7 +50,8 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
     
     async delete (data: DeleteBookRepository.Params): Promise<void> {
         try {
-            await MongoHelper.deleteBook(data)
+            const account = await User.findOne({ accessToken: data.accessToken }) as UserModel
+            await Book.deleteOne({ userId: account.id, bookId: data.bookId })
         } catch (error) {
             throw new Error(error)
         }
