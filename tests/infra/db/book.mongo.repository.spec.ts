@@ -45,8 +45,8 @@ describe('BookMongoRepository', () => {
         })
     })
 
-    describe('load book list system', () => {      
-        test('should return book list on success', async () => {
+    describe('load books system', () => {      
+        test('should return books on success', async () => {
             const sut = makeSut()
             const fakeAccessToken = faker.datatype.uuid()
             const bookData = mockAddBookParams()
