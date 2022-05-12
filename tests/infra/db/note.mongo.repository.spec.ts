@@ -26,6 +26,17 @@ describe('NoteMongoRepository', () => {
     
             expect(result).toBeUndefined()
         })
+
+        test('should call User model with correct values', async () => {
+            const sut = makeSut()
+            const fakeData = mockNoteModel()
+            const userModelSpy = jest.spyOn(User, 'findOne')
+            userModelSpy.mockResolvedValueOnce(mockUserModel())
+    
+            await sut.add(fakeData)
+    
+            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeData.accessToken })
+        })
     })
 
     describe('loadAll()', () => {
