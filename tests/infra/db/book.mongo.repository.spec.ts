@@ -51,14 +51,14 @@ describe('BookMongoRepository', () => {
             const fakeAccessToken = faker.datatype.uuid()
             const bookData = mockAddBookParams()
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
-            jest.spyOn(Book, 'findOne').mockResolvedValueOnce([bookData])
+            jest.spyOn(Book, 'find').mockResolvedValueOnce([bookData])
             
             const result = await sut.loadAll(fakeAccessToken)
 
             expect(result).toStrictEqual([bookData])
         })
     })
-
+    
     describe('load one book system', () => {
         test('should return a book on success', async () => {
             const sut = makeSut()
@@ -67,10 +67,11 @@ describe('BookMongoRepository', () => {
                 accessToken: fakeBook.accessToken,
                 bookId: faker.datatype.uuid(),
             }
-            jest.spyOn(MongoHelper, 'loadOneBook').mockReturnValueOnce(fakeBook as any)
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
+            jest.spyOn(Book, 'findOne').mockResolvedValueOnce(fakeBook)
             
             const book = await sut.loadOne(fakeDataRequest)
-            
+
             expect(book).toBe(fakeBook)
         })
     })

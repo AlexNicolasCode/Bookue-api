@@ -21,7 +21,7 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
 
     async loadAll (accessToken: string): Promise<LoadBooksRepository.Result> {
         try {
-            const account = await User.findOne({ accessToken }) as UserModel
+            const account = await User.findOne({ accessToken: accessToken }) as UserModel
             const books = await Book.find({ userId: account.id })
             return books
         } catch (error) {
@@ -31,7 +31,9 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
 
     async loadOne (data: LoadBookRepository.Request): Promise<BookModel> {
         try {
-            return await MongoHelper.loadOneBook(data)
+            const account = await User.findOne({ accessToken: data.accessToken }) as UserModel
+            const book = await Book.findOne({ userId: account.id })
+            return book
         } catch (error) {
             throw new Error(error)
         }
