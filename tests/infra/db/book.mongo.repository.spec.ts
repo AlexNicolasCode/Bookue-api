@@ -60,54 +60,49 @@ describe('BookMongoRepository', () => {
     })
     
     describe('load one book system', () => {
+        let fakeRequest
+
+        beforeEach(() => {
+            fakeRequest = {
+                accessToken: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+            }
+        })
+
         test('should return a book on success', async () => {
             const sut = makeSut()
             const fakeBook = mockAddBookParams()
-            const fakeDataRequest = { 
-                accessToken: fakeBook.accessToken,
-                bookId: faker.datatype.uuid(),
-            }
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
             jest.spyOn(Book, 'findOne').mockResolvedValueOnce(fakeBook)
             
-            const book = await sut.loadOne(fakeDataRequest)
+            const book = await sut.loadOne(fakeRequest)
 
             expect(book).toBe(fakeBook)
         })
 
         test('should call Book with correct values', async () => {
             const sut = makeSut()
-            const fakeBook = mockAddBookParams()
-            const fakeDataRequest = { 
-                accessToken: fakeBook.accessToken,
-                bookId: faker.datatype.uuid(),
-            }
             const fakeUser = mockUserModel()
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
             const bookSpy = jest.spyOn(Book, 'findOne')
             
-            await sut.loadOne(fakeDataRequest)
+            await sut.loadOne(fakeRequest)
 
             expect(bookSpy).toHaveBeenCalledWith({ 
                 userId: fakeUser.id, 
-                bookId: fakeDataRequest.bookId, 
+                bookId: fakeRequest.bookId, 
             })
         })
 
         test('should call User with correct values', async () => {
             const sut = makeSut()
-            const fakeBook = mockAddBookParams()
             const ramdomUserId = faker.datatype.uuid()
-            const fakeDataRequest = { 
-                accessToken: fakeBook.accessToken,
-                bookId: faker.datatype.uuid(),
-            }
             const userSpy = jest.spyOn(User, 'findOne')
             userSpy.mockResolvedValueOnce({ id: ramdomUserId })
             
-            await sut.loadOne(fakeDataRequest)
+            await sut.loadOne(fakeRequest)
 
-            expect(userSpy).toHaveBeenCalledWith({ accessToken: fakeDataRequest.accessToken })
+            expect(userSpy).toHaveBeenCalledWith({ accessToken: fakeRequest.accessToken })
         })
     })
 
