@@ -32,7 +32,7 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
     async loadOne (data: LoadBookRepository.Request): Promise<BookModel> {
         try {
             const account = await User.findOne({ accessToken: data.accessToken }) as UserModel
-            const book = await Book.findOne({ userId: account.id })
+            const book = await Book.findOne({ userId: account.id, bookId: data.bookId })
             return book
         } catch (error) {
             throw new Error(error)
