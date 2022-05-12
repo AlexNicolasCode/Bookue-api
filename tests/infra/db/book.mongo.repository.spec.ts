@@ -145,7 +145,7 @@ describe('BookMongoRepository', () => {
     })
 
     describe('delete method', () => {
-        test('should call Book Model with correct values', async () => {
+        test('should call User model with correct values', async () => {
             const sut = makeSut()
             const fakeData = mockDeleteBookRequest()
             const userModelSpy = jest.spyOn(User, 'findOne')
@@ -154,6 +154,21 @@ describe('BookMongoRepository', () => {
             await sut.delete(fakeData)
 
             expect(userModelSpy).toBeCalledWith({ accessToken: fakeData.accessToken })
+        })
+
+        test('should call Book model with correct values', async () => {
+            const sut = makeSut()
+            const fakeData = mockDeleteBookRequest()
+            const fakeUser = mockUserModel()
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
+            const bookModelSpy = jest.spyOn(Book, 'deleteOne')
+
+            await sut.delete(fakeData)
+
+            expect(bookModelSpy).toBeCalledWith({ 
+                userId: fakeUser.id,
+                bookId: fakeData.bookId,
+            })
         })
 
         test('should return undefined on success', async () => {
