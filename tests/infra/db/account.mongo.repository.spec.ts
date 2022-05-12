@@ -63,15 +63,15 @@ describe('AccountMongoRepository', () => {
     test('should call updateAccessToken to update token on success', async () => {
         const sut = makeSut()
         const accountMock = mockAddAccountParams()
-        const token = faker.datatype.uuid()
+        const fakeToken = faker.datatype.uuid()
         await User.create(accountMock)
 
-        const account = await MongoHelper.findUserByEmail(accountMock.email)
+        const account = await User.findOne({ email: accountMock.email })
         expect(account.accessToken).toBeFalsy()
-        await sut.updateAccessToken(account.id, token)        
-        const accountAfterUpdateAccessToken = await MongoHelper.findUserByEmail(accountMock.email)
-        
-        expect(accountAfterUpdateAccessToken.accessToken).toBe(token)
+        await sut.updateAccessToken(account.id, fakeToken)
+
+        const accountAfterUpdateAccessToken = await User.findOne({ email: accountMock.email })
+        expect(accountAfterUpdateAccessToken.accessToken).toBe(fakeToken)
     })
 
     test('should return true when account exists', async () => {
