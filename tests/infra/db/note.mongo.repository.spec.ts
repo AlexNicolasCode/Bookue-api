@@ -1,4 +1,4 @@
-import { MongoHelper, NoteMongoRepository } from "@/infra";
+import { MongoHelper, Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockLoadNotesParams, mockNoteModel, mockUserModel } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import env from "@/env";
@@ -16,10 +16,11 @@ describe('NoteMongoRepository', () => {
         await MongoHelper.deleteManyOn('note')
     })
 
-    describe('add()', () => {    
+    describe('add()', () => {
         test('should return undefined on success', async () => {
             const sut = makeSut()
             const fakeData = mockNoteModel()
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
     
             const result = await sut.add(fakeData)
     
