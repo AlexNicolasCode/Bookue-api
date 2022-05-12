@@ -39,9 +39,10 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
         }
     }
 
-    async update (bookData: UpdateBookRepository.Params): Promise<void> {
+    async update (data: UpdateBookRepository.Params): Promise<void> {
         try {
-            await MongoHelper.updateBook(bookData)
+            const account = await User.findOne({ accessToken: data.accessToken }) as UserModel
+            await Book.updateOne({ userId: account.id, bookId: data.bookId })
         } catch (error) {
             throw new Error(error)
         }
