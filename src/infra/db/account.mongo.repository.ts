@@ -22,7 +22,7 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
     
 
     async checkByAccessToken (accessToken: string): Promise<CheckAccountByAccessTokenRepository.Result> {
-        const hasAccount = await MongoHelper.findUserByAccessToken(accessToken)
+        const hasAccount = await User.findOne({ accessToken: accessToken })
         return hasAccount ? true : false
     }
     
