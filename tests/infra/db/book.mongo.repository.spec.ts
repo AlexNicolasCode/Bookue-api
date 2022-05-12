@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { Book, MongoHelper, User } from "@/infra"
-import { mockAddBookParams, mockDeleteBookRequest, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
+import { mockAddBookParams, mockBookModel, mockDeleteBookRequest, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import env from '@/env'
 
@@ -110,20 +110,22 @@ describe('BookMongoRepository', () => {
         test('should return undefined on success', async () => {
             const sut = makeSut()
             const fakeBook = mockUpdateBookRequest()
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockBookModel())
 
             const result = await sut.update(fakeBook)
 
             expect(result).toBeUndefined()
         })
 
-        test('should call MongoHelper with correct values', async () => {
+        test('should call User model with correct values', async () => {
             const sut = makeSut()
             const fakeBook = mockUpdateBookRequest()
-            const MongoHelperSpy = jest.spyOn(MongoHelper, 'updateBook')
+            const userModelSpy = jest.spyOn(User, 'findOne')
+            userModelSpy.mockResolvedValueOnce(mockBookModel())
 
             await sut.update(fakeBook)
 
-            expect(MongoHelperSpy).toBeCalledWith(fakeBook)
+            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeBook.accessToken })
         })
     })
 
