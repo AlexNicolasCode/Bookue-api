@@ -16,17 +16,7 @@ describe('NoteMongoRepository', () => {
         await MongoHelper.deleteManyOn('note')
     })
 
-    describe('add()', () => {
-        test('should throw if MongoHelper throws', async () => {
-            const sut = makeSut()
-            const fakeData = mockNoteModel()
-            jest.spyOn(MongoHelper, 'addNote').mockImplementationOnce(throwError)
-    
-            const promise = sut.add(fakeData)
-    
-            await expect(promise).rejects.toThrowError()
-        })
-    
+    describe('add()', () => {    
         test('should return undefined on success', async () => {
             const sut = makeSut()
             const fakeData = mockNoteModel()
@@ -38,16 +28,6 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('loadAll()', () => {
-        test('should throw if MongoHelper throws', async () => {
-            const sut = makeSut()
-            const fakeData = mockLoadNotesParams()
-            jest.spyOn(MongoHelper, 'loadNotes').mockImplementationOnce(throwError)
-
-            const promise = sut.loadAll(fakeData)
-
-            await expect(promise).rejects.toThrowError()
-        })
-
         test('should call MongoHelper with correct values', async () => {
             const sut = makeSut()
             const fakeData = mockLoadNotesParams()
