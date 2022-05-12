@@ -77,7 +77,7 @@ describe('AccountMongoRepository', () => {
     test('should return true when account exists', async () => {
         const sut = makeSut()
         const fakeAccount = mockUserModel()
-        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(fakeAccount)
+        jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeAccount)
         
         const result = await sut.checkByAccessToken(fakeAccount.id)
 
