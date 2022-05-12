@@ -1,6 +1,5 @@
 import { AddNoteRepository, LoadNotesRepository } from "@/data/protocols"
 import { NoteModel } from "@/domain/models"
-import { MongoHelper } from "./mongo.helper"
 import { Note, User } from "./mongoose.schemas"
 
 export class NoteMongoRepository implements AddNoteRepository, LoadNotesRepository {
