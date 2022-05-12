@@ -44,7 +44,8 @@ describe('NoteMongoRepository', () => {
             const sut = makeSut()
             const fakeData = mockLoadNotesParams()
             const fakeNotes = mockLoadNotes()
-            jest.spyOn(MongoHelper, 'loadNotes').mockResolvedValueOnce(fakeNotes)
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
+            jest.spyOn(Note, 'find').mockResolvedValueOnce(fakeNotes)
 
             const notes = await sut.loadAll(fakeData)
 
