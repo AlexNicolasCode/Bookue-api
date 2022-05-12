@@ -1,9 +1,8 @@
-import { AccountMongoRepository, MongoHelper } from "@/infra"
+import { AccountMongoRepository, MongoHelper, User } from "@/infra"
 import { mockAddAccountParams, mockUserModel } from "tests/domain/mocks"
 import env from "@/env"
 
 import faker from "@faker-js/faker"
-import { throwError } from "tests/domain/mocks/test.helpers"
 
 const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
@@ -23,8 +22,8 @@ describe('AccountMongoRepository', () => {
         const fakeAccount = mockAddAccountParams()
         
         await sut.add(fakeAccount)
-        const count = await MongoHelper.countDocuments('user', fakeAccount)
-        
+
+        const count = await User.countDocuments({ email: fakeAccount.email })
         expect(count).toBe(1)
     })
 
