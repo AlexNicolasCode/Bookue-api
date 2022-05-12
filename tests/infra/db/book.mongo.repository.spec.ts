@@ -43,26 +43,6 @@ describe('BookMongoRepository', () => {
             const book = await Book.findOne({ userId: fakeAccount.id })
             expect(book.userId).toBe(fakeAccount.id)
         })
-    
-        test('should throw if User schema throws', async () => {
-            const sut = makeSut()
-            const bookData = mockAddBookParams()
-            jest.spyOn(User, 'findOne').mockImplementationOnce(throwError)
-            
-            const promise = sut.add(bookData)
-            
-            await expect(promise).rejects.toThrowError()
-        })
-    
-        test('should throw if Book schema throws', async () => {
-            const sut = makeSut()
-            const bookData = mockAddBookParams()
-            jest.spyOn(Book, 'create').mockImplementationOnce(throwError)
-            
-            const promise = sut.add(bookData)
-            
-            await expect(promise).rejects.toThrowError()
-        })
     })
 
     describe('load book list system', () => {      
@@ -80,19 +60,6 @@ describe('BookMongoRepository', () => {
     })
 
     describe('load one book system', () => {
-        test('should throw if loadOneBook method on MongoHelper throws', async () => {
-            const sut = makeSut()
-            const fakeDataRequest = { 
-                accessToken: faker.datatype.uuid(),
-                bookId: faker.datatype.uuid(),
-            }
-            jest.spyOn(MongoHelper, 'loadOneBook').mockImplementationOnce(throwError)
-            
-            const promise = sut.loadOne(fakeDataRequest)
-            
-            expect(promise).rejects.toThrowError()
-        })
-
         test('should return a book on success', async () => {
             const sut = makeSut()
             const fakeBook = mockAddBookParams()
@@ -109,16 +76,6 @@ describe('BookMongoRepository', () => {
     })
 
     describe('updateBook method', () => {
-        test('should throw if MongoHelper throws', async () => {
-            const sut = makeSut()
-            const fakeBook = mockUpdateBookRequest()
-            jest.spyOn(MongoHelper, 'updateBook').mockImplementationOnce(throwError)
-
-            const promise = sut.update(fakeBook)
-
-            expect(promise).rejects.toThrowError()
-        })
-
         test('should return undefined on success', async () => {
             const sut = makeSut()
             const fakeBook = mockUpdateBookRequest()
