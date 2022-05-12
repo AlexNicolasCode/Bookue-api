@@ -104,16 +104,6 @@ describe('AccountMongoRepository', () => {
         expect(result).toStrictEqual(fakeAccount)
     })
 
-    test('should throw if MongoHelper on findUserByAccessToken method throws', async () => {
-        const sut = makeSut()
-        const fakeAccount = mockUserModel()
-        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockImplementationOnce(throwError)
-        
-        const promise = sut.loadByToken(fakeAccount.accessToken)
-
-        expect(promise).rejects.toThrowError()
-    })
-
     test('should return undefined if MongoHelper on findUserByAccessToken method not found account', async () => {
         const sut = makeSut()
         const fakeAccount = mockUserModel()
