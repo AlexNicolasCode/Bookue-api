@@ -6,7 +6,6 @@ import {
     UpdateAccessTokenRepository,
     LoadAccountByTokenRepository,
 } from "@/data/protocols"
-import { MongoHelper } from "./mongo.helper"
 import { User } from "./mongoose.schemas"
 
 export class AccountMongoRepository implements AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, CheckAccountByAccessTokenRepository, LoadAccountByTokenRepository {
