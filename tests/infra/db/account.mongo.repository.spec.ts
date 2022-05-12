@@ -30,8 +30,8 @@ describe('AccountMongoRepository', () => {
     test('should return true when account exists', async () => {
         const sut = makeSut()
         const fakeAccount = mockAddAccountParams()
-
-        await sut.add(fakeAccount)        
+        await User.create(fakeAccount)      
+          
         const result = await sut.checkByEmail(fakeAccount.email)
         
         expect(result).toBe(true)
@@ -49,8 +49,8 @@ describe('AccountMongoRepository', () => {
     test('should return data account on success', async () => {
         const sut = makeSut()
         const fakeAccount = mockAddAccountParams()
-        
-        await sut.add(fakeAccount)
+        await User.create(fakeAccount)
+
         const result = await sut.loadByEmail(fakeAccount.email)
         
         expect({
@@ -64,8 +64,8 @@ describe('AccountMongoRepository', () => {
         const sut = makeSut()
         const accountMock = mockAddAccountParams()
         const token = faker.datatype.uuid()
-        
-        await sut.add(accountMock)
+        await User.create(accountMock)
+
         const account = await MongoHelper.findUserByEmail(accountMock.email)
         expect(account.accessToken).toBeFalsy()
         await sut.updateAccessToken(account.id, token)        
