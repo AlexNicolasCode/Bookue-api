@@ -121,11 +121,26 @@ describe('BookMongoRepository', () => {
             const sut = makeSut()
             const fakeBook = mockUpdateBookRequest()
             const userModelSpy = jest.spyOn(User, 'findOne')
-            userModelSpy.mockResolvedValueOnce(mockBookModel())
+            userModelSpy.mockResolvedValueOnce(mockUserModel())
+            
+            await sut.update(fakeBook)
+            
+            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeBook.accessToken })
+        })
+        
+        test('should call Book model with correct values', async () => {
+            const sut = makeSut()
+            const fakeBook = mockUpdateBookRequest()
+            const fakeUser = mockUserModel()
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
+            const bookModelSpy = jest.spyOn(Book, 'updateOne')
 
             await sut.update(fakeBook)
 
-            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeBook.accessToken })
+            expect(bookModelSpy).toHaveBeenCalledWith({ 
+                userId: fakeUser.id,
+                bookId: fakeBook.bookId,
+            })
         })
     })
 
