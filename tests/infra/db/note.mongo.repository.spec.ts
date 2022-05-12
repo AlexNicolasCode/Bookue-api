@@ -29,14 +29,15 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('loadAll()', () => {
-        test('should call MongoHelper with correct values', async () => {
+        test('should call User model with correct values', async () => {
             const sut = makeSut()
             const fakeData = mockLoadNotesParams()
-            const MongoHelperSpy = jest.spyOn(MongoHelper, 'loadNotes')
+            const userModelSpy = jest.spyOn(User, 'findOne')
+            userModelSpy.mockResolvedValueOnce(mockUserModel())
 
             await sut.loadAll(fakeData)
 
-            expect(MongoHelperSpy).toHaveBeenCalledWith(fakeData)
+            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeData.accessToken })
         })
 
         test('should return notes list on success', async () => {
