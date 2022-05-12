@@ -31,6 +31,18 @@ describe('BookMongoRepository', () => {
             const count = await MongoHelper.countDocuments('book', bookData)
             expect(count).toBe(1)
         })
+        
+        test('should save book with correct userId', async () => {
+            const sut = makeSut()
+            const bookData = mockAddBookParams()
+            const fakeAccount = mockUserModel()
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeAccount)
+            
+            await sut.add(bookData)
+            
+            const book = await Book.findOne({ userId: fakeAccount.id })
+            expect(book.userId).toBe(fakeAccount.id)
+        })
     
         test('should throw if User schema throws', async () => {
             const sut = makeSut()
