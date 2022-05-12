@@ -6,13 +6,13 @@ import {
     UpdateAccessTokenRepository,
     LoadAccountByTokenRepository,
 } from "@/data/protocols"
-import { serverError } from "@/presentation/helpers"
 import { MongoHelper } from "./mongo.helper"
+import { User } from "./mongoose.schemas"
 
 export class AccountMongoRepository implements AddAccountRepository, CheckAccountByEmailRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, CheckAccountByAccessTokenRepository, LoadAccountByTokenRepository {
     async add (account: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
-        const isAdded = await MongoHelper.addOneOn('user', account)
-        return isAdded
+        await User.create(account)
+        return true
     }
 
     async checkByEmail (email: string): Promise<CheckAccountByEmailRepository.Result> {
