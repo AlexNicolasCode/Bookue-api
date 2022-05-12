@@ -65,22 +65,13 @@ describe('BookMongoRepository', () => {
         })
     })
 
-    describe('load book list system', () => {
-        test('should throw if loadBooks method on MongoHelper throws', async () => {
-            const sut = makeSut()
-            const fakeAccessToken = faker.datatype.uuid()
-            jest.spyOn(MongoHelper, 'loadBooks').mockImplementationOnce(throwError)
-            
-            const promise = sut.loadAll(fakeAccessToken)
-            
-            expect(promise).rejects.toThrowError()
-        })
-
+    describe('load book list system', () => {      
         test('should return book list on success', async () => {
             const sut = makeSut()
             const fakeAccessToken = faker.datatype.uuid()
             const bookData = mockAddBookParams()
-            jest.spyOn(MongoHelper, 'loadBooks').mockResolvedValueOnce([bookData])
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
+            jest.spyOn(Book, 'findOne').mockResolvedValueOnce([bookData])
             
             const result = await sut.loadAll(fakeAccessToken)
 

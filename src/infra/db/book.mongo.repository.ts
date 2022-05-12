@@ -5,7 +5,7 @@ import {
     LoadBookRepository, 
     UpdateBookRepository,
 } from "@/data/protocols"
-import { BookModel } from "@/domain/models"
+import { BookModel, UserModel } from "@/domain/models"
 import { MongoHelper } from "./mongo.helper"
 import { Book, User } from "./mongoose.schemas"
 
@@ -21,7 +21,9 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
 
     async loadAll (accessToken: string): Promise<LoadBooksRepository.Result> {
         try {
-            return await MongoHelper.loadBooks(accessToken)
+            const account = await User.findOne({ accessToken }) as UserModel
+            const books = await Book.findOne({ userId: account.id })
+            return books
         } catch (error) {
             throw new Error(error)
         }
