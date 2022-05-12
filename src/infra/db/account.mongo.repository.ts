@@ -40,8 +40,8 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
         await MongoHelper.updateAccessToken(id, token)
     }
 
-    async loadByToken (token: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
-        const account = await MongoHelper.findUserByAccessToken(token)
+    async loadByToken (accessToken: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
+        const account = await User.findOne({ accessToken: accessToken })
         return account
     }
 }
