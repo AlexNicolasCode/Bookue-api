@@ -1,6 +1,5 @@
 import { MongoHelper, Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockLoadNotesParams, mockNoteModel, mockUserModel } from "tests/domain/mocks";
-import { throwError } from "tests/domain/mocks/test.helpers";
 import env from "@/env";
 
 const makeSut = (): NoteMongoRepository => {
