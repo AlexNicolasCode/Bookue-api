@@ -6,7 +6,6 @@ import {
     UpdateBookRepository,
 } from "@/data/protocols"
 import { BookModel, UserModel } from "@/domain/models"
-import { MongoHelper } from "./mongo.helper"
 import { Book, User } from "./mongoose.schemas"
 
 export class BookMongoRepository implements AddBookRepository, LoadBooksRepository, LoadBookRepository, UpdateBookRepository, DeleteBookRepository {

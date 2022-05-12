@@ -1,7 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { Book, MongoHelper, User } from "@/infra"
 import { mockAddBookParams, mockBookModel, mockDeleteBookRequest, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
-import { throwError } from "tests/domain/mocks/test.helpers"
 import env from '@/env'
 
 import faker from "@faker-js/faker"
