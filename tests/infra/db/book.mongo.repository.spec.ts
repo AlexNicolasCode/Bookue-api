@@ -145,29 +145,21 @@ describe('BookMongoRepository', () => {
     })
 
     describe('delete method', () => {
-        test('should call MongoHelper with correct values', async () => {
+        test('should call Book Model with correct values', async () => {
             const sut = makeSut()
             const fakeData = mockDeleteBookRequest()
-            const MongoHelperSpy = jest.spyOn(MongoHelper, 'deleteBook')
+            const userModelSpy = jest.spyOn(User, 'findOne')
+            userModelSpy.mockResolvedValueOnce(mockUserModel())
 
             await sut.delete(fakeData)
 
-            expect(MongoHelperSpy).toBeCalledWith(fakeData)
-        })
-
-        test('should throw if MongoHelper throws', async () => {
-            const sut = makeSut()
-            const fakeData = mockDeleteBookRequest()
-            jest.spyOn(MongoHelper, 'deleteBook').mockImplementationOnce(throwError)
-
-            const promise = sut.delete(fakeData)
-
-            expect(promise).rejects.toThrowError()
+            expect(userModelSpy).toBeCalledWith({ accessToken: fakeData.accessToken })
         })
 
         test('should return undefined on success', async () => {
             const sut = makeSut()
             const fakeData = mockDeleteBookRequest()
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
 
             const result = await sut.delete(fakeData)
 
