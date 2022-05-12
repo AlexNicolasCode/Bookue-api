@@ -97,17 +97,17 @@ describe('AccountMongoRepository', () => {
     test('should return account id if access token is valid', async () => {
         const sut = makeSut()
         const fakeAccount = mockUserModel()
-        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(fakeAccount)
+        jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeAccount)
         
         const result = await sut.loadByToken(fakeAccount.accessToken)
 
         expect(result).toStrictEqual(fakeAccount)
     })
 
-    test('should return undefined if MongoHelper on findUserByAccessToken method not found account', async () => {
+    test('should return undefined if User model on findOne method not found account', async () => {
         const sut = makeSut()
         const fakeAccount = mockUserModel()
-        jest.spyOn(MongoHelper, 'findUserByAccessToken').mockResolvedValueOnce(undefined)
+        jest.spyOn(User, 'findOne').mockResolvedValueOnce(undefined)
         
         const result = await sut.loadByToken(fakeAccount.accessToken)
 
