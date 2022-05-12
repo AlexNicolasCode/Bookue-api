@@ -22,7 +22,7 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
     async loadAll (accessToken: string): Promise<LoadBooksRepository.Result> {
         try {
             const account = await User.findOne({ accessToken }) as UserModel
-            const books = await Book.findOne({ userId: account.id })
+            const books = await Book.find({ userId: account.id })
             return books
         } catch (error) {
             throw new Error(error)
