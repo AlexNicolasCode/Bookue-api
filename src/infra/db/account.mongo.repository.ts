@@ -36,8 +36,10 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
         }
     }
 
-    async updateAccessToken (id: string, token: string): Promise<void> {
-        await MongoHelper.updateAccessToken(id, token)
+    async updateAccessToken (id: string, accessToken: string): Promise<void> {
+        await User.findOneAndUpdate({ id: id }, {
+            accessToken: accessToken
+        })
     }
 
     async loadByToken (accessToken: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
