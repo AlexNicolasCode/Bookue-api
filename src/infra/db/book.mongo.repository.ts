@@ -14,8 +14,8 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
         try {
             const account = await User.findOne({ accessToken: data.accessToken })
             await Book.create({ ...data, userId: account.id })
-        } catch (e) {
-            throw new Error(e)
+        } catch (error) {
+            throw new Error(error)
         }
     }
 
