@@ -84,11 +84,11 @@ describe('BookMongoRepository', () => {
             }
             const fakeUser = mockUserModel()
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
-            const BookSpy = jest.spyOn(Book, 'findOne')
+            const bookSpy = jest.spyOn(Book, 'findOne')
             
             await sut.loadOne(fakeDataRequest)
 
-            expect(BookSpy).toHaveBeenCalledWith({ 
+            expect(bookSpy).toHaveBeenCalledWith({ 
                 userId: fakeUser.id, 
                 bookId: fakeDataRequest.bookId, 
             })
@@ -102,12 +102,12 @@ describe('BookMongoRepository', () => {
                 accessToken: fakeBook.accessToken,
                 bookId: faker.datatype.uuid(),
             }
-            const UserSpy = jest.spyOn(User, 'findOne')
-            UserSpy.mockResolvedValueOnce({ id: ramdomUserId })
+            const userSpy = jest.spyOn(User, 'findOne')
+            userSpy.mockResolvedValueOnce({ id: ramdomUserId })
             
             await sut.loadOne(fakeDataRequest)
 
-            expect(UserSpy).toHaveBeenCalledWith({ accessToken: fakeDataRequest.accessToken })
+            expect(userSpy).toHaveBeenCalledWith({ accessToken: fakeDataRequest.accessToken })
         })
     })
 
