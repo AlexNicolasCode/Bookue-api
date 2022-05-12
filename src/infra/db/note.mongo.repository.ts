@@ -5,24 +5,16 @@ import { Note, User } from "./mongoose.schemas"
 
 export class NoteMongoRepository implements AddNoteRepository, LoadNotesRepository {
     async add (data: NoteModel): Promise<void> {
-        try {
-            const account = await User.findOne({ accessToken: data.accessToken })
-            await Note.create({
-                userId: account.id,
-                bookId: data.bookID,
-                text: data.text,
-                createdAt: new Date()
-            })
-        } catch (error) {
-            throw new Error(error)
-        }
+        const account = await User.findOne({ accessToken: data.accessToken })
+        await Note.create({
+            userId: account.id,
+            bookId: data.bookID,
+            text: data.text,
+            createdAt: new Date()
+        })
     }
 
     async loadAll (data: LoadNotesRepository.Params): Promise<LoadNotesRepository.Result> {
-        try {
-            return await MongoHelper.loadNotes(data)
-        } catch (error) {
-            throw new Error(error)
-        }
+        return await MongoHelper.loadNotes(data)
     }
 }
