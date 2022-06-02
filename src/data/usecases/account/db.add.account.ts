@@ -15,5 +15,6 @@ export class DbAddAccount implements AddAccount {
             const isAdded = await this.addAccountRepository.add({ ...account, password: hashedPassword })
             return isAdded
         }
+        return false
     }
 }

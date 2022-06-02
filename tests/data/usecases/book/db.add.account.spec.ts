@@ -50,7 +50,7 @@ describe('DbAddAccount', () => {
 
         const result = await sut.add(addAccountParams)
 
-        expect(result).toBeFalsy()
+        expect(result).toBe(false)
     })
 
     test('should pass correct param to Hasher', async () => {
