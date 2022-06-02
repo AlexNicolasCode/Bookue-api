@@ -47,7 +47,7 @@ describe('DbDeleteBook', () => {
         
         const result = await sut.delete(fakeRequest)
         
-        expect(result).toBeUndefined()
+        expect(result).toBe(false)
     })
 
     test('should throws if DeleteBookRepository throws', async () => {

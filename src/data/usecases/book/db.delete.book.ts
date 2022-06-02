@@ -13,5 +13,6 @@ export class DbDeleteBook implements DeleteBook {
             await this.deleteBookRepository.delete(data)
             return true
         }
+        return false
     }
 }
