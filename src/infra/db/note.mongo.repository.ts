@@ -1,8 +1,8 @@
-import { AddNoteRepository, LoadNotesRepository } from "@/data/protocols"
+import { AddNoteRepository, LoadNotesRepository, DeleteNoteRepository } from "@/data/protocols"
 import { NoteModel } from "@/domain/models"
 import { Note, User } from "./mongoose.schemas"
 
-export class NoteMongoRepository implements AddNoteRepository, LoadNotesRepository {
+export class NoteMongoRepository implements AddNoteRepository, LoadNotesRepository, DeleteNoteRepository {
     async add (data: NoteModel): Promise<void> {
         const account = await User.findOne({ accessToken: data.accessToken })
         await Note.create({
@@ -16,5 +16,9 @@ export class NoteMongoRepository implements AddNoteRepository, LoadNotesReposito
     async loadAll (data: LoadNotesRepository.Params): Promise<LoadNotesRepository.Result> {
         const account = await User.findOne({ accessToken: data.accessToken })
         return await Note.find({ userId: account.id, bookId: data.bookId })
+    }
+
+    async delete (data: DeleteNoteRepository.Params): Promise<void> {
+        await Note.deleteOne({ id: data.noteId, bookId: data.bookId })
     }
 }
