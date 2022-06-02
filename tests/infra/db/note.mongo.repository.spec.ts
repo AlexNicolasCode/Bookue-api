@@ -1,6 +1,9 @@
 import { MongoHelper, Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockLoadNotesParams, mockNoteModel, mockUserModel } from "tests/domain/mocks";
+import { DeleteNote } from "@/domain/usecases";
+
 import env from "@/env";
+import faker from "@faker-js/faker";
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
@@ -76,6 +79,30 @@ describe('NoteMongoRepository', () => {
             const notes = await sut.loadAll(fakeData)
 
             expect(notes).toBe(fakeNotes)
+        })
+    })
+
+    describe('delete()', () => {
+        let mockRequest: DeleteNote.Params;
+
+        beforeEach(() => {
+            mockRequest = {
+                accessToken: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+                noteId: faker.datatype.uuid(),
+            }
+        })
+
+        test('should call Note model with correct values', async () => {
+            const sut = makeSut()
+            const noteModelSpy =  jest.spyOn(Note, 'deleteOne')
+
+            await sut.delete(mockRequest)
+
+            expect(noteModelSpy).toHaveBeenCalledWith({ 
+                id: mockRequest.noteId, 
+                bookId: mockRequest.bookId, 
+            })
         })
     })
 })
