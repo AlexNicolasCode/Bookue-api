@@ -1,5 +1,5 @@
 export type NoteModel = {
     accessToken: string
-    bookID: string,
+    bookId: string,
     text: string,
 }

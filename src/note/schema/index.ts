@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose"
 
 const NoteSchema = new Schema({
-    bookID: string,
+    bookId: string,
     text: string,
     created_at: Date
 })

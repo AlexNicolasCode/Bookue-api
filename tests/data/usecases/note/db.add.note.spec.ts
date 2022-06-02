@@ -29,7 +29,7 @@ describe('DbAddNote', () => {
     beforeEach(() => {
         fakeRequest = {
             accessToken: faker.datatype.uuid(),
-            bookID: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
             text: faker.random.words(),
         }
     })
@@ -72,7 +72,7 @@ describe('DbAddNote', () => {
 
         expect(addNoteRepositorySpy.params).toStrictEqual({
             userId: loadAccountByTokenRepositorySpy.result.id,
-            bookId: fakeRequest.bookID,
+            bookId: fakeRequest.bookId,
             text: fakeRequest.text,
         })
     })

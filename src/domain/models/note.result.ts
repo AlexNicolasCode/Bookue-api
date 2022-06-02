@@ -1,6 +1,6 @@
 export type NoteResultModel = {
     id: string,
-    bookID: string,
+    bookId: string,
     text: string
     createdAt: Date
 }

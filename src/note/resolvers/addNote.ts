@@ -1,20 +1,20 @@
 import { verifyToken } from "../../user/tools/validadeUser"
 import { Note } from "../schema"
 
-export const addNote = async (token, bookID, note) => {
+export const addNote = async (token, bookId, note) => {
     const user: any = await verifyToken(token)
 
     if (!user) {
         return
     }
 
-    const checkNotes = await Note.findOne({ bookID: bookID, text: note })
+    const checkNotes = await Note.findOne({ bookId: bookId, text: note })
     if (checkNotes)  {
         return
     }
     
     return await Note.create({
-            bookID: bookID,
+            bookId: bookId,
             text: note,
             created_at: Date.now()
         })

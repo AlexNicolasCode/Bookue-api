@@ -19,7 +19,7 @@ const BookSchema = new Schema({
 
 const NoteSchema = new Schema({
     userId: String,
-    bookID: String,
+    bookId: String,
     text: String,
     createdAt: Date
 })

@@ -124,7 +124,7 @@ export const MongoHelper = {
             const account = await this.findUserByAccessToken(data.accessToken)
             await this.addOneOn('note', {
                 userId: account.id,
-                bookId: data.bookID,
+                bookId: data.bookId,
                 text: data.text,
                 createdAt: new Date()
             })

@@ -23,7 +23,7 @@ export const typeDefs = gql`
   }
 
   type NoteType {
-    bookID: string
+    bookId: string
     id: string
     text: string
   }
@@ -33,9 +33,9 @@ export const typeDefs = gql`
     addBook(title: string, author: string, description: string, currentPage: string, pages: string): BookType
     updateBook(id: string, newTitle: string, newAuthor: string, newDescription: string, newCurrentPage: string, newPages: string): BookType
     deleteBook(id: string): BookType
-    addNote(bookID: string, note: string): NoteType
-    deleteNote(bookID: string, noteID: string): NoteType
-    updateNote(bookID: string, noteID: string, newNote: string): Boolean
+    addNote(bookId: string, note: string): NoteType
+    deleteNote(bookId: string, noteID: string): NoteType
+    updateNote(bookId: string, noteID: string, newNote: string): Boolean
   }
 
   type Query {
@@ -43,6 +43,6 @@ export const typeDefs = gql`
     getBook(id: string): BookType
     loginUser(email: string, password: string): TokenType
     autoLogin: UserType
-    getNotes(bookID: string): [NoteType]
+    getNotes(bookId: string): [NoteType]
   }
 `
