@@ -1,79 +1,95 @@
-import { AddNoteRepositorySpy, CheckAccountByAccessTokenRepositorySpy } from "../../mocks"
+import { AddNoteRepositorySpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
 import { mockNoteModel } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbAddNote } from "@/data/usecases"
+import { AddNoteRepository } from "@/data/protocols"
+import faker from "@faker-js/faker"
+import { AddNote } from "@/domain/usecases"
 
 type SutType = {
     sut: DbAddNote
     addNoteRepositorySpy: AddNoteRepositorySpy
-    checkAccountByAccessTokenRepositorySpy: CheckAccountByAccessTokenRepositorySpy
+    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
 }
 
 const makeSut = (): SutType => {
-    const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
     const addNoteRepositorySpy = new AddNoteRepositorySpy()
-    const sut = new DbAddNote(checkAccountByAccessTokenRepositorySpy, addNoteRepositorySpy)
+    const sut = new DbAddNote(loadAccountByTokenRepositorySpy, addNoteRepositorySpy)
     return {
         sut,
         addNoteRepositorySpy,
-        checkAccountByAccessTokenRepositorySpy,
+        loadAccountByTokenRepositorySpy,
     }
 }
 
 describe('DbAddNote', () => {
+    let fakeRequest: AddNote.Params
+
+    beforeEach(() => {
+        fakeRequest = {
+            accessToken: faker.datatype.uuid(),
+            bookID: faker.datatype.uuid(),
+            text: faker.random.words(),
+        }
+    })
+
     test('should throw if AddNoteRepository throws', async () => {
         const { sut, addNoteRepositorySpy } = makeSut()
-        const fakeNote = mockNoteModel()
         jest.spyOn(addNoteRepositorySpy, 'add').mockImplementationOnce(throwError)
 
-        const promise = sut.add(fakeNote)
+        const promise = sut.add(fakeRequest)
 
         await expect(promise).rejects.toThrowError()
     })
 
-    test('should throw if CheckAccountByAccessTokenRepository throws', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeNote = mockNoteModel()
-        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockImplementationOnce(throwError)
+    test('should throw if LoadAccountByTokenRepository throws', async () => {
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockImplementationOnce(throwError)
 
-        const promise = sut.add(fakeNote)
+        const promise = sut.add(fakeRequest)
 
         await expect(promise).rejects.toThrowError()
     })
 
-    test('should call CheckAccountByAccessTokenRepository with correct values', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeNote = mockNoteModel()
+    test('should call LoadAccountByTokenRepository with correct values', async () => {
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
 
-        await sut.add(fakeNote)
+        await sut.add(fakeRequest)
 
-        expect(checkAccountByAccessTokenRepositorySpy.accessToken).toBe(fakeNote.accessToken)
+        expect(loadAccountByTokenRepositorySpy.token).toBe(fakeRequest.accessToken)
     })
 
     test('should call AddNoteRepository with correct values', async () => {
-        const { sut, addNoteRepositorySpy } = makeSut()
-        const fakeNote = mockNoteModel()
+        const { 
+            sut, 
+            loadAccountByTokenRepositorySpy, 
+            addNoteRepositorySpy, 
+        } = makeSut()
 
-        await sut.add(fakeNote)
 
-        expect(addNoteRepositorySpy.params).toBe(fakeNote)
+        await sut.add(fakeRequest)
+
+        expect(addNoteRepositorySpy.params).toStrictEqual({
+            userId: loadAccountByTokenRepositorySpy.result.id,
+            bookId: fakeRequest.bookID,
+            text: fakeRequest.text,
+        })
     })
 
     test('should return true on success', async () => {
         const { sut } = makeSut()
-        const fakeNote = mockNoteModel()
 
-        const result = await sut.add(fakeNote)
+        const result = await sut.add(fakeRequest)
 
         expect(result).toBe(true)
     })
 
     test('should return undefined if access token is invalid', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeNote = mockNoteModel()
-        checkAccountByAccessTokenRepositorySpy.result = false
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        loadAccountByTokenRepositorySpy.result = undefined
 
-        const result = await sut.add(fakeNote)
+        const result = await sut.add(fakeRequest)
 
         expect(result).toBe(false)
     })
