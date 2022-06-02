@@ -4,6 +4,7 @@ import { DeleteNote } from "@/domain/usecases";
 
 import env from "@/env";
 import faker from "@faker-js/faker";
+import { throwError } from "tests/domain/mocks/test.helpers";
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
@@ -103,6 +104,15 @@ describe('NoteMongoRepository', () => {
                 id: mockRequest.noteId, 
                 bookId: mockRequest.bookId, 
             })
+        })
+
+        test('should throw if Note model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(Note, 'deleteOne').mockImplementationOnce(throwError)
+
+            const promise = sut.delete(mockRequest)
+
+            await expect(promise).rejects.toThrowError()
         })
     })
 })
