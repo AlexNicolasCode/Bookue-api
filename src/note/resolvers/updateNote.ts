@@ -1,18 +1,18 @@
 import { verifyToken } from "../../user/tools/validadeUser"
 import { Note } from "../schema"
 
-export const updateNote = async (token, bookID, noteID, newNote) => {
+export const updateNote = async (token, bookId, noteID, newNote) => {
   const user: any = verifyToken(token)
 
   if (!user) {
     return
   }
 
-  const note = await Note.findOne({ bookID: bookID, _id: noteID })
+  const note = await Note.findOne({ bookId: bookId, _id: noteID })
   if (!note || note.text === newNote) {
       return false
   } 
 
-  await Note.findOneAndUpdate({ bookID: bookID, _id: noteID }, { text: newNote })
+  await Note.findOneAndUpdate({ bookId: bookId, _id: noteID }, { text: newNote })
   return true
 }

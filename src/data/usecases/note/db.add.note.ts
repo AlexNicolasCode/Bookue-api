@@ -12,7 +12,7 @@ export class DbAddNote implements AddNote {
         if (account) {
             await this.addNoteRepository.add({
                 userId: account.id, 
-                bookId: data.bookID, 
+                bookId: data.bookId, 
                 text: data.text,
             })
             return true      
