@@ -50,6 +50,22 @@ describe('NoteMongoRepository', () => {
             expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeData.accessToken })
         })
 
+        test('should call Note model with correct values', async () => {
+            const sut = makeSut()
+            const fakeUser = mockUserModel() 
+            const fakeRequest = mockLoadNotesParams()
+            const noteModelSpy = jest.spyOn(Note, 'find')
+            noteModelSpy.mockResolvedValueOnce([mockNoteModel()])
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
+
+            await sut.loadAll(fakeRequest)
+
+            expect(noteModelSpy).toHaveBeenCalledWith({ 
+                bookId: fakeRequest.bookId,
+                userId: fakeUser.id,
+            })
+        })
+
         test('should return notes list on success', async () => {
             const sut = makeSut()
             const fakeData = mockLoadNotesParams()
