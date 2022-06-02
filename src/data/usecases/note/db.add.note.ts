@@ -12,6 +12,7 @@ export class DbAddNote implements AddNote {
         if (hasAccount) {
             await this.addNoteRepository.add(data)
             return true         
-        } 
+        }
+        return false
     }
 }

@@ -75,6 +75,6 @@ describe('DbAddNote', () => {
 
         const result = await sut.add(fakeNote)
 
-        expect(result).toBeUndefined()
+        expect(result).toBe(false)
     })
 })
