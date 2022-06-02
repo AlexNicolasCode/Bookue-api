@@ -13,5 +13,6 @@ export class DbUpdateBook implements UpdateBook {
             await this.updateBookRepository.update(data)
             return true
         }
+        return false
     }
 }

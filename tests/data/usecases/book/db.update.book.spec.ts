@@ -56,7 +56,7 @@ describe('DbUpdateBook', () => {
 
         const result = await sut.update(fakeBook)
 
-        expect(result).toBeUndefined()
+        expect(result).toBe(false)
     })
 
     test('should throw if CheckAccountByAccessTokenRepository throws', async () => {
