@@ -76,6 +76,6 @@ describe('DbDeleteNote', () => {
         
         const result = await sut.delete(fakeData)
 
-        expect(result).toBeUndefined()
+        expect(result).toBe(false)
     })
 })

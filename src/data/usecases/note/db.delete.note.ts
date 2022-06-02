@@ -13,5 +13,6 @@ export class DbDeleteNote implements DeleteNote {
             await this.deleteNoteRepository.delete(data)
             return true
         }
+        return false
     }
 }
