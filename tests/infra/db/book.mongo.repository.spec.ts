@@ -15,6 +15,7 @@ describe('BookMongoRepository', () => {
     })
 
     beforeEach(async () => {
+        jest.restoreAllMocks()
         await Book.deleteMany()
         await User.deleteMany()
     })
