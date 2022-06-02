@@ -1,5 +1,6 @@
-import { DeleteNoteRepository, LoadNotesRepository } from "@/data/protocols"
+import { DeleteNoteRepository } from "@/data/protocols"
 import { NoteModel, NoteResultModel } from "@/domain/models"
+import { LoadNotes } from "@/domain/usecases"
 
 import faker from "@faker-js/faker"
 
@@ -24,7 +25,7 @@ export const mockLoadNotes = (): NoteResultModel[] => ([
     mockLoadNote(),
 ])
 
-export const mockLoadNotesParams = (): LoadNotesRepository.Params => ({
+export const mockLoadNotesParams = (): LoadNotes.Params => ({
     accessToken: faker.datatype.uuid(),
     bookId: faker.datatype.uuid(),
 })

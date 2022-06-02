@@ -48,44 +48,28 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('loadAll()', () => {
-        let fakeRequest: LoadNotes.Params
+        let bookId: string
 
         beforeEach(() => {
-            fakeRequest = mockLoadNotesParams()
-        })
-
-        test('should call User model with correct values', async () => {
-            const sut = makeSut()
-            const userModelSpy = jest.spyOn(User, 'findOne')
-            userModelSpy.mockResolvedValueOnce(mockUserModel())
-
-            await sut.loadAll(fakeRequest)
-
-            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeRequest.accessToken })
+            bookId = faker.datatype.uuid()
         })
 
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
-            const fakeUser = mockUserModel() 
             const noteModelSpy = jest.spyOn(Note, 'find')
             noteModelSpy.mockResolvedValueOnce([mockNoteModel()])
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
 
-            await sut.loadAll(fakeRequest)
+            await sut.loadAll(bookId)
 
-            expect(noteModelSpy).toHaveBeenCalledWith({ 
-                bookId: fakeRequest.bookId,
-                userId: fakeUser.id,
-            })
+            expect(noteModelSpy).toHaveBeenCalledWith({ bookId })
         })
 
         test('should return notes list on success', async () => {
             const sut = makeSut()
             const fakeNotes = mockLoadNotes()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
             jest.spyOn(Note, 'find').mockResolvedValueOnce(fakeNotes)
 
-            const notes = await sut.loadAll(fakeRequest)
+            const notes = await sut.loadAll(bookId)
 
             expect(notes).toBe(fakeNotes)
         })

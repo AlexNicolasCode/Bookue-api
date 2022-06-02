@@ -26,7 +26,7 @@ describe('DbLoadNotes', () => {
         jest.spyOn(checkAccountByAccessTokenSpy, 'checkByAccessToken').mockImplementationOnce(throwError)
         const fakeRequest = mockLoadNotesParams()
 
-        const promise = sut.loadAll(fakeRequest)
+        const promise = sut.loadAll({ bookId: fakeRequest })
 
         await expect(promise).rejects.toThrowError()
     })
@@ -56,7 +56,7 @@ describe('DbLoadNotes', () => {
 
         await sut.loadAll(fakeRequest)
 
-        expect(loadNotesRepositorySpy.params).toBe(fakeRequest)
+        expect(loadNotesRepositorySpy.bookId).toBe(fakeRequest.bookId)
     })
 
     test('should return an array of notes on succcess', async () => {
