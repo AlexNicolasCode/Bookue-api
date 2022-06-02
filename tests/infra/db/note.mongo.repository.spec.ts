@@ -114,5 +114,13 @@ describe('NoteMongoRepository', () => {
 
             await expect(promise).rejects.toThrowError()
         })
+
+        test('should return undefined on success', async () => {
+            const sut = makeSut()
+
+            const result = await sut.delete(mockRequest)
+
+            expect(result).toBeUndefined()
+        })
     })
 })
