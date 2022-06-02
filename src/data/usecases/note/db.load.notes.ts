@@ -8,10 +8,10 @@ export class DbLoadNotes implements LoadNotes {
         private readonly loadNotesRepository: LoadNotesRepository,
     ) {}
 
-    async loadAll (data: LoadNotesRepository.Params): Promise<NoteResultModel[]> {
+    async loadAll (data: LoadNotes.Params): Promise<NoteResultModel[]> {
         const hasAccount = await this.checkAccountByAccessToken.checkByAccessToken(data.accessToken)
         if (hasAccount) {
-            return await this.loadNotesRepository.loadAll(data)
+            return await this.loadNotesRepository.loadAll(data.bookId)
         }
     }
 }

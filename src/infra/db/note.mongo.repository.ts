@@ -13,9 +13,8 @@ export class NoteMongoRepository implements AddNoteRepository, LoadNotesReposito
         })
     }
 
-    async loadAll (data: LoadNotesRepository.Params): Promise<LoadNotesRepository.Result> {
-        const account = await User.findOne({ accessToken: data.accessToken })
-        return await Note.find({ userId: account.id, bookId: data.bookId })
+    async loadAll (bookId: string): Promise<LoadNotesRepository.Result> {
+        return await Note.find({ bookId: bookId })
     }
 
     async delete (data: DeleteNoteRepository.Params): Promise<void> {
