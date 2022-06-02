@@ -10,8 +10,10 @@ import { Book, User } from "./mongoose.schemas"
 
 export class BookMongoRepository implements AddBookRepository, LoadBooksRepository, LoadBookRepository, UpdateBookRepository, DeleteBookRepository {
     async add (data: AddBookRepository.Params): Promise<void> {
-        const account = await User.findOne({ accessToken: data.accessToken })
-        await Book.create({ ...data, userId: account.id })
+        await Book.create({ 
+            userId: data.userId,
+            ...data,
+        })
     }
 
     async loadAll (accessToken: string): Promise<LoadBooksRepository.Result> {

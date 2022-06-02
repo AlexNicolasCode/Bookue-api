@@ -9,6 +9,6 @@ export namespace AddBookRepository {
         description: string
         currentPage: number
         pages: number
-        accessToken: string
+        userId: string
     }
 }

@@ -1,39 +1,45 @@
 import { DbAddBook } from "@/data/usecases"
 import { mockAddBookParams } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { AddBookRepositorySpy } from "../../mocks"
+import { AddBookRepositorySpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
 
 type SutTypes = {
     sut: DbAddBook
-    addBookRepositorySpy: AddBookRepositorySpy
+    addBookRepositorySpy: AddBookRepositorySpy,
+    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
+    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
     const addBookRepositorySpy = new AddBookRepositorySpy()
-    const sut = new DbAddBook(addBookRepositorySpy)
+    const sut = new DbAddBook(loadAccountByTokenRepositorySpy, addBookRepositorySpy)
     return {
         sut,
-        addBookRepositorySpy
+        addBookRepositorySpy,
+        loadAccountByTokenRepositorySpy,
     }
 }
 
 describe('DbAddBook', () => {
-    test('should send correct bookData', () => {
-        const { sut, addBookRepositorySpy } = makeSut()
-        const bookData = mockAddBookParams()
+    test('should send correct bookData', async () => {
+        const { sut, loadAccountByTokenRepositorySpy, addBookRepositorySpy } = makeSut()
+        const fakeRequest = mockAddBookParams()
         
-        sut.add(bookData)
-        
-        expect(addBookRepositorySpy.bookData).toBe(bookData)
+        await sut.add(fakeRequest)
+
+        expect(addBookRepositorySpy.params).toStrictEqual({
+            userId: loadAccountByTokenRepositorySpy.result.id,
+            ...fakeRequest,
+        })
     })
     
-    test('should throw if addBookRepositorySpy throws', () => {
+    test('should throw if addBookRepositorySpy throws', async () => {
         const { sut, addBookRepositorySpy } = makeSut()
         jest.spyOn(addBookRepositorySpy, 'add').mockImplementationOnce(throwError)
-        const bookData = mockAddBookParams()
+        const fakeRequest = mockAddBookParams()
 
-        const promise = sut.add(bookData)
+        const promise = sut.add(fakeRequest)
 
-        expect(promise).rejects.toThrow()
+        await expect(promise).rejects.toThrow()
     })
 })
