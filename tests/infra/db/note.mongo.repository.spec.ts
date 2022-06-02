@@ -1,10 +1,11 @@
 import { MongoHelper, Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockLoadNotesParams, mockNoteModel, mockUserModel } from "tests/domain/mocks";
-import { DeleteNote } from "@/domain/usecases";
+import { DeleteNote, LoadNotes } from "@/domain/usecases";
 
 import env from "@/env";
 import faker from "@faker-js/faker";
 import { throwError } from "tests/domain/mocks/test.helpers";
+import { NoteModel } from "@/domain/models";
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
@@ -20,44 +21,52 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('add()', () => {
+        let fakeRequest: NoteModel
+
+        beforeEach(() => {
+            fakeRequest = mockNoteModel()
+        })
+
         test('should return undefined on success', async () => {
             const sut = makeSut()
-            const fakeData = mockNoteModel()
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
     
-            const result = await sut.add(fakeData)
+            const result = await sut.add(fakeRequest)
     
             expect(result).toBeUndefined()
         })
 
         test('should call User model with correct values', async () => {
             const sut = makeSut()
-            const fakeData = mockNoteModel()
             const userModelSpy = jest.spyOn(User, 'findOne')
             userModelSpy.mockResolvedValueOnce(mockUserModel())
     
-            await sut.add(fakeData)
+            await sut.add(fakeRequest)
     
-            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeData.accessToken })
+            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeRequest.accessToken })
         })
     })
 
     describe('loadAll()', () => {
+        let fakeRequest: LoadNotes.Params
+
+        beforeEach(() => {
+            fakeRequest = mockLoadNotesParams()
+        })
+
         test('should call User model with correct values', async () => {
             const sut = makeSut()
-            const fakeData = mockLoadNotesParams()
             const userModelSpy = jest.spyOn(User, 'findOne')
             userModelSpy.mockResolvedValueOnce(mockUserModel())
 
-            await sut.loadAll(fakeData)
+            await sut.loadAll(fakeRequest)
 
-            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeData.accessToken })
+            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeRequest.accessToken })
         })
 
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
             const fakeUser = mockUserModel() 
-            const fakeRequest = mockLoadNotesParams()
             const noteModelSpy = jest.spyOn(Note, 'find')
             noteModelSpy.mockResolvedValueOnce([mockNoteModel()])
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
@@ -72,22 +81,21 @@ describe('NoteMongoRepository', () => {
 
         test('should return notes list on success', async () => {
             const sut = makeSut()
-            const fakeData = mockLoadNotesParams()
             const fakeNotes = mockLoadNotes()
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
             jest.spyOn(Note, 'find').mockResolvedValueOnce(fakeNotes)
 
-            const notes = await sut.loadAll(fakeData)
+            const notes = await sut.loadAll(fakeRequest)
 
             expect(notes).toBe(fakeNotes)
         })
     })
 
     describe('delete()', () => {
-        let mockRequest: DeleteNote.Params;
+        let fakeRequest: DeleteNote.Params;
 
         beforeEach(() => {
-            mockRequest = {
+            fakeRequest = {
                 accessToken: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
                 noteId: faker.datatype.uuid(),
@@ -98,11 +106,11 @@ describe('NoteMongoRepository', () => {
             const sut = makeSut()
             const noteModelSpy =  jest.spyOn(Note, 'deleteOne')
 
-            await sut.delete(mockRequest)
+            await sut.delete(fakeRequest)
 
             expect(noteModelSpy).toHaveBeenCalledWith({ 
-                id: mockRequest.noteId, 
-                bookId: mockRequest.bookId, 
+                id: fakeRequest.noteId, 
+                bookId: fakeRequest.bookId, 
             })
         })
 
@@ -110,7 +118,7 @@ describe('NoteMongoRepository', () => {
             const sut = makeSut()
             jest.spyOn(Note, 'deleteOne').mockImplementationOnce(throwError)
 
-            const promise = sut.delete(mockRequest)
+            const promise = sut.delete(fakeRequest)
 
             await expect(promise).rejects.toThrowError()
         })
@@ -118,7 +126,7 @@ describe('NoteMongoRepository', () => {
         test('should return undefined on success', async () => {
             const sut = makeSut()
 
-            const result = await sut.delete(mockRequest)
+            const result = await sut.delete(fakeRequest)
 
             expect(result).toBeUndefined()
         })
