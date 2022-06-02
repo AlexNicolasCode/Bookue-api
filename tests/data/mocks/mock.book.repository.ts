@@ -25,12 +25,12 @@ export class LoadBooksRepositorySpy implements LoadBooksRepository {
 }
 
 export class LoadBookRepositorySpy implements LoadBookRepository {
-    accessToken: string
+    userId: string
     bookId: string
     result = mockBookModel()
     
     async loadOne (data: LoadBookRepository.Request): Promise<LoadBookRepository.Result> {
-        this.accessToken = data.accessToken
+        this.userId = data.userId
         this.bookId = data.bookId
         return this.result
     }
