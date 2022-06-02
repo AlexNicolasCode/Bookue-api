@@ -1,20 +1,24 @@
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { LoadBookRepositorySpy } from "../../mocks"
+import { LoadAccountByTokenRepositorySpy, LoadBookRepositorySpy } from "../../mocks"
 import { DbLoadBook } from "@/data/usecases"
 
 import faker from "@faker-js/faker"
+import { mockUserModel } from "tests/domain/mocks"
 
 type SutType = {
     sut: DbLoadBook
     loadBookRepositorySpy: LoadBookRepositorySpy
+    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
 }
 
 const makeSut = (): SutType => {
+    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
     const loadBookRepositorySpy = new LoadBookRepositorySpy()
-    const sut = new DbLoadBook(loadBookRepositorySpy)
+    const sut = new DbLoadBook(loadAccountByTokenRepositorySpy, loadBookRepositorySpy)
     return {
         sut,
         loadBookRepositorySpy,
+        loadAccountByTokenRepositorySpy,
     }
 }
 
@@ -45,15 +49,16 @@ describe('DbLoadBook', () => {
     })
 
     test('should call LoadBookRepository with correct userId', async () => {
-        const { sut, loadBookRepositorySpy, } = makeSut()
+        const { sut, loadAccountByTokenRepositorySpy, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
             accessToken: faker.datatype.uuid(),
             bookId: faker.datatype.uuid(),
         }
+        const fakeUser = loadAccountByTokenRepositorySpy.result
 
         await sut.load(fakeData)
 
-        expect(loadBookRepositorySpy.accessToken).toBe(fakeData.accessToken)
+        expect(loadBookRepositorySpy.userId).toBe(fakeUser.id)
     })
 
     test('should return a book on success', async () => {
