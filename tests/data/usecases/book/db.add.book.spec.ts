@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAddBook', () => {
-    test('should send correct bookData', async () => {
+    test('should call AddBookRepository with correct values', async () => {
         const { sut, loadAccountByTokenRepositorySpy, addBookRepositorySpy } = makeSut()
         const fakeRequest = mockAddBookParams()
         
@@ -31,6 +31,15 @@ describe('DbAddBook', () => {
             userId: loadAccountByTokenRepositorySpy.result.id,
             ...fakeRequest,
         })
+    })
+
+    test('should call LoadAccountByTokenRepository with correct accessToken', async () => {
+        const { sut, loadAccountByTokenRepositorySpy, addBookRepositorySpy } = makeSut()
+        const fakeRequest = mockAddBookParams()
+        
+        await sut.add(fakeRequest)
+
+        expect(loadAccountByTokenRepositorySpy.token).toStrictEqual(fakeRequest.accessToken)
     })
     
     test('should throw if addBookRepositorySpy throws', async () => {
