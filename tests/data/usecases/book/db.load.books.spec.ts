@@ -1,9 +1,9 @@
 import { DbLoadBooks } from "@/data/usecases"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadAccountByTokenRepositorySpy, LoadBooksRepositorySpy } from "../../mocks"
+import { mockUserModel } from "tests/domain/mocks"
 
 import faker from "@faker-js/faker"
-import { mockUserModel } from "tests/domain/mocks"
 
 type SutType = {
     sut: DbLoadBooks
