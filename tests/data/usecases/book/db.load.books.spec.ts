@@ -44,6 +44,15 @@ describe('DbLoadBooks', () => {
         expect(loadBooksRepositorySpy.userId).toBe(fakeUserId.id)
     })
 
+    test('should call LoadAccountByTokenRepository with correct accessToken', async () => {
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        const fakeAccessToken = faker.datatype.uuid()
+
+        await sut.load(fakeAccessToken)
+
+        expect(loadAccountByTokenRepositorySpy.token).toBe(fakeAccessToken)
+    })
+
     test('should return book list on success', async () => {
         const { sut, loadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
