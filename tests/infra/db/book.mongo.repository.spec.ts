@@ -22,7 +22,10 @@ describe('BookMongoRepository', () => {
     describe('add book system', () => {
         test('should add one only book', async () => {
             const sut = makeSut()
-            const bookData = mockAddBookParams()
+            const bookData = {
+                userId: faker.datatype.uuid(),
+                ...mockAddBookParams()
+            }
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
             
             await sut.add(bookData)
@@ -33,14 +36,15 @@ describe('BookMongoRepository', () => {
         
         test('should save book with correct userId', async () => {
             const sut = makeSut()
-            const bookData = mockAddBookParams()
-            const fakeAccount = mockUserModel()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeAccount)
+            const bookData = {
+                userId: faker.datatype.uuid(),
+                ...mockAddBookParams()
+            }
             
             await sut.add(bookData)
             
-            const book = await Book.findOne({ userId: fakeAccount.id })
-            expect(book.userId).toBe(fakeAccount.id)
+            const book = await Book.findOne({ userId: bookData.userId })
+            expect(book.userId).toBe(bookData.userId)
         })
     })
 
@@ -48,8 +52,10 @@ describe('BookMongoRepository', () => {
         test('should return books on success', async () => {
             const sut = makeSut()
             const fakeAccessToken = faker.datatype.uuid()
-            const bookData = mockAddBookParams()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
+            const bookData = {
+                userId: faker.datatype.uuid(),
+                ...mockAddBookParams()
+            }
             jest.spyOn(Book, 'find').mockResolvedValueOnce([bookData])
             
             const result = await sut.loadAll(fakeAccessToken)

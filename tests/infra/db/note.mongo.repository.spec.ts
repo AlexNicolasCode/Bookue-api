@@ -1,11 +1,11 @@
 import { MongoHelper, Note, NoteMongoRepository, User } from "@/infra";
-import { mockLoadNotes, mockLoadNotesParams, mockNoteModel, mockUserModel } from "tests/domain/mocks";
-import { DeleteNote, LoadNotes } from "@/domain/usecases";
-
-import env from "@/env";
-import faker from "@faker-js/faker";
+import { mockLoadNotes, mockNoteModel, mockUserModel } from "tests/domain/mocks";
+import { DeleteNote } from "@/domain/usecases";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { NoteModel } from "@/domain/models";
+import { AddNoteRepository } from "@/data/protocols";
+import env from "@/env";
+
+import faker from "@faker-js/faker";
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
@@ -21,10 +21,13 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('add()', () => {
-        let fakeRequest: NoteModel
+        let fakeRequest: AddNoteRepository.Params
 
         beforeEach(() => {
-            fakeRequest = mockNoteModel()
+            fakeRequest = {
+                userId: faker.datatype.uuid(),
+                ...mockNoteModel(),
+            }
         })
 
         test('should return undefined on success', async () => {
@@ -34,16 +37,6 @@ describe('NoteMongoRepository', () => {
             const result = await sut.add(fakeRequest)
     
             expect(result).toBeUndefined()
-        })
-
-        test('should call User model with correct values', async () => {
-            const sut = makeSut()
-            const userModelSpy = jest.spyOn(User, 'findOne')
-            userModelSpy.mockResolvedValueOnce(mockUserModel())
-    
-            await sut.add(fakeRequest)
-    
-            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeRequest.accessToken })
         })
     })
 
