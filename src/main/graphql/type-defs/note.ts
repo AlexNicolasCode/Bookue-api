@@ -16,6 +16,6 @@ export default gql`
     type Notes {
         id: String
         text: String
-        createdAt: String
+        created_at: String
     }
 `

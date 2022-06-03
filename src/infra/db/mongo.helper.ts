@@ -126,7 +126,7 @@ export const MongoHelper = {
                 userId: account.id,
                 bookId: data.bookId,
                 text: data.text,
-                createdAt: new Date()
+                created_at: new Date()
             })
         } catch (error) {
             new Error(error)
