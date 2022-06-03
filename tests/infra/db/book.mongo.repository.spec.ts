@@ -1,7 +1,8 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { Book, MongoHelper, User } from "@/infra"
-import { mockAddBookParams, mockBookModel, mockDeleteBookRequest, mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
+import { mockAddBookParams, mockDeleteBookRequest, mockUserModel } from "tests/domain/mocks"
 import env from '@/env'
+import { UpdateBookRepository } from "@/data/protocols"
 
 import faker from "@faker-js/faker"
 
@@ -78,7 +79,6 @@ describe('BookMongoRepository', () => {
         test('should return a book on success', async () => {
             const sut = makeSut()
             const fakeBook = mockAddBookParams()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
             jest.spyOn(Book, 'findOne').mockResolvedValueOnce(fakeBook)
             
             const book = await sut.loadOne(fakeRequest)
@@ -88,65 +88,51 @@ describe('BookMongoRepository', () => {
 
         test('should call Book with correct values', async () => {
             const sut = makeSut()
-            const fakeUser = mockUserModel()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
             const bookSpy = jest.spyOn(Book, 'findOne')
             
             await sut.loadOne(fakeRequest)
 
             expect(bookSpy).toHaveBeenCalledWith({ 
-                userId: fakeUser.id, 
+                userId: fakeRequest.userId, 
                 bookId: fakeRequest.bookId, 
             })
-        })
-
-        test('should call User with correct values', async () => {
-            const sut = makeSut()
-            const ramdomUserId = faker.datatype.uuid()
-            const userSpy = jest.spyOn(User, 'findOne')
-            userSpy.mockResolvedValueOnce({ id: ramdomUserId })
-            
-            await sut.loadOne(fakeRequest)
-
-            expect(userSpy).toHaveBeenCalledWith({ accessToken: fakeRequest.accessToken })
         })
     })
 
     describe('updateBook method', () => {
-        test('should return undefined on success', async () => {
-            const sut = makeSut()
-            const fakeBook = mockUpdateBookRequest()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockBookModel())
+        let fakeNewBook: UpdateBookRepository.Params
 
-            const result = await sut.update(fakeBook)
-
-            expect(result).toBeUndefined()
+        beforeEach(() => {
+            const currentPage = faker.datatype.number()
+            fakeNewBook = {
+                title: faker.name.findName(),
+                author: faker.name.findName(),
+                description: faker.datatype.string(),
+                currentPage: currentPage,
+                pages: currentPage + 1,
+                userId: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+            }
         })
 
-        test('should call User model with correct values', async () => {
+        test('should return undefined on success', async () => {
             const sut = makeSut()
-            const fakeBook = mockUpdateBookRequest()
-            const userModelSpy = jest.spyOn(User, 'findOne')
-            userModelSpy.mockResolvedValueOnce(mockUserModel())
-            
-            await sut.update(fakeBook)
-            
-            expect(userModelSpy).toHaveBeenCalledWith({ accessToken: fakeBook.accessToken })
+
+            const result = await sut.update(fakeNewBook)
+
+            expect(result).toBeUndefined()
         })
         
         test('should call Book model with correct values', async () => {
             const sut = makeSut()
-            const fakeBook = mockUpdateBookRequest()
-            const fakeUser = mockUserModel()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeUser)
             const bookModelSpy = jest.spyOn(Book, 'updateOne')
 
-            await sut.update(fakeBook)
+            await sut.update(fakeNewBook)
 
             expect(bookModelSpy).toHaveBeenCalledWith({ 
-                userId: fakeUser.id,
-                bookId: fakeBook.bookId,
-            })
+                userId: fakeNewBook.userId,
+                bookId: fakeNewBook.bookId,
+            }, fakeNewBook)
         })
     })
 

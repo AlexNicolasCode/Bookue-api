@@ -1,22 +1,22 @@
-import { CheckAccountByAccessTokenRepositorySpy, UpdateBookRepositorySpy } from "../../mocks"
+import { LoadAccountByTokenRepositorySpy, UpdateBookRepositorySpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbUpdateBook } from "@/data/usecases"
-import { mockUpdateBookRequest } from "tests/domain/mocks"
+import { mockUpdateBookRequest, mockUserModel } from "tests/domain/mocks"
 
 type SutType = {
     sut: DbUpdateBook
     updateBookRepositorySpy: UpdateBookRepositorySpy
-    checkAccountByAccessTokenRepositorySpy: CheckAccountByAccessTokenRepositorySpy
+    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
 }
 
 const makeSut = (): SutType => {
-    const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
     const updateBookRepositorySpy = new UpdateBookRepositorySpy()
-    const sut = new DbUpdateBook(checkAccountByAccessTokenRepositorySpy, updateBookRepositorySpy)
+    const sut = new DbUpdateBook(loadAccountByTokenRepositorySpy, updateBookRepositorySpy)
     return {
         sut,
         updateBookRepositorySpy,
-        checkAccountByAccessTokenRepositorySpy,
+        loadAccountByTokenRepositorySpy,
     }
 }
 
@@ -32,12 +32,21 @@ describe('DbUpdateBook', () => {
     })
 
     test('should call UpdateBookRepository with correct values', async () => {
-        const { sut, updateBookRepositorySpy } = makeSut()
-        const fakeBook = mockUpdateBookRequest()   
+        const { sut, loadAccountByTokenRepositorySpy, updateBookRepositorySpy } = makeSut()
+        const fakeBook = mockUpdateBookRequest()
+        const fakeUser = loadAccountByTokenRepositorySpy.result
 
         await sut.update(fakeBook)
 
-        expect(updateBookRepositorySpy.params).toBe(fakeBook)
+        expect(updateBookRepositorySpy.params).toStrictEqual({
+            author: fakeBook.author,
+            title: fakeBook.title,
+            description: fakeBook.description,
+            pages: fakeBook.pages,
+            currentPage: fakeBook.currentPage,
+            userId: fakeUser.id,
+            bookId: fakeBook.bookId,
+        })
     })
 
     test('should return true on success', async () => {
@@ -49,20 +58,19 @@ describe('DbUpdateBook', () => {
         expect(result).toBe(true)
     })
 
-    test('should return undefined if CheckAccountByAccessTokenRepository returns false', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
+    test('should return undefined if LoadAccountByTokenRepository returns account', async () => {
+        const { sut } = makeSut()
         const fakeBook = mockUpdateBookRequest()
-        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockResolvedValueOnce(false)
 
         const result = await sut.update(fakeBook)
 
-        expect(result).toBe(false)
+        expect(result).toBe(true)
     })
 
-    test('should throw if CheckAccountByAccessTokenRepository throws', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
+    test('should throw if LoadAccountByTokenRepository throws', async () => {
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeBook = mockUpdateBookRequest()
-        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockImplementationOnce(throwError)
+        jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockImplementationOnce(throwError)
 
         const promise = sut.update(fakeBook)
 

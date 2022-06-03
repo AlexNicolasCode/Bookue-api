@@ -24,9 +24,8 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
         return await Book.findOne({ userId: data.userId, bookId: data.bookId })
     }
 
-    async update (data: UpdateBookRepository.Params): Promise<void> {
-        const account = await User.findOne({ accessToken: data.accessToken }) as UserModel
-        await Book.updateOne({ userId: account.id, bookId: data.bookId })
+    async update (book: UpdateBookRepository.Params): Promise<void> {
+        await Book.updateOne({ userId: book.userId, bookId: book.bookId }, book)
     }
     
     async delete (data: DeleteBookRepository.Params): Promise<void> {
