@@ -1,49 +1,49 @@
-import { CheckAccountByAccessTokenRepositorySpy, DeleteBookRepositorySpy } from "../../mocks"
-import { mockDeleteBookRequest } from "tests/domain/mocks"
+import { DeleteBookRepositorySpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
+import { mockDeleteBookParams } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbDeleteBook } from "@/data/usecases"
 
 type SutType = {
     sut: DbDeleteBook
-    checkAccountByAccessTokenRepositorySpy: CheckAccountByAccessTokenRepositorySpy
+    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
     deleteBookRepositorySpy: DeleteBookRepositorySpy
 }
 
 const makeSut = (): SutType => {
-    const checkAccountByAccessTokenRepositorySpy = new CheckAccountByAccessTokenRepositorySpy()
+    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
     const deleteBookRepositorySpy = new DeleteBookRepositorySpy()
-    const sut = new DbDeleteBook(checkAccountByAccessTokenRepositorySpy, deleteBookRepositorySpy)
+    const sut = new DbDeleteBook(loadAccountByTokenRepositorySpy, deleteBookRepositorySpy)
     return {
         sut,
-        checkAccountByAccessTokenRepositorySpy,
+        loadAccountByTokenRepositorySpy,
         deleteBookRepositorySpy,
     }
 }
 
 describe('DbDeleteBook', () => {
-    test('should throws if CheckAccountByAccessTokenRepository throws', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeRequest = mockDeleteBookRequest()
-        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockImplementationOnce(throwError)
+    test('should throws if LoadAccountByTokenRepository throws', async () => {
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        const fakeRequest = mockDeleteBookParams()
+        jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockImplementationOnce(throwError)
         
         const promise = sut.delete(fakeRequest)
         
         expect(promise).rejects.toThrowError()
     })
 
-    test('should call CheckAccountByAccessTokenRepository with correct values', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeRequest = mockDeleteBookRequest()
+    test('should call LoadAccountByTokenRepository with correct values', async () => {
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        const fakeRequest = mockDeleteBookParams()
         
         await sut.delete(fakeRequest)
         
-        expect(checkAccountByAccessTokenRepositorySpy.accessToken).toBe(fakeRequest.accessToken)
+        expect(loadAccountByTokenRepositorySpy.token).toBe(fakeRequest.accessToken)
     })
 
     test('should return undefined if access token is invalid', async () => {
-        const { sut, checkAccountByAccessTokenRepositorySpy } = makeSut()
-        const fakeRequest = mockDeleteBookRequest()
-        jest.spyOn(checkAccountByAccessTokenRepositorySpy, 'checkByAccessToken').mockResolvedValueOnce(false)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        const fakeRequest = mockDeleteBookParams()
+        jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockResolvedValueOnce(undefined)
         
         const result = await sut.delete(fakeRequest)
         
@@ -52,7 +52,7 @@ describe('DbDeleteBook', () => {
 
     test('should throws if DeleteBookRepository throws', async () => {
         const { sut, deleteBookRepositorySpy } = makeSut()
-        const fakeRequest = mockDeleteBookRequest()
+        const fakeRequest = mockDeleteBookParams()
         jest.spyOn(deleteBookRepositorySpy, 'delete').mockImplementationOnce(throwError)
 
         const promise = sut.delete(fakeRequest)
@@ -61,18 +61,19 @@ describe('DbDeleteBook', () => {
     })
     
     test('should call DeleteBookRepository with correct values', async () => {
-        const { sut, deleteBookRepositorySpy } = makeSut()
-        const fakeRequest = mockDeleteBookRequest()
+        const { sut, loadAccountByTokenRepositorySpy, deleteBookRepositorySpy } = makeSut()
+        const fakeRequest = mockDeleteBookParams()
+        const fakeAccount = loadAccountByTokenRepositorySpy.result
         
         await sut.delete(fakeRequest)
         
-        expect(deleteBookRepositorySpy.accessBook).toBe(fakeRequest.accessToken)
+        expect(deleteBookRepositorySpy.userId).toBe(fakeAccount.id)
         expect(deleteBookRepositorySpy.bookId).toBe(fakeRequest.bookId)
     })
     
     test('should return true on success', async () => {
         const { sut } = makeSut()
-        const fakeRequest = mockDeleteBookRequest()
+        const fakeRequest = mockDeleteBookParams()
         
         const result = await sut.delete(fakeRequest)
         
