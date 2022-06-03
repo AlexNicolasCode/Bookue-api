@@ -1,6 +1,6 @@
-import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
+import { DeleteBookRepository } from "@/data/protocols"
 import { BookModel } from "@/domain/models"
-import { AddBook } from "@/domain/usecases"
+import { AddBook, UpdateBook } from "@/domain/usecases"
 
 import faker from '@faker-js/faker'
 
@@ -25,7 +25,7 @@ export const mockAddBookParams = (): AddBook.Params => {
     }
 }
 
-export const mockUpdateBookRequest = (): UpdateBookRepository.Params => {
+export const mockUpdateBookRequest = (): UpdateBook.Params => {
     const currentPage = faker.datatype.number()
     return {
         title: faker.name.findName(),
