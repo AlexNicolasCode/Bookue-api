@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { Book, MongoHelper, User } from "@/infra"
-import { mockAddBookParams, mockUserModel } from "tests/domain/mocks"
+import { mockAddBookParams, mockAccount } from "tests/domain/mocks"
 import env from '@/env'
 import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
 
@@ -28,7 +28,7 @@ describe('BookMongoRepository', () => {
                 userId: faker.datatype.uuid(),
                 ...mockAddBookParams()
             }
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockUserModel())
+            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockAccount())
             
             await sut.add(bookData)
             

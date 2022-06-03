@@ -1,4 +1,4 @@
-import { mockUserModel } from "tests/domain/mocks"
+import { mockAccount } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DecrypterSpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
 import { DbLoadAccountByToken } from "@/data/usecases"
@@ -75,7 +75,7 @@ describe('DbLoadAccountByToken', () => {
     test('should return account data if LoadAccountByTokenRepository found an account', async () => {
         const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
-        const fakeAccount = mockUserModel()
+        const fakeAccount = mockAccount()
         jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockResolvedValueOnce(fakeAccount)
 
         const result = await sut.load(fakeAccessToken)
