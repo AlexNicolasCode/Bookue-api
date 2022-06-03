@@ -1,4 +1,3 @@
-import { DeleteBookRepository } from "@/data/protocols"
 import { BookModel } from "@/domain/models"
 import { AddBook, DeleteBook, UpdateBook } from "@/domain/usecases"
 
