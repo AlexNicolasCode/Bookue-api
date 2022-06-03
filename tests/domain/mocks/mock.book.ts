@@ -3,7 +3,7 @@ import { AddBook, DeleteBook, UpdateBook } from "@/domain/usecases"
 
 import faker from '@faker-js/faker'
 
-export const mockBookModel = (): BookModel => {
+export const mockBook = (): BookModel => {
     return {
         title: faker.random.words(),
         author: faker.random.word(),

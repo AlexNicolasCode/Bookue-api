@@ -1,5 +1,5 @@
 import { AddBookRepository, LoadBooksRepository, LoadBookRepository, UpdateBookRepository } from "@/data/protocols"
-import { mockBookModel } from "tests/domain/mocks"
+import { mockBook } from "tests/domain/mocks"
 
 export class AddBookRepositorySpy implements AddBookRepository {
     params: AddBookRepository.Params
@@ -12,10 +12,10 @@ export class AddBookRepositorySpy implements AddBookRepository {
 export class LoadBooksRepositorySpy implements LoadBooksRepository {
     userId: string
     result = [
-        mockBookModel(),
-        mockBookModel(),
-        mockBookModel(),
-        mockBookModel(),
+        mockBook(),
+        mockBook(),
+        mockBook(),
+        mockBook(),
     ]
 
     async loadAll (userId: string): Promise<LoadBooksRepository.Result> {
@@ -27,7 +27,7 @@ export class LoadBooksRepositorySpy implements LoadBooksRepository {
 export class LoadBookRepositorySpy implements LoadBookRepository {
     userId: string
     bookId: string
-    result = mockBookModel()
+    result = mockBook()
     
     async loadOne (data: LoadBookRepository.Request): Promise<LoadBookRepository.Result> {
         this.userId = data.userId
