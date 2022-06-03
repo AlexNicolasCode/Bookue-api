@@ -1,6 +1,6 @@
 import { DeleteBookRepository } from "@/data/protocols"
 import { BookModel } from "@/domain/models"
-import { AddBook, UpdateBook } from "@/domain/usecases"
+import { AddBook, DeleteBook, UpdateBook } from "@/domain/usecases"
 
 import faker from '@faker-js/faker'
 
@@ -38,8 +38,7 @@ export const mockUpdateBookRequest = (): UpdateBook.Params => {
     }
 }
 
-export const mockDeleteBookRequest = (): DeleteBookRepository.Params => {
-    const currentPage = faker.datatype.number()
+export const mockDeleteBookParams = (): DeleteBook.Params => {
     return {
         accessToken: faker.datatype.uuid(),
         bookId: faker.datatype.uuid(),

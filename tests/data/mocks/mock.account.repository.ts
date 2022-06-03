@@ -75,11 +75,11 @@ export class UpdateAccessTokenRepositorySpy implements UpdateAccessTokenReposito
 }
 
 export class DeleteBookRepositorySpy implements DeleteBookRepository {
-    accessBook: string
+    userId: string
     bookId: string
 
     async delete (data: DeleteBookRepository.Params): Promise<void> {
-        this.accessBook = data.accessToken
+        this.userId = data.userId
         this.bookId = data.bookId
     }
 }
