@@ -1,5 +1,5 @@
 import { AccountMongoRepository, MongoHelper, User } from "@/infra"
-import { mockAddAccountParams, mockUserModel } from "tests/domain/mocks"
+import { mockAddAccountParams, mockAccount } from "tests/domain/mocks"
 import env from "@/env"
 
 import faker from "@faker-js/faker"
@@ -76,7 +76,7 @@ describe('AccountMongoRepository', () => {
 
     test('should return true when account exists', async () => {
         const sut = makeSut()
-        const fakeAccount = mockUserModel()
+        const fakeAccount = mockAccount()
         jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeAccount)
         
         const result = await sut.checkByAccessToken(fakeAccount.id)
@@ -86,7 +86,7 @@ describe('AccountMongoRepository', () => {
 
     test('should return false when account exists', async () => {
         const sut = makeSut()
-        const fakeAccount = mockUserModel()
+        const fakeAccount = mockAccount()
         jest.spyOn(User, 'findOne').mockResolvedValueOnce(undefined)
         
         const result = await sut.checkByAccessToken(fakeAccount.id)
@@ -96,7 +96,7 @@ describe('AccountMongoRepository', () => {
 
     test('should return account id if access token is valid', async () => {
         const sut = makeSut()
-        const fakeAccount = mockUserModel()
+        const fakeAccount = mockAccount()
         jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeAccount)
         
         const result = await sut.loadByToken(fakeAccount.accessToken)
@@ -106,7 +106,7 @@ describe('AccountMongoRepository', () => {
 
     test('should return undefined if User model on findOne method not found account', async () => {
         const sut = makeSut()
-        const fakeAccount = mockUserModel()
+        const fakeAccount = mockAccount()
         jest.spyOn(User, 'findOne').mockResolvedValueOnce(undefined)
         
         const result = await sut.loadByToken(fakeAccount.accessToken)

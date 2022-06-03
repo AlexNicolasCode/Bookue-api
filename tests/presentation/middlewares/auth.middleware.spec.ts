@@ -1,6 +1,6 @@
 import { AccessDeniedError } from "@/presentation/errors";
 import { serverError } from "@/presentation/helpers";
-import { mockUserModel } from "tests/domain/mocks";
+import { mockAccount } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadAccountByTokenSpy } from "../mocks";
 import { AuthMiddleware } from "@/presentation/middlewares";
@@ -26,7 +26,7 @@ describe('AuthMiddleware', () => {
     test('should return 200 on success', async () => {
         const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
         const sut = new AuthMiddleware(loadAccountByTokenSpy)
-        const fakeAccount = mockUserModel()
+        const fakeAccount = mockAccount()
         jest.spyOn(loadAccountByTokenSpy, 'load').mockResolvedValueOnce(fakeAccount)
 
         const httpResponse = await sut.handle(mockRequest())

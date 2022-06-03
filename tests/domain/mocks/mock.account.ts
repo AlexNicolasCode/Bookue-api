@@ -3,7 +3,7 @@ import { AddAccount, Authentication } from "@/domain/usecases"
 
 import faker from "@faker-js/faker"
 
-export const mockUserModel = (): UserModel => ({
+export const mockAccount = (): UserModel => ({
     id: faker.datatype.uuid(),
     name: faker.name.findName(),
     email: faker.internet.email(),

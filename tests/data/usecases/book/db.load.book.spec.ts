@@ -3,7 +3,7 @@ import { LoadAccountByTokenRepositorySpy, LoadBookRepositorySpy } from "../../mo
 import { DbLoadBook } from "@/data/usecases"
 
 import faker from "@faker-js/faker"
-import { mockUserModel } from "tests/domain/mocks"
+import { mockAccount } from "tests/domain/mocks"
 
 type SutType = {
     sut: DbLoadBook

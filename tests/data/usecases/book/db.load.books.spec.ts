@@ -1,7 +1,7 @@
 import { DbLoadBooks } from "@/data/usecases"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadAccountByTokenRepositorySpy, LoadBooksRepositorySpy } from "../../mocks"
-import { mockUserModel } from "tests/domain/mocks"
+import { mockAccount } from "tests/domain/mocks"
 
 import faker from "@faker-js/faker"
 
@@ -36,7 +36,7 @@ describe('DbLoadBooks', () => {
     test('should call LoadBooksRepository with correct userId', async () => {
         const { sut, loadAccountByTokenRepositorySpy, loadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
-        const fakeUserId = mockUserModel()
+        const fakeUserId = mockAccount()
         loadAccountByTokenRepositorySpy.result = fakeUserId
 
         await sut.load(fakeAccessToken)
