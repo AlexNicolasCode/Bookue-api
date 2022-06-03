@@ -1,5 +1,5 @@
 import { MongoHelper, Note, NoteMongoRepository, User } from "@/infra";
-import { mockLoadNotes, mockNoteModel, mockAccount } from "tests/domain/mocks";
+import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
 import { DeleteNote } from "@/domain/usecases";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { AddNoteRepository } from "@/data/protocols";
@@ -26,7 +26,7 @@ describe('NoteMongoRepository', () => {
         beforeEach(() => {
             fakeRequest = {
                 userId: faker.datatype.uuid(),
-                ...mockNoteModel(),
+                ...mockNote(),
             }
         })
 
@@ -50,7 +50,7 @@ describe('NoteMongoRepository', () => {
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
             const noteModelSpy = jest.spyOn(Note, 'find')
-            noteModelSpy.mockResolvedValueOnce([mockNoteModel()])
+            noteModelSpy.mockResolvedValueOnce([mockNote()])
 
             await sut.loadAll(bookId)
 
