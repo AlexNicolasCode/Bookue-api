@@ -1,5 +1,5 @@
 import { AddNoteRepositorySpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
-import { mockNoteModel } from "tests/domain/mocks"
+import { mockNote } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbAddNote } from "@/data/usecases"
 import { AddNoteRepository } from "@/data/protocols"
