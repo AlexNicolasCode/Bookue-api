@@ -21,7 +21,7 @@ const NoteSchema = new Schema({
     userId: String,
     bookId: String,
     text: String,
-    createdAt: Date
+    created_at: Date
 })
 
 export const Book = model("books", BookSchema)

@@ -7,7 +7,7 @@ export class NoteMongoRepository implements AddNoteRepository, LoadNotesReposito
             userId: data.userId,
             bookId: data.bookId,
             text: data.text,
-            createdAt: new Date()
+            created_at: new Date()
         })
     }
 
