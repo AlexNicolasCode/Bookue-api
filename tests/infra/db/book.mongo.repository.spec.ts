@@ -1,6 +1,6 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { Book, MongoHelper, User } from "@/infra"
-import { mockAddBookParams, mockDeleteBookParams, mockUserModel } from "tests/domain/mocks"
+import { mockAddBookParams, mockUserModel } from "tests/domain/mocks"
 import env from '@/env'
 import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
 
