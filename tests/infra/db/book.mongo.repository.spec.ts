@@ -16,6 +16,10 @@ describe('BookMongoRepository', () => {
         await mongoose.connect(env.MONGO_URL)
     })
 
+    afterAll(async () => {
+        await mongoose.disconnect()
+    })
+
     beforeEach(async () => {
         jest.restoreAllMocks()
         await Book.deleteMany()

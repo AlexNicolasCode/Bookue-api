@@ -17,6 +17,10 @@ describe('NoteMongoRepository', () => {
         await mongoose.connect(env.MONGO_URL)
     })
 
+    afterAll(async () => {
+        await mongoose.disconnect()
+    })
+
     beforeEach(async () => {
         await Note.deleteMany({})
         jest.resetAllMocks()
