@@ -4,7 +4,7 @@ export interface UpdateNoteRepository {
 
 export namespace UpdateNoteRepository {
     export type Params = {
-        accessToken: string
+        userId: string
         bookId: string
         noteId: string
     }
