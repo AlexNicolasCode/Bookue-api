@@ -3,7 +3,8 @@ import { mockAddAccountParams, mockAccount } from "tests/domain/mocks"
 import env from "@/env"
 
 import faker from "@faker-js/faker"
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
+import { UserModel } from "@/domain/models"
 
 const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
@@ -20,7 +21,6 @@ describe('AccountMongoRepository', () => {
 
     beforeEach(async () => {
         await User.deleteMany({})
-        jest.resetAllMocks()
     })
 
     test('should add one only user', async () => {
