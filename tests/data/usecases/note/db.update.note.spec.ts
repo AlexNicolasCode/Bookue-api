@@ -57,18 +57,27 @@ describe('DbUpdateNote', () => {
     test('should throw if LoadAccountByTokenRepository throws', async () => {
         const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockImplementationOnce(throwError)
-
+        
         const promise = sut.update(fakeRequest)
-
+        
         await expect(promise).rejects.toThrowError()
     })
 
     test('should call LoadAccountByTokenRepository with correct parameters', async () => {
         const { sut, loadAccountByTokenRepositorySpy } = makeSut()
-
+        
         await sut.update(fakeRequest)
-
+        
         expect(loadAccountByTokenRepositorySpy.token).toBe(fakeRequest.accessToken)
+    })
+    
+    test('should throw if UpdateNoteRepository throws', async () => {
+        const { sut, updateNoteRepositorySpy } = makeSut()
+        jest.spyOn(updateNoteRepositorySpy, 'update').mockImplementationOnce(throwError)
+
+        const promise = sut.update(fakeRequest)
+
+        await expect(promise).rejects.toThrowError()
     })
 
     test('should call UpdateNoteRepository with correct parameters', async () => {
