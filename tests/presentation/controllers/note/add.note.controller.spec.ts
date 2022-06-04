@@ -1,9 +1,12 @@
+import { AddNoteRepository } from "@/data/protocols";
+import { AddNote } from "@/domain/usecases";
 import { AddNoteController } from "@/presentation/controllers";
 import { AccessDeniedError } from "@/presentation/errors";
 import { serverError } from "@/presentation/helpers";
-import { mockNote } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { ValidationSpy, AddNoteSpy } from "../../mocks";
+
+import faker from "@faker-js/faker";
 
 type SutType = {
     sut: AddNoteController
@@ -23,13 +26,22 @@ const makeSut = (): SutType => {
 }
 
 describe('AddNoteController', () => {
+    let fakeRequest: AddNote.Params
+
+    beforeEach(() => {
+        fakeRequest = {
+            accessToken: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+            text: faker.random.words(),
+        }
+    })
+
     beforeEach(() => {
         jest.resetAllMocks()
     })
 
     test('should return 400 if Validation return error', async () => {
         const { sut, validationSpy } = makeSut()
-        const fakeRequest = mockNote()
         validationSpy.error = new Error()
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -40,7 +52,6 @@ describe('AddNoteController', () => {
 
     test('should call Validation with correct values', async () => {
         const { sut, validationSpy } = makeSut()
-        const fakeRequest = mockNote()
 
         await sut.handle(fakeRequest)
 
@@ -49,7 +60,6 @@ describe('AddNoteController', () => {
 
     test('should return 500 if AddNote throws', async () => {
         const { sut, addNoteSpy } = makeSut()
-        const fakeRequest = mockNote()
         jest.spyOn(addNoteSpy, 'add').mockImplementationOnce(throwError)
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -60,7 +70,6 @@ describe('AddNoteController', () => {
     
     test('should call AddNote with correct values', async () => {
         const { sut, addNoteSpy } = makeSut()
-        const fakeRequest = mockNote()
 
         await sut.handle(fakeRequest)
 
@@ -69,7 +78,6 @@ describe('AddNoteController', () => {
 
     test('should return 403 if AddNote returns false', async () => {
         const { sut, addNoteSpy } = makeSut()
-        const fakeRequest = mockNote()
         addNoteSpy.result = false
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -80,7 +88,6 @@ describe('AddNoteController', () => {
 
     test('should return 204 on success', async () => {
         const { sut } = makeSut()
-        const fakeRequest = mockNote()
 
         const httpResponse = await sut.handle(fakeRequest)
 
