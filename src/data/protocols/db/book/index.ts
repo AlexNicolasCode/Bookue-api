@@ -1,5 +1,0 @@
-export * from './add.book.repository'
-export * from './load.books.repository'
-export * from './load.book.repository'
-export * from './update.book.repository'
-export * from './delete.book.repository'

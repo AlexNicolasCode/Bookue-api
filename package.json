@@ -4,43 +4,24 @@
   "description": "",
   "main": "build/src/index.js",
   "scripts": {
-    "test": "jest --passWithNoTests --runInBand --no-cache",
-    "test:unit": "npm test -- --watch -c jest.unit.config.js",
-    "test:ci": "npm test -- --coverage",
-    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
-    "start": "node dist/src/main/server.js",
-    "start:dev": "ts-node-dev -r tsconfig-paths/register src/main/server.ts",
-    "build": "tsc",
-    "mongo:up": "docker-compose up -d",
-    "mongo:stop": "docker-compose stop"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc"
   },
   "author": "AlexNicolasCode",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^3.3.0",
-    "apollo-server-express": "^3.6.7",
-    "bcrypt": "^5.0.1",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
-    "express": "^4.17.3",
     "graphql": "^15.5.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.6",
-    "validator": "^13.7.0"
+    "mongoose": "^6.0.6"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.1.2",
-    "@shelf/jest-mongodb": "^3.0.1",
-    "@types/bcrypt": "^5.0.0",
-    "@types/jest": "^27.4.1",
-    "@types/jsonwebtoken": "^8.5.5",
-    "coveralls": "^3.1.1",
-    "jest": "^27.5.1",
-    "mockdate": "^3.0.5",
-    "ts-jest": "^27.1.4",
-    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.3",
     "tsc": "^2.0.3",
-    "tsconfig-paths": "^3.14.1",
-    "typescript": "^4.4.3"
+    "@types/jsonwebtoken": "^8.5.5",
+    "ts-node-dev": "^1.1.8"
   }
 }
