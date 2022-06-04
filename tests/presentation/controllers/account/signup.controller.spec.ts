@@ -46,6 +46,10 @@ const makeSut = (): SutType => {
 }
 
 describe('SignUpController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 400 if Validation returns an error', async () => {
         const { sut, validationSpy, } = makeSut()
         validationSpy.error = new MissingParamError(faker.random.word())

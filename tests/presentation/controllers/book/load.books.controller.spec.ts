@@ -20,6 +20,10 @@ const makeSut = (): SutType => {
 }
 
 describe('LoadBooksController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 500 if loadBooks throws', async () => {
         const { sut, loadBooksSpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()

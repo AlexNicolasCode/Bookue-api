@@ -23,6 +23,10 @@ const makeSut = (): SutType => {
 
 
 describe('DeleteBookController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 400 if Validation return error', async () => {
         const { sut, validationSpy } = makeSut()
         const fakeRequest = mockDeleteBookParams()

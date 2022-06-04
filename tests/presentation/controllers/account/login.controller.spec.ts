@@ -31,6 +31,10 @@ const makeSut = (): SutType => {
 }
 
 describe('LoginController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 400 when validation fails', async () => {
         const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockRequest()

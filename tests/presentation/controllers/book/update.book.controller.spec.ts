@@ -23,6 +23,10 @@ const makeSut = (): SutType => {
 }
 
 describe('UpdateBookController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 500 if Validation throws', async () => {
         const { sut, validationSpy, } = makeSut()
         const fakeRequest = mockUpdateBookRequest() 
