@@ -2,7 +2,7 @@ import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { Book, User } from "@/infra"
 import { mockAddBookParams, mockAccount } from "tests/domain/mocks"
 import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
-import env from '@/env'
+import env from "@/main/config/env"
 
 import faker from "@faker-js/faker"
 import mongoose from 'mongoose'
@@ -13,7 +13,7 @@ const makeSut = (): BookMongoRepository => {
 
 describe('BookMongoRepository', () => {
     beforeAll(async () => {
-        await mongoose.connect(env.MONGO_URL)
+        await mongoose.connect(env.mongoUrl)
     })
 
     afterAll(async () => {
