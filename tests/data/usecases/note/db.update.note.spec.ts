@@ -1,32 +1,43 @@
-import { LoadAccountByTokenRepository } from "@/data/protocols";
+import { LoadAccountByTokenRepository, UpdateNoteRepository } from "@/data/protocols";
 import { UpdateNote } from "@/domain/usecases";
-import { LoadAccountByTokenRepositorySpy } from "tests/data/mocks";
+import { LoadAccountByTokenRepositorySpy, UpdateNoteRepositorySpy } from "tests/data/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 import faker from "@faker-js/faker";
 
 class DbUpdateNote implements UpdateNote {
     constructor (
-        private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository
+        private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository,
+        private readonly updateNoteRepository: UpdateNoteRepository,
     ) {}
 
     async update (data: UpdateNote.Params): Promise<void> {
         const account = await this.loadAccountByTokenRepository.loadByToken(data.accessToken)
-        if (account) {}
+        if (account) {
+            await this.updateNoteRepository.update({ 
+                userId: account.id, 
+                bookId: data.bookId, 
+                noteId: data.noteId, 
+                text: data.text, 
+            })
+        }
     }
 }
 
 type SutTypes = {
     sut: DbUpdateNote
     loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
+    updateNoteRepositorySpy: UpdateNoteRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
+    const updateNoteRepositorySpy = new UpdateNoteRepositorySpy()
     const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-    const sut = new DbUpdateNote(loadAccountByTokenRepositorySpy)
+    const sut = new DbUpdateNote(loadAccountByTokenRepositorySpy, updateNoteRepositorySpy)
     return {
         sut,
         loadAccountByTokenRepositorySpy,
+        updateNoteRepositorySpy,
     }
 }
 
@@ -58,5 +69,19 @@ describe('DbUpdateNote', () => {
         await sut.update(fakeRequest)
 
         expect(loadAccountByTokenRepositorySpy.token).toBe(fakeRequest.accessToken)
+    })
+
+    test('should call UpdateNoteRepository with correct parameters', async () => {
+        const { sut, loadAccountByTokenRepositorySpy, updateNoteRepositorySpy } = makeSut()
+        const fakeAccount = loadAccountByTokenRepositorySpy.result
+
+        await sut.update(fakeRequest)
+
+        expect(updateNoteRepositorySpy.params).toStrictEqual({
+            userId: fakeAccount.id,
+            bookId: fakeRequest.bookId,
+            noteId: fakeRequest.noteId,
+            text: fakeRequest.text,
+        })
     })
 })
