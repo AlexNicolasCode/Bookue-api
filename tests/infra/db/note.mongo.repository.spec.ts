@@ -139,5 +139,13 @@ describe('NoteMongoRepository', () => {
                 noteId: fakeNote.noteId,
             }, fakeNote)
         })
+
+        test('should return undefined on success', async () => {
+            const sut = makeSut()
+
+            const result = await sut.update(fakeNote)
+
+            expect(result).toBeUndefined()
+        })
     })
 })
