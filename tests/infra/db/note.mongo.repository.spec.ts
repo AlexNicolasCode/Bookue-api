@@ -2,7 +2,7 @@ import { Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
-import env from "@/env";
+import env from "@/main/config/env";
 
 import faker from "@faker-js/faker";
 import mongoose from 'mongoose'
@@ -13,7 +13,7 @@ const makeSut = (): NoteMongoRepository => {
 
 describe('NoteMongoRepository', () => {
     beforeAll(async () => {
-        await mongoose.connect(env.MONGO_URL)
+        await mongoose.connect(env.mongoUrl)
     })
 
     afterAll(async () => {

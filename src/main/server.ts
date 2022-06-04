@@ -1,12 +1,10 @@
-import env from '@/env'
 import mongoose from 'mongoose'
+import env from './config/env'
 
-const port = 8000
-
-mongoose.connect(env.MONGO_URL)
+mongoose.connect(env.mongoUrl)
   .then(async () => {
     const { setupApp } = await import('./config/app')
     const app = await setupApp()
-    app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
+    app.listen(env.port, () => console.log(`Server running at http://localhost:${env.port}/graphql`))
   })
   .catch(console.error)

@@ -1,10 +1,9 @@
 import { AccountMongoRepository, User } from "@/infra"
 import { mockAddAccountParams, mockAccount } from "tests/domain/mocks"
-import env from "@/env"
+import env from "@/main/config/env"
 
 import faker from "@faker-js/faker"
 import mongoose from 'mongoose'
-import { UserModel } from "@/domain/models"
 
 const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
@@ -12,7 +11,7 @@ const makeSut = (): AccountMongoRepository => {
 
 describe('AccountMongoRepository', () => {
     beforeAll(async () => {
-        await mongoose.connect(env.MONGO_URL)
+        await mongoose.connect(env.mongoUrl)
     })
 
     afterAll(async () => {
