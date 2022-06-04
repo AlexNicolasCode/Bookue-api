@@ -2,6 +2,7 @@ import { Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
 import { DeleteNote } from "@/domain/usecases";
 import { throwError } from "tests/domain/mocks/test.helpers";
+import { UpdateNoteRepository } from "@/data/protocols";
 import env from "@/env";
 
 import faker from "@faker-js/faker";
@@ -102,6 +103,28 @@ describe('NoteMongoRepository', () => {
             const result = await sut.delete(fakeRequest)
 
             expect(result).toBeUndefined()
+        })
+    })
+
+    describe('update()', () => {
+        let fakeNote: UpdateNoteRepository.Params
+
+        beforeEach(() => {
+            fakeNote = {
+                userId: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+                noteId: faker.datatype.uuid(),
+                text: faker.random.words(),
+            }
+        })
+
+        test('should throw if Note schema throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(Note, 'updateOne').mockImplementationOnce(throwError)
+
+            const promise = sut.update(fakeNote)
+
+            await expect(promise).rejects.toThrowError()
         })
     })
 })
