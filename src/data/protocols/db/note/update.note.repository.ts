@@ -7,5 +7,6 @@ export namespace UpdateNoteRepository {
         userId: string
         bookId: string
         noteId: string
+        text: string
     }
 }
