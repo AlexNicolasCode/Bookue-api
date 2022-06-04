@@ -1,5 +1,9 @@
 import { adaptResolver } from "@/main/adapters"
-import { makeAddNoteController, makeLoadNotesController } from "@/main/factories/controllers"
+import { 
+    makeAddNoteController, 
+    makeDeleteNoteController,
+    makeLoadNotesController,
+} from "@/main/factories/controllers"
 
 export default {
     Query: {
@@ -8,5 +12,6 @@ export default {
 
     Mutation: {
         addNote: async (parent: any, args: any, context: any) => adaptResolver(makeAddNoteController(), args, context),
+        deleteNote: async (parent: any, args: any, context: any) => adaptResolver(makeDeleteNoteController(), args, context),
     },
 }
