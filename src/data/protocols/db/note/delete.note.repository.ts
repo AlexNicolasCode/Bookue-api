@@ -4,7 +4,7 @@ export interface DeleteNoteRepository {
 
 export namespace DeleteNoteRepository {
     export type Params = {
-        accessToken: string
+        userId: string
         bookId: string
         noteId: string
     }

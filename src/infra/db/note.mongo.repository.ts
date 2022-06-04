@@ -16,7 +16,11 @@ export class NoteMongoRepository implements AddNoteRepository, LoadNotesReposito
     }
 
     async delete (data: DeleteNoteRepository.Params): Promise<void> {
-        await Note.deleteOne({ id: data.noteId, bookId: data.bookId })
+        await Note.deleteOne({ 
+            id: data.noteId, 
+            bookId: data.bookId,
+            userId: data.userId,
+        })
     }
 
     async update (note: UpdateNoteRepository.Params): Promise<void> {

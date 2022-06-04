@@ -1,16 +1,20 @@
-import { CheckAccountByAccessTokenRepository, DeleteNoteRepository } from "@/data/protocols"
+import { DeleteNoteRepository, LoadAccountByTokenRepository } from "@/data/protocols"
 import { DeleteNote } from "@/domain/usecases"
 
 export class DbDeleteNote implements DeleteNote {
     constructor (
-        private readonly checkAccountByAccessTokenRepository: CheckAccountByAccessTokenRepository,
+        private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository,
         private readonly deleteNoteRepository: DeleteNoteRepository,
     ) {}
 
     async delete (data: DeleteNote.Params): Promise<boolean> {
-        const hasAccount = await this.checkAccountByAccessTokenRepository.checkByAccessToken(data.accessToken)
-        if (hasAccount) {
-            await this.deleteNoteRepository.delete(data)
+        const account = await this.loadAccountByTokenRepository.loadByToken(data.accessToken)
+        if (account) {
+            await this.deleteNoteRepository.delete({ 
+                userId: account.id, 
+                bookId: data.bookId,
+                noteId: data.noteId, 
+            })
             return true
         }
         return false
