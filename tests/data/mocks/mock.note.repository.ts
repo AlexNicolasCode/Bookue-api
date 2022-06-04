@@ -1,4 +1,9 @@
-import { AddNoteRepository, DeleteNoteRepository, LoadNotesRepository } from "@/data/protocols"
+import { 
+    AddNoteRepository, 
+    DeleteNoteRepository, 
+    LoadNotesRepository, 
+    UpdateNoteRepository, 
+} from "@/data/protocols"
 import { NoteResultModel } from "@/domain/models"
 import { mockLoadNotes } from "tests/domain/mocks"
 
@@ -24,6 +29,14 @@ export class DeleteNoteRepositorySpy implements DeleteNoteRepository {
     params: DeleteNoteRepository.Params
 
     async delete (params: DeleteNoteRepository.Params): Promise<void> {
+        this.params = params
+    }
+}
+
+export class UpdateNoteRepositorySpy implements UpdateNoteRepository {
+    params: UpdateNoteRepository.Params
+
+    async update (params: UpdateNoteRepository.Params): Promise<void> {
         this.params = params
     }
 }
