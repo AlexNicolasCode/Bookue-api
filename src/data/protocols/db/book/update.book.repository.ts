@@ -11,6 +11,5 @@ export namespace UpdateBookRepository {
         pages?: number
         userId: string
         bookId: string
-        noteId: string
     }
 }
