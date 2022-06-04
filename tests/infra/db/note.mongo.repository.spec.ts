@@ -2,7 +2,6 @@ import { Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
 import { DeleteNote } from "@/domain/usecases";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { AddNoteRepository } from "@/data/protocols";
 import env from "@/env";
 
 import faker from "@faker-js/faker";
