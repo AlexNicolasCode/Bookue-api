@@ -1,10 +1,9 @@
 import { AddNoteRepositorySpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
-import { mockNote } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbAddNote } from "@/data/usecases"
-import { AddNoteRepository } from "@/data/protocols"
-import faker from "@faker-js/faker"
 import { AddNote } from "@/domain/usecases"
+
+import faker from "@faker-js/faker"
 
 type SutType = {
     sut: DbAddNote
