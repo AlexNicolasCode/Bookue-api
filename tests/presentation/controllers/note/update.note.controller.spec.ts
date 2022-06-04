@@ -1,7 +1,7 @@
 import { UpdateNote } from "@/domain/usecases";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { UpdateNoteSpy, ValidationSpy } from "tests/presentation/mocks";
-import { badRequest } from "@/presentation/helpers";
+import { badRequest, noContent } from "@/presentation/helpers";
 
 import faker from "@faker-js/faker";
 
@@ -17,7 +17,7 @@ class UpdateNoteController implements Controller {
             return badRequest(error)
         }
         await this.updateNote.update(request)
-        return
+        return noContent()
     }
 }
 
@@ -74,5 +74,14 @@ describe('UpdateNoteController', () => {
         await sut.handle(fakeRequest)
 
         expect(updateNoteSpy.params).toBe(fakeRequest)
+    })
+
+    test('should return 204 on success', async () => {
+        const { sut } = makeSut()
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(204)
+        expect(httpResponse.body).toBeNull()
     })
 })
