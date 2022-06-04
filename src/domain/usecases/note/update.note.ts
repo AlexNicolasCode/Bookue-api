@@ -7,5 +7,6 @@ export namespace UpdateNote {
         accessToken: string
         bookId: string
         noteId: string
+        text: string
     }
 }
