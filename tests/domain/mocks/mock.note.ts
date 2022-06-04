@@ -5,7 +5,7 @@ import { LoadNotes } from "@/domain/usecases"
 import faker from "@faker-js/faker"
 
 export const mockNote = (): NoteModel => ({
-    accessToken: faker.datatype.uuid(),
+    userId: faker.datatype.uuid(),
     bookId: faker.datatype.uuid(),
     text: faker.random.words(),
 })
