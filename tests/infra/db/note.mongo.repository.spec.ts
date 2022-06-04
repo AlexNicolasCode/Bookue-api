@@ -121,10 +121,23 @@ describe('NoteMongoRepository', () => {
         test('should throw if Note schema throws', async () => {
             const sut = makeSut()
             jest.spyOn(Note, 'updateOne').mockImplementationOnce(throwError)
-
+            
             const promise = sut.update(fakeNote)
-
+            
             await expect(promise).rejects.toThrowError()
+        })
+        
+        test('should call Note schema with correct parameters', async () => {
+            const sut = makeSut()
+            const noteSchemaSpy = jest.spyOn(Note, 'updateOne')
+
+            await sut.update(fakeNote)
+
+            expect(noteSchemaSpy).toHaveBeenCalledWith({
+                userId: fakeNote.userId,
+                bookId: fakeNote.bookId,
+                noteId: fakeNote.noteId,
+            }, fakeNote)
         })
     })
 })
