@@ -1,10 +1,11 @@
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
-import { Book, MongoHelper, User } from "@/infra"
+import { Book, User } from "@/infra"
 import { mockAddBookParams, mockAccount } from "tests/domain/mocks"
-import env from '@/env'
 import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
+import env from '@/env'
 
 import faker from "@faker-js/faker"
+import * as mongoose from 'mongoose'
 
 const makeSut = (): BookMongoRepository => {
     return new BookMongoRepository()
@@ -12,7 +13,7 @@ const makeSut = (): BookMongoRepository => {
 
 describe('BookMongoRepository', () => {
     beforeAll(async () => {
-        await MongoHelper.connect(env.MONGO_URL)
+        await mongoose.connect(env.MONGO_URL)
     })
 
     beforeEach(async () => {
@@ -32,7 +33,7 @@ describe('BookMongoRepository', () => {
             
             await sut.add(bookData)
             
-            const count = await MongoHelper.countDocuments('book', bookData)
+            const count = await Book.countDocuments(bookData)
             expect(count).toBe(1)
         })
         

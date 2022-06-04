@@ -1,8 +1,9 @@
-import { AccountMongoRepository, MongoHelper, User } from "@/infra"
+import { AccountMongoRepository, User } from "@/infra"
 import { mockAddAccountParams, mockAccount } from "tests/domain/mocks"
 import env from "@/env"
 
 import faker from "@faker-js/faker"
+import * as mongoose from 'mongoose'
 
 const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
@@ -10,11 +11,11 @@ const makeSut = (): AccountMongoRepository => {
 
 describe('AccountMongoRepository', () => {
     beforeAll(async () => {
-        await MongoHelper.connect(env.MONGO_URL)
+        await mongoose.connect(env.MONGO_URL)
     })
 
     beforeEach(async () => {
-        await MongoHelper.deleteManyOn('user')
+        await User.deleteMany({})
         jest.resetAllMocks()
     })
 

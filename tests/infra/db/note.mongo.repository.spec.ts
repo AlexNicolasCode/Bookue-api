@@ -1,4 +1,4 @@
-import { MongoHelper, Note, NoteMongoRepository, User } from "@/infra";
+import { Note, NoteMongoRepository, User } from "@/infra";
 import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
 import { DeleteNote } from "@/domain/usecases";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -6,6 +6,7 @@ import { AddNoteRepository } from "@/data/protocols";
 import env from "@/env";
 
 import faker from "@faker-js/faker";
+import * as mongoose from 'mongoose'
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
@@ -13,11 +14,11 @@ const makeSut = (): NoteMongoRepository => {
 
 describe('NoteMongoRepository', () => {
     beforeAll(async () => {
-        await MongoHelper.connect(env.MONGO_URL)
+        await mongoose.connect(env.MONGO_URL)
     })
 
     beforeEach(async () => {
-        await MongoHelper.deleteManyOn('note')
+        await Note.deleteMany({})
         jest.resetAllMocks()
     })
 
