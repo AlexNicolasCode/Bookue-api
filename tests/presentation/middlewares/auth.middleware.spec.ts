@@ -12,6 +12,10 @@ const mockRequest = () => ({
 })
 
 describe('AuthMiddleware', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 500 if LoadAccountById throws', async () => {
         const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
         const sut = new AuthMiddleware(loadAccountByTokenSpy)

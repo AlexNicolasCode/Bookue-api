@@ -18,6 +18,7 @@ describe('NoteMongoRepository', () => {
 
     beforeEach(async () => {
         await MongoHelper.deleteManyOn('note')
+        jest.resetAllMocks()
     })
 
     describe('add()', () => {

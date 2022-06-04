@@ -19,6 +19,10 @@ const makeSut = (): SutType => {
 }
 
 describe('LoadBookController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 500 if LoadBook throws', async () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {

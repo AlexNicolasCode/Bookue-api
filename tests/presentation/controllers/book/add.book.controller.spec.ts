@@ -34,6 +34,10 @@ describe('AddBookController', () => {
         MockDate.reset()
     })
 
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should call Validation with correct values', async () => {
         const { sut, validation } = makeSut()
         const request = mockRequest()

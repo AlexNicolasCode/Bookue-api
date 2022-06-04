@@ -15,6 +15,7 @@ describe('AccountMongoRepository', () => {
 
     beforeEach(async () => {
         await MongoHelper.deleteManyOn('user')
+        jest.resetAllMocks()
     })
 
     test('should add one only user', async () => {

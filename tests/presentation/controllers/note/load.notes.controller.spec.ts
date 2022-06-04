@@ -23,6 +23,10 @@ const makeSut = (): SutType => {
 }
 
 describe('LoadNotesController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 400 if Vadalition returns error', async () => {
         const { sut, validationSpy } = makeSut()
         const fakeRequest = mockLoadNotesParams()

@@ -23,6 +23,10 @@ const makeSut = (): SutType => {
 }
 
 describe('DeleteNoteController', () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     test('should return 400 if Validation returns error', async () => {
         const { sut, validationSpy } = makeSut()
         const fakeRequest = mockDeleteNotesParams()
