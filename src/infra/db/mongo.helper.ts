@@ -10,28 +10,6 @@ export const MongoHelper = {
     async connect (uri: string): Promise<void> {
         this.client = mongoose.connect(uri)
     },
-
-    async addOneOn (modelName: string, data): Promise<boolean> {
-        try {
-            const model = await this.findModel(modelName)
-            await model.create(data)
-            return true
-        } catch (e) {
-            throw new Error(e)
-        }
-    },
-
-    async findUserByEmail (email: string): Promise<UserModel> {
-        const userModel = await this.findModel('user')
-        const account = await userModel.findOne({ email })
-        return account
-    },
-
-    async findUserByAccessToken (accessToken: string): Promise<UserModel> {
-        const userModel = await this.findModel('user')
-        const account = await userModel.findOne({ accessToken: accessToken })
-        return account
-    },
     
     async countDocuments (modelName: string, data: any): Promise<number> {
         try {
@@ -59,88 +37,6 @@ export const MongoHelper = {
             return model
         } catch (e) {
             throw new Error(e)
-        }
-    },
-
-    async updateAccessToken (id: string, token: string): Promise<void> {
-        try {
-            const model = await this.findModel('user')
-            await model.findOneAndUpdate({ id: id }, {
-                accessToken: token
-            })
-        } catch (e) {
-            new Error(e)
-        }
-    },
-
-    async loadBooks (accessToken: string): Promise<LoadBooks.Result> {
-        try {
-            const userModel = await this.findModel('user')
-            const account = await userModel.findOne({ accessToken: accessToken })
-            const bookModel = await this.findModel('book')
-            return await bookModel.find({ userId: account.id })
-        } catch (error) {
-            new Error(error)
-        }
-    },
-
-    async loadOneBook (data: LoadBook.Request): Promise<LoadBook.Result> {
-        try {
-            const bookModel = await this.findModel('book')
-            return await bookModel.findOne({ accessToken: data.accessToken, bookId: data.bookId })
-        } catch (error) {
-            new Error(error)
-        }
-    },
-
-    async updateBook (data: UpdateBook.Params): Promise<void> {
-        try {
-            const userModel = await this.findModel('user')
-            const account = await userModel.findOne({ accessToken: data.accessToken })
-            const bookModel = await this.findModel('book')
-            await bookModel.findOneAndUpdate({ userId: account.id, bookId: data.bookId }, {
-                ...data,
-                userId: account.id, 
-                bookId: data.bookId,
-            })
-        } catch (e) {
-            new Error(e)
-        }
-    },
-
-    async deleteBook (data: DeleteBook.Params): Promise<void> {
-        try {
-            const userModel = await this.findModel('user')
-            const account = await userModel.findOne({ accessToken: data.accessToken })
-            const bookModel = await this.findModel('book')
-            await bookModel.deleteOne({ userId: account.id, bookId: data.bookId })
-        } catch (error) {
-            new Error(error)
-        }
-    },
-
-    async addNote (data: AddNote.Params): Promise<void> {
-        try {
-            const account = await this.findUserByAccessToken(data.accessToken)
-            await this.addOneOn('note', {
-                userId: account.id,
-                bookId: data.bookId,
-                text: data.text,
-                created_at: new Date()
-            })
-        } catch (error) {
-            new Error(error)
-        }
-    },
-
-    async loadNotes (data: LoadNotes.Params): Promise<LoadNotes.Result> {
-        try {
-            const account = await this.findUserByAccessToken(data.accessToken)
-            const noteModel = await this.findModel('note')
-            const notes = await noteModel.find({ userId: account.id, bookId: data.bookId })
-            return notes
-        } catch (error) {
-            new Error(error)
         }
     },
 }
