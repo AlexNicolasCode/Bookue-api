@@ -1,6 +1,6 @@
 import { setupApolloServer } from '@/main/graphql/apollo'
 
-import * as express from 'express'
+import express from 'express'
 
 export const setupApp = async (): Promise<express.Express> => {
   const app = express()
