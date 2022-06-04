@@ -27,20 +27,11 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('add()', () => {
-        let fakeRequest: AddNoteRepository.Params
-
-        beforeEach(() => {
-            fakeRequest = {
-                userId: faker.datatype.uuid(),
-                ...mockNote(),
-            }
-        })
-
         test('should return undefined on success', async () => {
             const sut = makeSut()
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockAccount())
     
-            const result = await sut.add(fakeRequest)
+            const result = await sut.add(mockNote())
     
             expect(result).toBeUndefined()
         })
