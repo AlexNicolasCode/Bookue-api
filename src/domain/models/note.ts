@@ -1,5 +1,6 @@
 export type NoteModel = {
-    accessToken: string
+    userId: string
     bookId: string,
     text: string,
+    created_at: Date
 }
