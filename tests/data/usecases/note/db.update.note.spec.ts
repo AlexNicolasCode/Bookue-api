@@ -38,4 +38,13 @@ describe('DbUpdateNote', () => {
 
         await expect(promise).rejects.toThrowError()
     })    
+
+    test('should call LoadAccountByTokenRepository with correct parameters', async () => {
+        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
+        const sut = new DbUpdateNote(loadAccountByTokenRepositorySpy)
+
+        await sut.update(fakeRequest)
+
+        expect(loadAccountByTokenRepositorySpy.token).toBe(fakeRequest.accessToken)
+    })    
 })
