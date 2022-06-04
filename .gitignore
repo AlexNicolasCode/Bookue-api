@@ -1,7 +1,4 @@
 node_modules
 .env
+env.ts
 environment.d.ts
-yarn.lock
-/data
-coverage
-globalConfig.json

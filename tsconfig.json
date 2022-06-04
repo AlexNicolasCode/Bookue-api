@@ -1,17 +1,8 @@
 {
   "compilerOptions": {
     "skipLibCheck": true,
-    "baseUrl": "./",
-    "outDir": "dist",
-    "module": "commonjs",
-    "target": "es2019",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "paths": {
-      "@/tests/*": ["../tests/*"],
-      "@/*": ["src/*"]
-    }
+    "outDir": "build",
   },
-  "include": ["src", "tests"],
-  "exclude": ["node_modules", "src/env.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "./env.ts"]
 }
