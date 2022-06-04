@@ -93,4 +93,12 @@ describe('DbUpdateNote', () => {
             text: fakeRequest.text,
         })
     })
+
+    test('should return undefined on success', async () => {
+        const { sut } = makeSut()
+
+        const result = await sut.update(fakeRequest)
+
+        expect(result).toBeUndefined()
+    })
 })
