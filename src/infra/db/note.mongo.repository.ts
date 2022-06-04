@@ -1,7 +1,7 @@
-import { AddNoteRepository, LoadNotesRepository, DeleteNoteRepository, UpdateBookRepository } from "@/data/protocols"
+import { AddNoteRepository, LoadNotesRepository, DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols"
 import { Note } from "./mongoose.schemas"
 
-export class NoteMongoRepository implements AddNoteRepository, LoadNotesRepository, DeleteNoteRepository, UpdateBookRepository {
+export class NoteMongoRepository implements AddNoteRepository, LoadNotesRepository, DeleteNoteRepository, UpdateNoteRepository {
     async add (data: AddNoteRepository.Params): Promise<void> {
         await Note.create({
             userId: data.userId,
@@ -19,7 +19,7 @@ export class NoteMongoRepository implements AddNoteRepository, LoadNotesReposito
         await Note.deleteOne({ id: data.noteId, bookId: data.bookId })
     }
 
-    async update (note: UpdateBookRepository.Params): Promise<void> {
+    async update (note: UpdateNoteRepository.Params): Promise<void> {
         await Note.updateOne({ 
             userId: note.userId,
             bookId: note.bookId,
