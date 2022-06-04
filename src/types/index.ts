@@ -15,7 +15,7 @@ export const typeDefs = gql`
     pages: string
     notes: [NoteType]
     created_by: string
-    created_at: string
+    createdAt: string
   }
 
   type TokenType {

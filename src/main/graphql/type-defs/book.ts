@@ -34,7 +34,7 @@ export default gql`
         description: String
         currentPage: String
         pages: String
-        created_at: String
+        createdAt: String
         userId: String
     }
 `

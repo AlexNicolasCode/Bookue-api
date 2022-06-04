@@ -16,6 +16,6 @@ export const addNote = async (token, bookId, note) => {
     return await Note.create({
             bookId: bookId,
             text: note,
-            created_at: Date.now()
+            createdAt: Date.now()
         })
 }

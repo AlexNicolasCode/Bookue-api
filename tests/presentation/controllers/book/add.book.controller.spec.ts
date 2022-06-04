@@ -63,7 +63,7 @@ describe('AddBookController', () => {
 
         await sut.handle(request)
 
-        expect(addBook.params).toEqual({ ...request, created_at: new Date() })
+        expect(addBook.params).toEqual({ ...request, createdAt: new Date() })
     })
     
     test('should return 500 if AddBook fails', async () => {
@@ -82,6 +82,6 @@ describe('AddBookController', () => {
 
         const httpResponse = await sut.handle(request)
 
-        expect(httpResponse).toEqual(ok({ ...request, created_at: new Date() }))
+        expect(httpResponse).toEqual(ok({ ...request, createdAt: new Date() }))
     })
 })
