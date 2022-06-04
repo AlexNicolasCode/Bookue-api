@@ -14,14 +14,14 @@ const BookSchema = new Schema({
     currentPage: String,
     pages: String,
     userId: String,
-    created_at: Date
+    createdAt: Date
 })
 
 const NoteSchema = new Schema({
     userId: String,
     bookId: String,
     text: String,
-    created_at: Date
+    createdAt: Date
 })
 
 export const Book = model("books", BookSchema)

@@ -16,7 +16,7 @@ export class AddBookController implements Controller {
             }
             const book = {
                 ...request,
-                created_at: new Date()
+                createdAt: new Date()
             }
             await this.addBook.add(book)
             return ok(book)
