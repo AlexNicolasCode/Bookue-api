@@ -5,7 +5,7 @@ import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
 import env from '@/env'
 
 import faker from "@faker-js/faker"
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 
 const makeSut = (): BookMongoRepository => {
     return new BookMongoRepository()
