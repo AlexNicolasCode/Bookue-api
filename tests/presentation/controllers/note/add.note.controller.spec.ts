@@ -1,4 +1,3 @@
-import { AddNoteRepository } from "@/data/protocols";
 import { AddNote } from "@/domain/usecases";
 import { AddNoteController } from "@/presentation/controllers";
 import { AccessDeniedError } from "@/presentation/errors";
