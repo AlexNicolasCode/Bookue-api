@@ -16,6 +16,12 @@ export default gql`
             noteId: String!,
             bookId: String!,
         ): Boolean
+        updateNote (
+            accessToken: String!,
+            noteId: String!,
+            bookId: String!,
+            text: String!,
+        ): Boolean
     }
 
     type Notes {
