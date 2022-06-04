@@ -1,5 +1,5 @@
 export interface UpdateNote {
-    update: (data: UpdateNote.Params) => Promise<UpdateNote.Result>
+    update: (data: UpdateNote.Params) => Promise<void>
 }
 
 export namespace UpdateNote {
@@ -8,5 +8,4 @@ export namespace UpdateNote {
         bookId: string
         noteId: string
     }
-    export type Result = boolean
 }
