@@ -1,31 +1,10 @@
 import { UpdateNote } from "@/domain/usecases";
-import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { UpdateNoteSpy, ValidationSpy } from "tests/presentation/mocks";
-import { badRequest, noContent, serverError } from "@/presentation/helpers";
+import { serverError } from "@/presentation/helpers";
+import { throwError } from "tests/domain/mocks/test.helpers";
+import { UpdateNoteController } from "@/presentation/controllers";
 
 import faker from "@faker-js/faker";
-import { throwError } from "tests/domain/mocks/test.helpers";
-import { ServerError } from "@/presentation/errors";
-
-class UpdateNoteController implements Controller {
-    constructor (
-        private readonly validation: Validation,
-        private readonly updateNote: UpdateNote,
-    ) {}
-
-    async handle (request: UpdateNote.Params): Promise<HttpResponse> {
-        try {
-            const error = this.validation.validate(request)
-            if (error) {
-                return badRequest(error)
-            }
-            await this.updateNote.update(request)
-            return noContent()
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-}
 
 type SutTypes = {
     validationSpy: ValidationSpy
