@@ -76,4 +76,14 @@ describe('DbUpdateBook', () => {
 
         expect(promise).rejects.toThrowError()
     })
+
+    test('should return false if not found account', async () => {
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
+        const fakeBook = mockUpdateBookRequest()
+        loadAccountByTokenRepositorySpy.result = undefined
+
+        const result = await sut.update(fakeBook)
+
+        expect(result).toBe(false)
+    })
 })
