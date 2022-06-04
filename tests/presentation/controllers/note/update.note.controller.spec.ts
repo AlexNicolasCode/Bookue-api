@@ -21,6 +21,23 @@ class UpdateNoteController implements Controller {
     }
 }
 
+type SutTypes = {
+    validationSpy: ValidationSpy
+    updateNoteSpy: UpdateNoteSpy
+    sut: UpdateNoteController
+}
+
+const makeSut = (): SutTypes => {
+    const validationSpy = new ValidationSpy()
+    const updateNoteSpy = new UpdateNoteSpy()
+    const sut = new UpdateNoteController(validationSpy, updateNoteSpy)
+    return {
+        sut,
+        validationSpy,
+        updateNoteSpy,
+    }
+}
+
 describe('UpdateNoteController', () => {
     let fakeRequest: UpdateNote.Params
 
@@ -34,9 +51,7 @@ describe('UpdateNoteController', () => {
     })
 
     test('should call Validation with correct values', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateNoteSpy = new UpdateNoteSpy()
-        const sut = new UpdateNoteController(validationSpy, updateNoteSpy)
+        const { sut, validationSpy } = makeSut()
 
         await sut.handle(fakeRequest)
 
@@ -44,9 +59,7 @@ describe('UpdateNoteController', () => {
     })
 
     test('should return 400 if validation return error', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateNoteSpy = new UpdateNoteSpy()
-        const sut = new UpdateNoteController(validationSpy, updateNoteSpy)
+        const { sut, validationSpy } = makeSut()
         validationSpy.error = new Error()
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -56,9 +69,7 @@ describe('UpdateNoteController', () => {
     })
 
     test('should call UpdateNote with correct values', async () => {
-        const validationSpy = new ValidationSpy()
-        const updateNoteSpy = new UpdateNoteSpy()
-        const sut = new UpdateNoteController(validationSpy, updateNoteSpy)
+        const { sut, updateNoteSpy } = makeSut()
 
         await sut.handle(fakeRequest)
 
