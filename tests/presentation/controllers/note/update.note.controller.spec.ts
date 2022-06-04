@@ -1,9 +1,11 @@
 import { UpdateNote } from "@/domain/usecases";
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols";
 import { UpdateNoteSpy, ValidationSpy } from "tests/presentation/mocks";
-import { badRequest, noContent } from "@/presentation/helpers";
+import { badRequest, noContent, serverError } from "@/presentation/helpers";
 
 import faker from "@faker-js/faker";
+import { throwError } from "tests/domain/mocks/test.helpers";
+import { ServerError } from "@/presentation/errors";
 
 class UpdateNoteController implements Controller {
     constructor (
@@ -12,12 +14,16 @@ class UpdateNoteController implements Controller {
     ) {}
 
     async handle (request: UpdateNote.Params): Promise<HttpResponse> {
-        const error = this.validation.validate(request)
-        if (error) {
-            return badRequest(error)
+        try {
+            const error = this.validation.validate(request)
+            if (error) {
+                return badRequest(error)
+            }
+            await this.updateNote.update(request)
+            return noContent()
+        } catch (error) {
+            return serverError(error)
         }
-        await this.updateNote.update(request)
-        return noContent()
     }
 }
 
@@ -83,5 +89,15 @@ describe('UpdateNoteController', () => {
 
         expect(httpResponse.statusCode).toBe(204)
         expect(httpResponse.body).toBeNull()
+    })
+
+    test('should return 500 if UpdateNote throws', async () => {
+        const { sut, updateNoteSpy } = makeSut()
+        jest.spyOn(updateNoteSpy, 'update').mockImplementationOnce(throwError)
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse.statusCode).toBe(500)
+        expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
     })
 })
