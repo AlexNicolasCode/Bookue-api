@@ -14,6 +14,10 @@ describe('AccountMongoRepository', () => {
         await mongoose.connect(env.MONGO_URL)
     })
 
+    afterAll(async () => {
+        await mongoose.disconnect()
+    })
+
     beforeEach(async () => {
         await User.deleteMany({})
         jest.resetAllMocks()
