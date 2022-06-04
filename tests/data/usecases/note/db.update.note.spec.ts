@@ -16,6 +16,20 @@ class DbUpdateNote implements UpdateNote {
     }
 }
 
+type SutTypes = {
+    sut: DbUpdateNote
+    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
+}
+
+const makeSut = (): SutTypes => {
+    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
+    const sut = new DbUpdateNote(loadAccountByTokenRepositorySpy)
+    return {
+        sut,
+        loadAccountByTokenRepositorySpy,
+    }
+}
+
 describe('DbUpdateNote', () => {
     let fakeRequest: UpdateNote.Params
 
@@ -30,21 +44,19 @@ describe('DbUpdateNote', () => {
     })
 
     test('should throw if LoadAccountByTokenRepository throws', async () => {
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbUpdateNote(loadAccountByTokenRepositorySpy)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockImplementationOnce(throwError)
 
         const promise = sut.update(fakeRequest)
 
         await expect(promise).rejects.toThrowError()
-    })    
+    })
 
     test('should call LoadAccountByTokenRepository with correct parameters', async () => {
-        const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
-        const sut = new DbUpdateNote(loadAccountByTokenRepositorySpy)
+        const { sut, loadAccountByTokenRepositorySpy } = makeSut()
 
         await sut.update(fakeRequest)
 
         expect(loadAccountByTokenRepositorySpy.token).toBe(fakeRequest.accessToken)
-    })    
+    })
 })
