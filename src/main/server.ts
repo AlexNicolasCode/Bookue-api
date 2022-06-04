@@ -1,9 +1,9 @@
 import env from '@/env'
-import { MongoHelper } from '@/infra/db'
+import * as mongoose from 'mongoose'
 
 const port = 8000
 
-MongoHelper.connect(env.MONGO_URL)
+mongoose.connect(env.MONGO_URL)
   .then(async () => {
     const { setupApp } = await import('./config/app')
     const app = await setupApp()
