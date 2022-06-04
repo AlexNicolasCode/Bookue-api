@@ -8,6 +8,7 @@ export const mockNote = (): NoteModel => ({
     userId: faker.datatype.uuid(),
     bookId: faker.datatype.uuid(),
     text: faker.random.words(),
+    created_at: new Date(),
 })
 
 export const mockLoadNote = (): NoteResultModel => ({
