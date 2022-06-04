@@ -73,7 +73,7 @@ describe('AccountMongoRepository', () => {
         await User.create(accountMock)
 
         const account = await User.findOne({ email: accountMock.email })
-        expect(account.accessToken).toBeFalsy()
+        expect(account.accessToken).toBeUndefined()
         await sut.updateAccessToken(account.id, fakeToken)
 
         const accountAfterUpdateAccessToken = await User.findOne({ email: accountMock.email })
