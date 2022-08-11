@@ -1,6 +1,6 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, DeleteBookRepository } from "@/data/protocols"
+import { faker } from "@faker-js/faker"
 
-import faker from "@faker-js/faker"
+import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByAccessTokenRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, DeleteBookRepository } from "@/data/protocols"
 
 export class CheckAccountByEmailRepositorySpy implements CheckAccountByEmailRepository {
     email: string
@@ -36,7 +36,7 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
     email: string
     result = {
         id: faker.datatype.uuid(),
-        name: faker.name.findName(),
+        name: faker.name.fullName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
     }
@@ -52,7 +52,7 @@ export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenReposi
     role: string
     result = {
         id: faker.datatype.uuid(),
-        name: faker.name.findName(),
+        name: faker.name.fullName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
     }

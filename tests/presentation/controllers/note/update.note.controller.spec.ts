@@ -4,7 +4,7 @@ import { serverError } from "@/presentation/helpers";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { UpdateNoteController } from "@/presentation/controllers";
 
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 
 type SutTypes = {
     validationSpy: ValidationSpy

@@ -3,7 +3,7 @@ import { throwError } from "tests/domain/mocks/test.helpers"
 import { DecrypterSpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
 import { DbLoadAccountByToken } from "@/data/usecases"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 type SutType = {
     decrypterSpy: DecrypterSpy

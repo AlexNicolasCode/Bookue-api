@@ -2,7 +2,7 @@ import { MissingParamError } from "@/presentation/errors"
 import { ValidationSpy } from "tests/presentation/mocks"
 import { ValidationComposite } from "@/validation/validators"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 const field = faker.random.word()
 

@@ -1,7 +1,7 @@
 import { AddAccount, Authentication, LoadAccountByToken, UpdateBook } from "@/domain/usecases"
 import { mockAccount } from "tests/domain/mocks"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 export class AddAccountSpy implements AddAccount {
     params: AddAccount.Params
@@ -17,7 +17,7 @@ export class AuthenticationSpy implements Authentication {
     params: Authentication.Params
     result = {
       accessToken: faker.datatype.uuid(),
-      name: faker.name.findName()
+      name: faker.name.fullName()
     }
   
     async auth (params: Authentication.Params): Promise<Authentication.Result> {

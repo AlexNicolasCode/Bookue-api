@@ -3,7 +3,7 @@ import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbAddNote } from "@/data/usecases"
 import { AddNote } from "@/domain/usecases"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 type SutType = {
     sut: DbAddNote

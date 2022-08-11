@@ -3,7 +3,7 @@ import { LoadAccountByTokenRepositorySpy, UpdateNoteRepositorySpy } from "tests/
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { DbUpdateNote } from "@/data/usecases";
 
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 
 type SutTypes = {
     sut: DbUpdateNote

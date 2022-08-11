@@ -5,7 +5,7 @@ import { throwError } from "tests/domain/mocks/test.helpers";
 import { LoadAccountByTokenSpy } from "../mocks";
 import { AuthMiddleware } from "@/presentation/middlewares";
 
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 
 const mockRequest = () => ({
     accessToken: faker.datatype.uuid()

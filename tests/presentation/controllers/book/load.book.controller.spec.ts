@@ -2,7 +2,7 @@ import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadBookSpy } from "../../mocks"
 import { LoadBookController } from "@/presentation/controllers"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 type SutType = {
     sut: LoadBookController

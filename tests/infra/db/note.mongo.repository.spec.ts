@@ -4,7 +4,7 @@ import { throwError } from "tests/domain/mocks/test.helpers";
 import { DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
 import env from "@/main/config/env";
 
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import mongoose from 'mongoose'
 
 const makeSut = (): NoteMongoRepository => {

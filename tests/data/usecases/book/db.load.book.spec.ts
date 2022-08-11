@@ -2,7 +2,7 @@ import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadAccountByTokenRepositorySpy, LoadBookRepositorySpy } from "../../mocks"
 import { DbLoadBook } from "@/data/usecases"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 import { mockAccount } from "tests/domain/mocks"
 
 type SutType = {

@@ -4,7 +4,7 @@ import { mockAddBookParams, mockAccount } from "tests/domain/mocks"
 import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
 import env from "@/main/config/env"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 import mongoose from 'mongoose'
 
 const makeSut = (): BookMongoRepository => {
@@ -110,8 +110,8 @@ describe('BookMongoRepository', () => {
         beforeEach(() => {
             const currentPage = faker.datatype.number()
             fakeNewBook = {
-                title: faker.name.findName(),
-                author: faker.name.findName(),
+                title: faker.name.fullName(),
+                author: faker.name.fullName(),
                 description: faker.datatype.string(),
                 currentPage: currentPage,
                 pages: currentPage + 1,

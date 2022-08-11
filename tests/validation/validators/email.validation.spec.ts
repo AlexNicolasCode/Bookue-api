@@ -3,7 +3,7 @@ import { EmailValidationSpy } from "../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { EmailValidation } from "@/validation/validators"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 type SutType = {
     sut: EmailValidation

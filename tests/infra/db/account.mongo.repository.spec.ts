@@ -2,7 +2,7 @@ import { AccountMongoRepository, User } from "@/infra"
 import { mockAddAccountParams, mockAccount } from "tests/domain/mocks"
 import env from "@/main/config/env"
 
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 import mongoose from 'mongoose'
 
 const makeSut = (): AccountMongoRepository => {
@@ -84,7 +84,7 @@ describe('AccountMongoRepository', () => {
         const fakeAccount = mockAccount()
         jest.spyOn(User, 'findOne').mockResolvedValueOnce(fakeAccount)
         
-        const result = await sut.checkByAccessToken(fakeAccount.id)
+        const result = await sut.checkByAccessToken(fakeAccount._id)
 
         expect(result).toBe(true)
     })
@@ -94,7 +94,7 @@ describe('AccountMongoRepository', () => {
         const fakeAccount = mockAccount()
         jest.spyOn(User, 'findOne').mockResolvedValueOnce(undefined)
         
-        const result = await sut.checkByAccessToken(fakeAccount.id)
+        const result = await sut.checkByAccessToken(fakeAccount._id)
 
         expect(result).toBe(false)
     })
@@ -106,7 +106,7 @@ describe('AccountMongoRepository', () => {
         
         const result = await sut.loadByToken(fakeAccount.accessToken)
 
-        expect(result).toStrictEqual(fakeAccount)
+        expect(result).toStrictEqual({ id: fakeAccount._id })
     })
 
     test('should return undefined if User model on findOne method not found account', async () => {

@@ -5,7 +5,7 @@ import { serverError } from "@/presentation/helpers";
 import { throwError } from "tests/domain/mocks/test.helpers";
 import { ValidationSpy, AddNoteSpy } from "../../mocks";
 
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 
 type SutType = {
     sut: AddNoteController

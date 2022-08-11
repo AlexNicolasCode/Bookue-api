@@ -1,7 +1,7 @@
 import { BookModel } from "@/domain/models"
 import { AddBook, DeleteBook, UpdateBook } from "@/domain/usecases"
 
-import faker from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 
 export const mockBook = (): BookModel => {
     return {
@@ -27,8 +27,8 @@ export const mockAddBookParams = (): AddBook.Params => {
 export const mockUpdateBookRequest = (): UpdateBook.Params => {
     const currentPage = faker.datatype.number()
     return {
-        title: faker.name.findName(),
-        author: faker.name.findName(),
+        title: faker.name.fullName(),
+        author: faker.name.fullName(),
         description: faker.datatype.string(),
         currentPage: currentPage,
         pages: currentPage + 1,

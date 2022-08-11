@@ -1,5 +1,5 @@
 import { EmailValidatorAdapter } from "@/infra/validators"
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 import validator from 'validator'
 
