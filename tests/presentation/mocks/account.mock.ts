@@ -44,6 +44,6 @@ export class LoadAccountByTokenSpy implements LoadAccountByToken {
     async load (accessToken: string, role?: string ): Promise<LoadAccountByToken.Result> {
       this.accessToken = accessToken
       this.role = role
-      return this.result
+      return { id: this.result._id }
     }
 }
