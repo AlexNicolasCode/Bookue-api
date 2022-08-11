@@ -37,11 +37,11 @@ describe('DbLoadBooks', () => {
         const { sut, loadAccountByTokenRepositorySpy, loadBooksRepositorySpy } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
         const fakeUserId = mockAccount()
-        loadAccountByTokenRepositorySpy.result = fakeUserId
+        loadAccountByTokenRepositorySpy.result = { id: fakeUserId._id }
 
         await sut.load(fakeAccessToken)
 
-        expect(loadBooksRepositorySpy.userId).toBe(fakeUserId.id)
+        expect(loadBooksRepositorySpy.userId).toBe(fakeUserId._id)
     })
 
     test('should call LoadAccountByTokenRepository with correct accessToken', async () => {

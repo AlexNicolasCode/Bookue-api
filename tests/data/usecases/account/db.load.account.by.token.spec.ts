@@ -76,10 +76,10 @@ describe('DbLoadAccountByToken', () => {
         const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
         const fakeAccount = mockAccount()
-        jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockResolvedValueOnce(fakeAccount)
+        jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockResolvedValueOnce({ id: fakeAccount._id })
 
         const result = await sut.load(fakeAccessToken)
 
-        expect(result).toBe(fakeAccount)
+        expect(result.id).toBe(fakeAccount._id)
     })
 })
