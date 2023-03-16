@@ -1,7 +1,8 @@
-import { BcryptAdapter } from "@/infra"
-import { throwError } from "tests/domain/mocks/test.helpers"
+import * as bcrypt from "bcrypt"
 
-import bcrypt from 'bcrypt'
+import { BcryptAdapter } from "@/infra"
+
+import { throwError } from "tests/domain/mocks/test.helpers"
 
 type SutTypes = {
     sut: BcryptAdapter,
