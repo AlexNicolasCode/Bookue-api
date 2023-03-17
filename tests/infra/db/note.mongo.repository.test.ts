@@ -1,11 +1,13 @@
+
+import mongoose from "mongoose"
+import { faker } from "@faker-js/faker";
+import { MongoMemoryServer } from "mongodb-memory-server";
+
 import { Note, NoteMongoRepository, User } from "@/infra";
+import { DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
+
 import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
-import env from "@/main/config/env";
-
-import { faker } from "@faker-js/faker";
-import mongoose from 'mongoose'
 
 const makeSut = (): NoteMongoRepository => {
     return new NoteMongoRepository()
@@ -13,7 +15,8 @@ const makeSut = (): NoteMongoRepository => {
 
 describe('NoteMongoRepository', () => {
     beforeAll(async () => {
-        await mongoose.connect(env.mongoUrl)
+        const mongoDb = await MongoMemoryServer.create();
+        await mongoose.connect(mongoDb.getUri())
     })
 
     afterAll(async () => {

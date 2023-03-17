@@ -1,11 +1,12 @@
+import { faker } from "@faker-js/faker"
+import mongoose from "mongoose"
+import { MongoMemoryServer } from "mongodb-memory-server"
+
 import { BookMongoRepository } from "@/infra/db/book.mongo.repository"
 import { Book, User } from "@/infra"
-import { mockAddBookParams, mockAccount } from "tests/domain/mocks"
 import { DeleteBookRepository, UpdateBookRepository } from "@/data/protocols"
-import env from "@/main/config/env"
 
-import { faker } from "@faker-js/faker"
-import mongoose from 'mongoose'
+import { mockAddBookParams, mockAccount } from "tests/domain/mocks"
 
 const makeSut = (): BookMongoRepository => {
     return new BookMongoRepository()
@@ -13,7 +14,8 @@ const makeSut = (): BookMongoRepository => {
 
 describe('BookMongoRepository', () => {
     beforeAll(async () => {
-        await mongoose.connect(env.mongoUrl)
+        const mongoDb = await MongoMemoryServer.create();
+        await mongoose.connect(mongoDb.getUri())
     })
 
     afterAll(async () => {
