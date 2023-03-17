@@ -16,6 +16,9 @@ describe('BookMongoRepository', () => {
     beforeAll(async () => {
         const mongoDb = await MongoMemoryServer.create();
         await mongoose.connect(mongoDb.getUri())
+        setTimeout(async () => {
+            await mongoDb.stop()
+        }, 10000)
     })
 
     afterAll(async () => {
