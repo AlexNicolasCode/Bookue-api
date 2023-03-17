@@ -1,9 +1,9 @@
+import mongoose from "mongoose"
+import { MongoMemoryServer } from 'mongodb-memory-server'
+import { faker } from "@faker-js/faker"
+
 import { AccountMongoRepository, User } from "@/infra"
 import { mockAddAccountParams, mockAccount } from "tests/domain/mocks"
-import env from "@/main/config/env"
-
-import { faker } from "@faker-js/faker"
-import mongoose from 'mongoose'
 
 const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
@@ -11,7 +11,11 @@ const makeSut = (): AccountMongoRepository => {
 
 describe('AccountMongoRepository', () => {
     beforeAll(async () => {
-        await mongoose.connect(env.mongoUrl)
+        const mongoDb = await MongoMemoryServer.create();
+        await mongoose.connect(mongoDb.getUri())
+        setTimeout(async () => {
+            await mongoDb.stop()
+        }, 10000)
     })
 
     afterAll(async () => {
