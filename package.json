@@ -40,6 +40,7 @@
     "jest": "^27.5.1",
     "jest-environment-node": "^27.5.0",
     "mockdate": "^3.0.5",
+    "mongodb-memory-server": "^8.12.1",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.9.1",
     "tsc": "^2.0.3",
