@@ -6,20 +6,21 @@ on:
   pull_request:
     branches: [ "main", "develop" ]
 
-stages:
-  - test
-
 jobs:
   test:
-    image: node:14.17.6-alpine3.14
-    stage: test
-    cache:
-      - key:
-          files:
-            - yarn.lock
-        paths:
-          - node_modules/
-    before_script:
-      - yarn install
-    script:
-      - yarn test:ci
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install
+    - run: npm run test:ci
