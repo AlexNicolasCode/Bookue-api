@@ -1,8 +1,5 @@
-FROM node:16
-RUN mkdir -p /api
-WORKDIR /api
-COPY . /api
-RUN yarn install --frozen-lockfile
-RUN yarn build
+FROM node:16-alpine
+COPY . .
+RUN yarn install
 EXPOSE 8000
-CMD ["node", "./dist/main/server.js"]
+CMD ["yarn", "start:dev"]
