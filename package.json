@@ -11,9 +11,7 @@
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "start": "node dist/main/server.js",
     "start:dev": "ts-node -r tsconfig-paths/register src/main/server.ts",
-    "build": "tsc",
-    "mongo:up": "docker-compose up -d",
-    "mongo:stop": "docker-compose stop"
+    "build": "tsc"
   },
   "author": "AlexNicolasCode",
   "license": "ISC",
