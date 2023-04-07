@@ -8,7 +8,7 @@ export const setupApp = async (): Promise<express.Express> => {
   const app = express()
   app.use(
     "/graphql",
-    cors<cors.CorsRequest>({ origin: ["http://localhost:8000", "https://bookue.vercel.app"] })
+    cors<cors.CorsRequest>({ origin: ["http://localhost:3000", "https://bookue.vercel.app"] })
   )
   const server = setupApolloServer()
   await server.start()
