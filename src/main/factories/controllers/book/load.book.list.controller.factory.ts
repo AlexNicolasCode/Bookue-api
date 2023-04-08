@@ -4,6 +4,5 @@ import { makeDbLoadBooks } from "@/main/factories/usecases"
 
 export const makeLoadBooksController = (): Controller => {
     const dbLoadList = makeDbLoadBooks()
-    const controller = new LoadBooksController(dbLoadList)
-    return controller
+    return new LoadBooksController(dbLoadList)
 }
