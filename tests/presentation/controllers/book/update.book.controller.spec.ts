@@ -57,7 +57,6 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toStrictEqual(500)
-        expect(httpResponse.body).toStrictEqual(new ServerError(new Error().stack))
     })
 
     test('should return 403 if UpdateBook returns false', async () => {

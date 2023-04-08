@@ -9,11 +9,10 @@ export default gql`
     type Mutation {
         addBook (
             title: String!,
-            author: String!,
+            author: String,
             description: String,
-            currentPage: String,
-            pages: String!,
-            accessToken: String!
+            currentPage: Int,
+            pages: Int!
         ): Book!
         updateBook (
             title: String,

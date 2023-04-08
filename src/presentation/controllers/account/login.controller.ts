@@ -8,7 +8,7 @@ export class LoginController implements Controller {
         private readonly authentication: Authentication,
     ) {}
 
-    async handle (request: any): Promise<HttpResponse> {
+    async handle (request: LoginController.Request): Promise<HttpResponse> {
         try {
             const error = this.validation.validate(request)
             if (error) {
