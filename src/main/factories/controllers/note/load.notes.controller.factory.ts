@@ -4,6 +4,5 @@ import { makeDbLoadNotes } from "../../usecases"
 import { makeLoadNotesValidation } from "@/main/factories/validators"
 
 export const makeLoadNotesController = (): Controller => {
-    const controller = new LoadNotesController(makeLoadNotesValidation(), makeDbLoadNotes())
-    return controller
+    return new LoadNotesController(makeLoadNotesValidation(), makeDbLoadNotes())
 }

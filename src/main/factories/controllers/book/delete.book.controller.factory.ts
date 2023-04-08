@@ -4,6 +4,5 @@ import { makeDbDeleteBook } from "@/main/factories/usecases"
 import { makeDeleteBookValidation } from "@/main/factories/validators"
 
 export const makeDeleteBookController = (): Controller => {
-    const controller = new DeleteBookController(makeDeleteBookValidation(), makeDbDeleteBook())
-    return controller
+    return new DeleteBookController(makeDeleteBookValidation(), makeDbDeleteBook())
 }
