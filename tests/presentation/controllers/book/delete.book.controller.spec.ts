@@ -4,7 +4,7 @@ import { DeleteBookController } from "@/presentation/controllers";
 import { AccessDeniedError } from "@/presentation/errors";
 
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { DeleteBookSpy, ValidationSpy } from "../../mocks";
+import { DeleteBookSpy, LoadAccountByTokenSpy, ValidationSpy } from "../../mocks";
 
 const mockRequest = (): DeleteBookController.Params => ({
     accessToken: faker.datatype.uuid(),
@@ -15,16 +15,23 @@ type SutType = {
     sut: DeleteBookController
     validationSpy: ValidationSpy
     deleteBookSpy: DeleteBookSpy
+    loadAccountByTokenSpy: LoadAccountByTokenSpy
 }
 
 const makeSut = (): SutType => {
+    const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
     const validationSpy = new ValidationSpy()
     const deleteBookSpy = new DeleteBookSpy()
-    const sut = new DeleteBookController(validationSpy, deleteBookSpy)
+    const sut = new DeleteBookController(
+        loadAccountByTokenSpy,
+        validationSpy,
+        deleteBookSpy,
+    )
     return {
         sut,
         validationSpy,
         deleteBookSpy,
+        loadAccountByTokenSpy,
     }
 }
 
@@ -44,9 +51,9 @@ describe('DeleteBookController', () => {
         expect(httpResponse.body).toStrictEqual(new Error())
     })
     
-    test('should return 403 if DeleteBook return false', async () => {
-        const { sut, deleteBookSpy } = makeSut()
-        jest.spyOn(deleteBookSpy, 'delete').mockResolvedValueOnce(false)
+    test('should return 403 if account not found', async () => {
+        const { sut, loadAccountByTokenSpy } = makeSut()
+        loadAccountByTokenSpy.result = undefined
         
         const httpResponse = await sut.handle(mockRequest())
 
