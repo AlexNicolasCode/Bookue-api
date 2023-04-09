@@ -34,6 +34,6 @@ describe('DbDeleteBook', () => {
         
         await sut.delete(fakeRequest)
         
-        expect(deleteBookRepositorySpy).toBe(fakeRequest)
+        expect(deleteBookRepositorySpy.data).toStrictEqual(fakeRequest)
     })
 })
