@@ -1,7 +1,14 @@
 import { UpdateBookController } from "@/presentation/controllers"
-import { makeDbUpdateBook } from "@/main/factories/usecases"
+import { makeDbLoadAccountByToken, makeDbUpdateBook } from "@/main/factories/usecases"
 import { makeUpdateBookValidation } from "@/main/factories/validators"
 
 export const makeUpdateBookController = (): UpdateBookController => {
-    return new UpdateBookController(makeUpdateBookValidation(), makeDbUpdateBook())
+    const updateBookValidation = makeUpdateBookValidation()
+    const updateBook = makeDbUpdateBook()
+    const loadAccountByToken = makeDbLoadAccountByToken()
+    return new UpdateBookController(
+        updateBookValidation,
+        updateBook,
+        loadAccountByToken,
+    )
 }
