@@ -1,5 +1,5 @@
 import { serverError } from "@/presentation/helpers"
-import { LoadBooksSpy } from "../../mocks"
+import { LoadAccountByTokenSpy, LoadBooksSpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadBooksController } from "@/presentation/controllers"
 
@@ -8,14 +8,20 @@ import { faker } from "@faker-js/faker"
 type SutType = {
     sut: LoadBooksController
     loadBooksSpy: LoadBooksSpy
+    loadAccountByTokenSpy: LoadAccountByTokenSpy
 }
 
 const makeSut = (): SutType => {
+    const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
     const loadBooksSpy = new LoadBooksSpy()
-    const sut = new LoadBooksController(loadBooksSpy)
+    const sut = new LoadBooksController(
+        loadAccountByTokenSpy,
+        loadBooksSpy,
+    )
     return {
         sut,
         loadBooksSpy,
+        loadAccountByTokenSpy,
     }
 }
 
@@ -53,6 +59,16 @@ describe('LoadBooksController', () => {
         expect(httpResponse.statusCode).toStrictEqual(200)
     })
 
+    test('should return 403 when user not found', async () => {
+        const { sut, loadAccountByTokenSpy } = makeSut()
+        const fakeAccessToken = faker.datatype.uuid()
+        loadAccountByTokenSpy.result = undefined
+
+        const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
+
+        expect(httpResponse.statusCode).toStrictEqual(403)
+    })
+
     test('should return book list on success', async () => {
         const { sut, loadBooksSpy, } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
@@ -62,16 +78,6 @@ describe('LoadBooksController', () => {
         expect(httpResponse.body).toStrictEqual(loadBooksSpy.result)
     })
 
-    test('should return 204 on success if not have book', async () => {
-        const { sut, loadBooksSpy, } = makeSut()
-        const fakeAccessToken = faker.datatype.uuid()
-        loadBooksSpy.result = []
-
-        const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
-
-        expect(httpResponse.statusCode).toStrictEqual(204)
-    })
-
     test('should return null on success if not have book', async () => {
         const { sut, loadBooksSpy, } = makeSut()
         const fakeAccessToken = faker.datatype.uuid()
@@ -79,6 +85,6 @@ describe('LoadBooksController', () => {
 
         const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
 
-        expect(httpResponse.body).toBeNull()
+        expect(httpResponse.body).toStrictEqual([])
     })
 })
