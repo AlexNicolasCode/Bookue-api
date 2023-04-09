@@ -38,10 +38,8 @@ export class LoadBookSpy implements LoadBook {
 
 export class DeleteBookSpy implements DeleteBook {
     params: DeleteBook.Params
-    result = true
 
-    async delete (params: DeleteBook.Params): Promise<boolean> {
+    async delete (params: DeleteBook.Params): Promise<void> {
         this.params = params
-        return this.result
     }
 }
