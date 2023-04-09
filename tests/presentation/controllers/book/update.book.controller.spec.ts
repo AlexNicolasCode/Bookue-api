@@ -1,14 +1,9 @@
 import { UpdateBookController } from "@/presentation/controllers"
-import { serverError } from "@/presentation/helpers"
+import { forbidden, serverError } from "@/presentation/helpers"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadAccountByTokenSpy, UpdateBookSpy, ValidationSpy } from "../../mocks"
 import { faker } from "@faker-js/faker"
-
-type SutType = {
-    sut: UpdateBookController
-    validationSpy: ValidationSpy
-    updateBookSpy: UpdateBookSpy
-}
+import { InvalidParamError } from "@/presentation/errors"
 
 const mockRequest = (): UpdateBookController.Params => ({
     title: faker.datatype.string(),
@@ -19,6 +14,13 @@ const mockRequest = (): UpdateBookController.Params => ({
     accessToken: faker.datatype.string(),
     bookId: faker.datatype.string(),
 })
+
+type SutType = {
+    sut: UpdateBookController
+    validationSpy: ValidationSpy
+    updateBookSpy: UpdateBookSpy
+    loadAccountByTokenSpy: LoadAccountByTokenSpy
+}
 
 const makeSut = (): SutType => {
     const validationSpy = new ValidationSpy()
@@ -33,6 +35,7 @@ const makeSut = (): SutType => {
         sut,
         validationSpy,
         updateBookSpy,
+        loadAccountByTokenSpy,
     }
 }
 
@@ -59,6 +62,16 @@ describe('UpdateBookController', () => {
 
         expect(httpResponse.statusCode).toStrictEqual(400)
         expect(httpResponse.body).toStrictEqual(new Error())
+    })
+
+    test('should return 403 if account not found', async () => {
+        const { sut, loadAccountByTokenSpy } = makeSut()
+        loadAccountByTokenSpy.result = undefined
+
+        const httpResponse = await sut.handle(mockRequest())
+
+        expect(httpResponse.statusCode).toStrictEqual(403)
+        expect(httpResponse.body).toStrictEqual(forbidden(new InvalidParamError('accessToken')))
     })
 
     test('should return 500 if UpdateBook throws', async () => {

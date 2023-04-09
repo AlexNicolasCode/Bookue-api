@@ -17,6 +17,9 @@ export class UpdateBookController implements Controller {
                 return badRequest(error)
             }
             const account = await this.loadAccountByToken.load(request.accessToken)  
+            if (!account) {
+                return forbidden(new InvalidParamError('accessToken'))
+            }
             const book: UpdateBook.Params = {
                 bookId: request.bookId,
                 userId: account.id,
