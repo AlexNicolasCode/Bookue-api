@@ -1,6 +1,6 @@
 import { LoadAccountByToken, LoadBook } from "@/domain/usecases"
 import { AccessDeniedError } from "@/presentation/errors"
-import { ok, noContent, serverError, forbidden } from "@/presentation/helpers"
+import { ok, serverError, forbidden, notFound } from "@/presentation/helpers"
 import { Controller, HttpResponse } from "@/presentation/protocols"
 
 export class LoadBookController implements Controller {
@@ -19,7 +19,7 @@ export class LoadBookController implements Controller {
                 userId: account.id,
                 bookId: request.bookId
             })
-            return book ? ok(book) : noContent()
+            return book ? ok(book) : notFound()
         } catch (error) {
             return serverError(error)
         }
