@@ -40,7 +40,7 @@ export const mockUpdateBookRequest = (): UpdateBook.Params => {
 
 export const mockDeleteBookParams = (): DeleteBook.Params => {
     return {
-        accessToken: faker.datatype.uuid(),
+        userId: faker.datatype.uuid(),
         bookId: faker.datatype.uuid(),
     }
 }

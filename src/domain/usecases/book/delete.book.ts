@@ -1,11 +1,10 @@
 export interface DeleteBook {
-    delete: (data: DeleteBook.Params) => Promise<DeleteBook.Result>
+    delete: (data: DeleteBook.Params) => Promise<void>
 }
 
 export namespace DeleteBook {
     export type Params = {
-        accessToken: string
+        userId: string
         bookId: string
     }
-    export type Result = boolean
 }
