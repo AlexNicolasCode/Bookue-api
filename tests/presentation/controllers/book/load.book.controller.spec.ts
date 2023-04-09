@@ -1,20 +1,29 @@
-import { throwError } from "tests/domain/mocks/test.helpers"
-import { LoadBookSpy } from "../../mocks"
-import { LoadBookController } from "@/presentation/controllers"
-
 import { faker } from "@faker-js/faker"
+
+import { LoadAccountByTokenSpy, LoadBookSpy } from "../../mocks"
+import { LoadBookController } from "@/presentation/controllers"
+import { AccessDeniedError } from "@/presentation/errors"
+import { forbidden } from "@/presentation/helpers"
+
+import { throwError } from "tests/domain/mocks/test.helpers"
 
 type SutType = {
     sut: LoadBookController
     loadBookSpy: LoadBookSpy
+    loadAccountByTokenSpy: LoadAccountByTokenSpy
 }
 
 const makeSut = (): SutType => {
+    const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
     const loadBookSpy = new LoadBookSpy()
-    const sut = new LoadBookController(loadBookSpy)
+    const sut = new LoadBookController(
+        loadAccountByTokenSpy,
+        loadBookSpy,
+    )
     return {
         sut,
         loadBookSpy,
+        loadAccountByTokenSpy,
     }
 }
 
@@ -34,6 +43,19 @@ describe('LoadBookController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toBe(500)
+    })
+
+    test('should return 403 when account is not found', async () => {
+        const { sut, loadAccountByTokenSpy } = makeSut()
+        const fakeRequest = {
+            accessToken: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+        }
+        loadAccountByTokenSpy.result = undefined
+
+        const httpResponse = await sut.handle(fakeRequest)
+
+        expect(httpResponse).toStrictEqual(forbidden(new AccessDeniedError()))
     })
 
     test('should return 200 on success', async () => {

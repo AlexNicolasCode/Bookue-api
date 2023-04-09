@@ -71,7 +71,7 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(mockRequest())
 
         expect(httpResponse.statusCode).toStrictEqual(403)
-        expect(httpResponse.body).toStrictEqual(forbidden(new InvalidParamError('accessToken')))
+        expect(httpResponse.body).toStrictEqual(new InvalidParamError('accessToken'))
     })
 
     test('should return 500 if UpdateBook throws', async () => {

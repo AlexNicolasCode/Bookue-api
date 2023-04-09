@@ -1,8 +1,12 @@
 import { LoadBookController } from "@/presentation/controllers"
 import { Controller } from "@/presentation/protocols"
-import { makeDbLoadBook } from "@/main/factories/usecases"
+import { makeDbLoadAccountByToken, makeDbLoadBook } from "@/main/factories/usecases"
 
 export const makeLoadBookController = (): Controller => {
-    const dbLoadBook = makeDbLoadBook()
-    return new LoadBookController(dbLoadBook)
+    const loadAccountByToken = makeDbLoadAccountByToken()
+    const loadBook = makeDbLoadBook()
+    return new LoadBookController(
+        loadAccountByToken,
+        loadBook,
+    )
 }
