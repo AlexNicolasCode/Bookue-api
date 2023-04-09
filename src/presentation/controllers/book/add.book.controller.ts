@@ -1,4 +1,4 @@
-import { AddBook } from "@/domain/usecases"
+import { AddBook, LoadAccountByToken } from "@/domain/usecases"
 import { badRequest, ok, serverError } from "@/presentation/helpers"
 import { Controller, HttpResponse, Validation } from "@/presentation/protocols"
 
@@ -6,6 +6,7 @@ export class AddBookController implements Controller {
     constructor (
         private readonly validation: Validation,
         private readonly addBook: AddBook,
+        private readonly loadAccountByToken: LoadAccountByToken,
     ) {}
 
     async handle (request: AddBookController.Request): Promise<HttpResponse> {
@@ -14,9 +15,11 @@ export class AddBookController implements Controller {
             if (error) {
                 return badRequest(error)
             }
-            const book = {
+            const user = await this.loadAccountByToken.load(request.accessToken)
+            const book: AddBook.Params = {
                 ...request,
-                createdAt: new Date()
+                userId: user.id,
+                createdAt: new Date(),
             }
             await this.addBook.add(book)
             return ok(book)

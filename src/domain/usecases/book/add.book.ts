@@ -8,7 +8,8 @@ export namespace AddBook {
         author: string,
         description: string,
         currentPage: number,
+        createdAt: Date,
         pages: number,
-        accessToken: string
+        userId: string
     }
 }
