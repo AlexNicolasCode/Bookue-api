@@ -82,7 +82,7 @@ describe('LoadBookController', () => {
         expect(httpResponse.body).toBe(loadBookSpy.result)
     })
 
-    test('should return 204 if not found book', async () => {
+    test('should return 404 if not found book', async () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
             accessToken: faker.datatype.uuid(),
@@ -92,7 +92,7 @@ describe('LoadBookController', () => {
 
         const httpResponse = await sut.handle(fakeRequest)
 
-        expect(httpResponse.statusCode).toBe(204)
+        expect(httpResponse.statusCode).toBe(404)
     })
 
     test('should return null on boby if not found book', async () => {
