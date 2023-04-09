@@ -16,6 +16,11 @@ export const noContent = (): HttpResponse  => ({
     body: null
 })
 
+export const notFound = (): HttpResponse  => ({
+    statusCode: 404,
+    body: null
+})
+
 export const forbidden = (error: any): HttpResponse => ({
     statusCode: 403,
     body: error
