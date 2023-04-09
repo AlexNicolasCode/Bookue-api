@@ -33,7 +33,7 @@ export const mockUpdateBookRequest = (): UpdateBook.Params => {
         description: faker.datatype.string(),
         currentPage: currentPage,
         pages: currentPage + 1,
-        accessToken: faker.datatype.uuid(),
+        userId: faker.datatype.uuid(),
         bookId: faker.datatype.uuid(),
     }
 }
