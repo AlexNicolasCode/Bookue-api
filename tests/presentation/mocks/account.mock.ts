@@ -39,11 +39,11 @@ export class UpdateBookSpy implements UpdateBook {
 export class LoadAccountByTokenSpy implements LoadAccountByToken {
     accessToken: string
     role: string
-    result = mockAccount()
+    result = { id: faker.datatype.uuid() }
   
     async load (accessToken: string, role?: string ): Promise<LoadAccountByToken.Result> {
       this.accessToken = accessToken
       this.role = role
-      return { id: this.result._id }
+      return this.result
     }
 }

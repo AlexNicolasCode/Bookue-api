@@ -20,7 +20,8 @@ export const mockAddBookParams = (): AddBook.Params => {
         description: faker.random.words(),
         currentPage: faker.datatype.number(),
         pages: faker.datatype.number(),
-        accessToken: faker.datatype.uuid(),
+        createdAt: faker.datatype.datetime(),
+        userId: faker.datatype.uuid(),
     }
 }
 
