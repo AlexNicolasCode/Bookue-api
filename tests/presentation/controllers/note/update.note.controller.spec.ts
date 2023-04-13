@@ -61,11 +61,16 @@ describe('UpdateNoteController', () => {
     })
 
     test('should call UpdateNote with correct values', async () => {
-        const { sut, updateNoteSpy } = makeSut()
+        const { sut, updateNoteSpy, loadAccountByTokenSpy } = makeSut()
 
         await sut.handle(fakeRequest)
 
-        expect(updateNoteSpy.params).toBe(fakeRequest)
+        expect(updateNoteSpy.params).toStrictEqual({
+            userId: loadAccountByTokenSpy.result.id,
+            bookId: fakeRequest.bookId,
+            noteId: fakeRequest.noteId,
+            text: fakeRequest.text,
+        })
     })
 
     test('should return 204 on success', async () => {
