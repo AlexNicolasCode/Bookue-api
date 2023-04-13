@@ -1,35 +1,53 @@
 import { DeleteNoteController } from "@/presentation/controllers/note/delete.note";
 import { AccessDeniedError } from "@/presentation/errors";
 import { serverError } from "@/presentation/helpers";
-import { mockDeleteNotesParams, mockLoadNotesParams } from "tests/domain/mocks";
+
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { DeleteNoteSpy, ValidationSpy } from "tests/presentation/mocks";
+import { DeleteNoteSpy, LoadAccountByTokenSpy, ValidationSpy } from "tests/presentation/mocks";
+
+import { faker } from "@faker-js/faker";
 
 type SutType = {
     sut: DeleteNoteController
     validationSpy: ValidationSpy
     deleteNoteSpy: DeleteNoteSpy
+    loadAccountByTokenSpy: LoadAccountByTokenSpy
 }
 
 const makeSut = (): SutType => {
     const deleteNoteSpy = new DeleteNoteSpy()
+    const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
     const validationSpy = new ValidationSpy()
-    const sut = new DeleteNoteController(validationSpy, deleteNoteSpy)
+    const sut = new DeleteNoteController(
+        validationSpy,
+        loadAccountByTokenSpy,
+        deleteNoteSpy,
+    )
     return {
         sut,
         validationSpy,
         deleteNoteSpy,
+        loadAccountByTokenSpy
     }
 }
 
 describe('DeleteNoteController', () => {
+    let fakeRequest: DeleteNoteController.Request
+
+    beforeEach(() => {
+        fakeRequest = {
+            accessToken: faker.datatype.uuid(),
+            bookId: faker.datatype.uuid(),
+            noteId: faker.datatype.uuid(),
+        }
+    })
+
     beforeEach(() => {
         jest.resetAllMocks()
     })
 
     test('should return 400 if Validation returns error', async () => {
         const { sut, validationSpy } = makeSut()
-        const fakeRequest = mockDeleteNotesParams()
         validationSpy.error = new Error()
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -40,7 +58,6 @@ describe('DeleteNoteController', () => {
 
     test('should call Validation with correct values', async () => {
         const { sut, validationSpy } = makeSut()
-        const fakeRequest = mockDeleteNotesParams()
 
         await sut.handle(fakeRequest)
 
@@ -49,7 +66,6 @@ describe('DeleteNoteController', () => {
 
     test('should call DeleteNote with correct values', async () => {
         const { sut, deleteNoteSpy } = makeSut()
-        const fakeRequest = mockDeleteNotesParams()
 
         await sut.handle(fakeRequest)
 
@@ -58,7 +74,6 @@ describe('DeleteNoteController', () => {
 
     test('should return 500 if DeleteNote throws', async () => {
         const { sut, deleteNoteSpy } = makeSut()
-        const fakeRequest = mockDeleteNotesParams()
         jest.spyOn(deleteNoteSpy, 'delete').mockImplementationOnce(throwError)
 
         const httpReponse = await sut.handle(fakeRequest)
@@ -67,10 +82,9 @@ describe('DeleteNoteController', () => {
         expect(httpReponse.body).toStrictEqual(serverError(new Error).body)
     })
 
-    test('should return 403 if DeleteNote returns false', async () => {
-        const { sut, deleteNoteSpy } = makeSut()
-        const fakeRequest = mockDeleteNotesParams()
-        deleteNoteSpy.result = false
+    test('should return 403 if LoadAccountByToken not found an account', async () => {
+        const { sut, loadAccountByTokenSpy } = makeSut()
+        loadAccountByTokenSpy.result = undefined
 
         const httpReponse = await sut.handle(fakeRequest)
 
@@ -80,7 +94,6 @@ describe('DeleteNoteController', () => {
 
     test('should return 204 on success', async () => {
         const { sut } = makeSut()
-        const fakeRequest = mockDeleteNotesParams()
 
         const httpReponse = await sut.handle(fakeRequest)
 
