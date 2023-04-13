@@ -26,7 +26,7 @@ export const mockLoadNotes = (): NoteResultModel[] => ([
 ])
 
 export const mockLoadNotesParams = (): LoadNotes.Params => ({
-    accessToken: faker.datatype.uuid(),
+    userId: faker.datatype.uuid(),
     bookId: faker.datatype.uuid(),
 })
 
