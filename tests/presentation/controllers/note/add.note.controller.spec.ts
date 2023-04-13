@@ -87,7 +87,7 @@ describe('AddNoteController', () => {
 
     test('should return 403 if LoadAccountByToken should not return an acccount', async () => {
         const { sut, loadAccountByTokenSpy } = makeSut()
-        loadAccountByTokenSpy.accessToken = ''
+        loadAccountByTokenSpy.result = undefined
 
         const httpResponse = await sut.handle(fakeRequest)
 
