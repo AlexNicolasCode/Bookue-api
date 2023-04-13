@@ -1,10 +1,10 @@
 export interface DeleteNote {
-    delete: (data: DeleteNote.Params) => Promise<DeleteNote.Result>
+    delete: (data: DeleteNote.Params) => Promise<void>
 }
 
 export namespace DeleteNote {
     export type Params = {
-        accessToken: string
+        userId: string
         bookId: string
         noteId: string
     }

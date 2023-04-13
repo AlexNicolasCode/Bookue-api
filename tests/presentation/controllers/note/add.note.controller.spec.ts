@@ -1,9 +1,8 @@
-import { AddNote } from "@/domain/usecases";
 import { AddNoteController } from "@/presentation/controllers";
 import { AccessDeniedError } from "@/presentation/errors";
 import { serverError } from "@/presentation/helpers";
 import { throwError } from "tests/domain/mocks/test.helpers";
-import { ValidationSpy, AddNoteSpy } from "../../mocks";
+import { ValidationSpy, AddNoteSpy, LoadAccountByTokenSpy } from "../../mocks";
 
 import { faker } from "@faker-js/faker";
 
@@ -11,21 +10,28 @@ type SutType = {
     sut: AddNoteController
     addNoteSpy: AddNoteSpy
     validationSpy: ValidationSpy
+    loadAccountByTokenSpy: LoadAccountByTokenSpy
 }
 
 const makeSut = (): SutType => {
     const validationSpy = new ValidationSpy()
+    const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
     const addNoteSpy = new AddNoteSpy()
-    const sut = new AddNoteController(validationSpy, addNoteSpy)
+    const sut = new AddNoteController(
+        validationSpy,
+        addNoteSpy,
+        loadAccountByTokenSpy,
+    )
     return {
         sut,
         addNoteSpy,
         validationSpy,
+        loadAccountByTokenSpy,
     }
 }
 
 describe('AddNoteController', () => {
-    let fakeRequest: AddNote.Params
+    let fakeRequest: AddNoteController.Request
 
     beforeEach(() => {
         fakeRequest = {
@@ -68,16 +74,20 @@ describe('AddNoteController', () => {
     })
     
     test('should call AddNote with correct values', async () => {
-        const { sut, addNoteSpy } = makeSut()
+        const { sut, addNoteSpy, loadAccountByTokenSpy } = makeSut()
 
         await sut.handle(fakeRequest)
 
-        expect(addNoteSpy.params).toBe(fakeRequest)
+        expect(addNoteSpy.params).toStrictEqual({
+            userId: loadAccountByTokenSpy.result.id,
+            bookId: fakeRequest.bookId,
+            text: fakeRequest.text,
+        })
     })
 
-    test('should return 403 if AddNote returns false', async () => {
-        const { sut, addNoteSpy } = makeSut()
-        addNoteSpy.result = false
+    test('should return 403 if LoadAccountByToken should not return an acccount', async () => {
+        const { sut, loadAccountByTokenSpy } = makeSut()
+        loadAccountByTokenSpy.result = undefined
 
         const httpResponse = await sut.handle(fakeRequest)
 

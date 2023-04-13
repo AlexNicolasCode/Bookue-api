@@ -1,10 +1,10 @@
 export interface AddNote {
-    add: (data: AddNote.Params) => Promise<boolean>
+    add: (data: AddNote.Params) => Promise<void>
 }
 
 export namespace AddNote {
     export type Params = {
-        accessToken: string
+        userId: string
         bookId: string
         text: string
     }

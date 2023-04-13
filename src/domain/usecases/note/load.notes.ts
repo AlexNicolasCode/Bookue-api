@@ -6,7 +6,7 @@ export interface LoadNotes {
 
 export namespace LoadNotes {
     export type Params = {
-        accessToken: string
+        userId: string
         bookId: string
     }
     export type Result = NoteResultModel[]

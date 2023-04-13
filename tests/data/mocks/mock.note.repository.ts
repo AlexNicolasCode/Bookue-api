@@ -16,11 +16,11 @@ export class AddNoteRepositorySpy implements AddNoteRepository {
 }
 
 export class LoadNotesRepositorySpy implements LoadNotesRepository {
-    bookId: string
+    data: LoadNotesRepository.Params
     result = mockLoadNotes()
 
-    async loadAll (bookId: string): Promise<NoteResultModel[]> {
-        this.bookId = bookId
+    async loadAll (data: LoadNotesRepository.Params): Promise<NoteResultModel[]> {
+        this.data = data
         return this.result
     }
 }
