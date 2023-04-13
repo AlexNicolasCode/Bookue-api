@@ -10,7 +10,7 @@ export class DbLoadNotes implements LoadNotes {
     async loadAll (data: LoadNotes.Params): Promise<NoteResultModel[]> {
         return await this.loadNotesRepository.loadAll({
             userId: data.userId,
-            bookdId: data.bookId,
+            bookId: data.bookId,
         })
     }
 }

@@ -7,7 +7,7 @@ export interface LoadNotesRepository {
 export namespace LoadNotesRepository {
     export type Params = {
         userId: string
-        bookdId: string
+        bookId: string
     }
     export type Result = NoteResultModel[]
 }
