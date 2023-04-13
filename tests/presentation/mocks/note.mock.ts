@@ -21,11 +21,9 @@ export class LoadNotesSpy implements LoadNotes {
 
 export class DeleteNoteSpy implements DeleteNote {
     params: DeleteNote.Params
-    result = true
 
-    async delete (params: DeleteNote.Params): Promise<DeleteNote.Result> {
+    async delete (params: DeleteNote.Params): Promise<void> {
         this.params = params
-        return this.result
     }
 }
 
