@@ -74,11 +74,15 @@ describe('AddNoteController', () => {
     })
     
     test('should call AddNote with correct values', async () => {
-        const { sut, addNoteSpy } = makeSut()
+        const { sut, addNoteSpy, loadAccountByTokenSpy } = makeSut()
 
         await sut.handle(fakeRequest)
 
-        expect(addNoteSpy.params).toBe(fakeRequest)
+        expect(addNoteSpy.params).toStrictEqual({
+            userId: loadAccountByTokenSpy.result.id,
+            bookId: fakeRequest.bookId,
+            text: fakeRequest.text,
+        })
     })
 
     test('should return 403 if LoadAccountByToken should not return an acccount', async () => {
