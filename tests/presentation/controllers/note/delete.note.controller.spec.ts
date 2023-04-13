@@ -65,11 +65,15 @@ describe('DeleteNoteController', () => {
     })
 
     test('should call DeleteNote with correct values', async () => {
-        const { sut, deleteNoteSpy } = makeSut()
+        const { sut, deleteNoteSpy, loadAccountByTokenSpy } = makeSut()
 
         await sut.handle(fakeRequest)
 
-        expect(deleteNoteSpy.params).toBe(fakeRequest)
+        expect(deleteNoteSpy.params).toStrictEqual({
+            userId: loadAccountByTokenSpy.result.id,
+            bookId: fakeRequest.bookId,
+            noteId: fakeRequest.noteId,
+        })
     })
 
     test('should return 500 if DeleteNote throws', async () => {
