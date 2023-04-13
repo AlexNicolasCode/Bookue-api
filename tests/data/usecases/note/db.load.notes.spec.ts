@@ -35,7 +35,7 @@ describe('DbLoadNotes', () => {
 
         await sut.loadAll(fakeRequest)
 
-        expect(loadNotesRepositorySpy.bookId).toBe(fakeRequest.bookId)
+        expect(loadNotesRepositorySpy.data).toStrictEqual(fakeRequest)
     })
 
     test('should return an array of notes on succcess', async () => {
