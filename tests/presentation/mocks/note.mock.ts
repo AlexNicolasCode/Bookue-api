@@ -3,11 +3,9 @@ import { mockLoadNotes } from "tests/domain/mocks"
 
 export class AddNoteSpy implements AddNote {
     params: AddNote.Params
-    result = true
 
-    async add (params: AddNote.Params): Promise<boolean> {
+    async add (params: AddNote.Params): Promise<void> {
         this.params = params
-        return this.result
     }
 }
 
