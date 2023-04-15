@@ -26,12 +26,12 @@ export const mockLoadNotes = (): NoteResultModel[] => ([
 ])
 
 export const mockLoadNotesParams = (): LoadNotes.Params => ({
-    accessToken: faker.datatype.uuid(),
+    userId: faker.datatype.uuid(),
     bookId: faker.datatype.uuid(),
 })
 
 export const mockDeleteNotesParams = (): DeleteNote.Params => ({
-    accessToken: faker.datatype.uuid(),
+    userId: faker.datatype.uuid(),
     bookId: faker.datatype.uuid(),
     noteId: faker.datatype.uuid(),
 })

@@ -3,11 +3,9 @@ import { mockLoadNotes } from "tests/domain/mocks"
 
 export class AddNoteSpy implements AddNote {
     params: AddNote.Params
-    result = true
 
-    async add (params: AddNote.Params): Promise<boolean> {
+    async add (params: AddNote.Params): Promise<void> {
         this.params = params
-        return this.result
     }
 }
 
@@ -23,11 +21,9 @@ export class LoadNotesSpy implements LoadNotes {
 
 export class DeleteNoteSpy implements DeleteNote {
     params: DeleteNote.Params
-    result = true
 
-    async delete (params: DeleteNote.Params): Promise<DeleteNote.Result> {
+    async delete (params: DeleteNote.Params): Promise<void> {
         this.params = params
-        return this.result
     }
 }
 

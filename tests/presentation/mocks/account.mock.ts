@@ -28,22 +28,20 @@ export class AuthenticationSpy implements Authentication {
 
 export class UpdateBookSpy implements UpdateBook {
     params: UpdateBook.Params
-    result = true
   
-    async update (params: UpdateBook.Params): Promise<UpdateBook.Result> {
+    async update (params: UpdateBook.Params): Promise<void> {
       this.params = params
-      return this.result
     }
 }
 
 export class LoadAccountByTokenSpy implements LoadAccountByToken {
     accessToken: string
     role: string
-    result = mockAccount()
+    result = { id: faker.datatype.uuid() }
   
     async load (accessToken: string, role?: string ): Promise<LoadAccountByToken.Result> {
       this.accessToken = accessToken
       this.role = role
-      return { id: this.result._id }
+      return this.result
     }
 }

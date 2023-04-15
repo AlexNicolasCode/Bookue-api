@@ -8,6 +8,7 @@ export namespace AddBookRepository {
         author: string
         description: string
         currentPage: number
+        createdAt: Date
         pages: number
         userId: string
     }

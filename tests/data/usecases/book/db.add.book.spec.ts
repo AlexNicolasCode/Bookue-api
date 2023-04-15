@@ -1,45 +1,30 @@
 import { DbAddBook } from "@/data/usecases"
 import { mockAddBookParams } from "tests/domain/mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
-import { AddBookRepositorySpy, LoadAccountByTokenRepositorySpy } from "../../mocks"
+import { AddBookRepositorySpy } from "../../mocks"
 
 type SutTypes = {
     sut: DbAddBook
-    addBookRepositorySpy: AddBookRepositorySpy,
-    loadAccountByTokenRepositorySpy: LoadAccountByTokenRepositorySpy
+    addBookRepositorySpy: AddBookRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
-    const loadAccountByTokenRepositorySpy = new LoadAccountByTokenRepositorySpy()
     const addBookRepositorySpy = new AddBookRepositorySpy()
-    const sut = new DbAddBook(loadAccountByTokenRepositorySpy, addBookRepositorySpy)
+    const sut = new DbAddBook(addBookRepositorySpy)
     return {
         sut,
         addBookRepositorySpy,
-        loadAccountByTokenRepositorySpy,
     }
 }
 
 describe('DbAddBook', () => {
     test('should call AddBookRepository with correct values', async () => {
-        const { sut, loadAccountByTokenRepositorySpy, addBookRepositorySpy } = makeSut()
+        const { sut, addBookRepositorySpy } = makeSut()
         const fakeRequest = mockAddBookParams()
         
         await sut.add(fakeRequest)
 
-        expect(addBookRepositorySpy.params).toStrictEqual({
-            userId: loadAccountByTokenRepositorySpy.result.id,
-            ...fakeRequest,
-        })
-    })
-
-    test('should call LoadAccountByTokenRepository with correct accessToken', async () => {
-        const { sut, loadAccountByTokenRepositorySpy, addBookRepositorySpy } = makeSut()
-        const fakeRequest = mockAddBookParams()
-        
-        await sut.add(fakeRequest)
-
-        expect(loadAccountByTokenRepositorySpy.token).toStrictEqual(fakeRequest.accessToken)
+        expect(addBookRepositorySpy.params).toStrictEqual(fakeRequest)
     })
     
     test('should throw if addBookRepositorySpy throws', async () => {
