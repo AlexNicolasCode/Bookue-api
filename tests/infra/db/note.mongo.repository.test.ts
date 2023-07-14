@@ -26,11 +26,6 @@ describe('NoteMongoRepository', () => {
         await mongoDb.stop()
     })
 
-    beforeEach(async () => {
-        await Note.deleteMany({})
-        jest.resetAllMocks()
-    })
-
     describe('add()', () => {
         test('should return undefined on success', async () => {
             const sut = makeSut()
@@ -45,7 +40,6 @@ describe('NoteMongoRepository', () => {
     describe('loadAll()', () => {
         let userId: string
         let bookId: string
-        let noteId: string
 
         beforeEach(async () => {
             const account = await User.create({
@@ -61,15 +55,8 @@ describe('NoteMongoRepository', () => {
                 pages: faker.datatype.number(),
                 userId: account.id,
             })
-            const note = await Note.create({
-                userId: account.id,
-                bookId: book.id,
-                text: faker.datatype.string(),
-                createdAt: faker.datatype.datetime(),
-            })
             userId = account.id 
             bookId = book.id 
-            noteId = note.id 
         })
 
         afterEach(() => {
@@ -89,12 +76,17 @@ describe('NoteMongoRepository', () => {
 
         test('should return notes list on success', async () => {
             const sut = makeSut()
-            const fakeNotes = mockLoadNotes()
-            jest.spyOn(Note, 'find').mockResolvedValueOnce(fakeNotes)
-
+            await Note.create({
+                userId: userId,
+                bookId: bookId,
+                text: faker.datatype.string(),
+                createdAt: faker.datatype.datetime(),
+            })
+            
             const notes = await sut.loadAll({ userId, bookId })
 
-            expect(notes).toBe(fakeNotes)
+            const fakeNotes = await Note.find({ userId, bookId })
+            expect(notes).toEqual(fakeNotes)
         })
     })
 
