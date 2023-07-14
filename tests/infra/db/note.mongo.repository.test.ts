@@ -3,8 +3,8 @@ import mongoose from "mongoose"
 import { faker } from "@faker-js/faker";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
-import { Note, NoteMongoRepository, User } from "@/infra";
-import { DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
+import { Note, NoteMongoRepository, User, Book } from "@/infra";
+import { AddBookRepository, DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
 
 import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
@@ -43,20 +43,48 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('loadAll()', () => {
+        let userId: string
         let bookId: string
+        let noteId: string
 
-        beforeEach(() => {
-            bookId = faker.datatype.uuid()
+        beforeEach(async () => {
+            const account = await User.create({
+                email: faker.internet.email(),
+                password: faker.internet.password(),
+            })
+            const book = await Book.create({
+                title: faker.datatype.string(),
+                author: faker.datatype.string(),
+                description: faker.datatype.string(),
+                currentPage: faker.datatype.number(),
+                createdAt: faker.datatype.datetime(),
+                pages: faker.datatype.number(),
+                userId: account.id,
+            })
+            const note = await Note.create({
+                userId: account.id,
+                bookId: book.id,
+                text: faker.datatype.string(),
+                createdAt: faker.datatype.datetime(),
+            })
+            userId = account.id 
+            bookId = book.id 
+            noteId = note.id 
+        })
+
+        afterEach(() => {
+            User.deleteMany({})
+            Book.deleteMany({})
+            Note.deleteMany({})
         })
 
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
             const noteModelSpy = jest.spyOn(Note, 'find')
-            User.mockResolvedValueOnce([mockNote()])
 
-            await sut.loadAll({ bookId })
+            await sut.loadAll({ userId, bookId })
 
-            expect(noteModelSpy).toHaveBeenCalledWith({ bookId })
+            expect(noteModelSpy).toHaveBeenCalledWith({ userId, bookId })
         })
 
         test('should return notes list on success', async () => {
@@ -64,7 +92,7 @@ describe('NoteMongoRepository', () => {
             const fakeNotes = mockLoadNotes()
             jest.spyOn(Note, 'find').mockResolvedValueOnce(fakeNotes)
 
-            const notes = await sut.loadAll(bookId)
+            const notes = await sut.loadAll({ userId, bookId })
 
             expect(notes).toBe(fakeNotes)
         })
