@@ -27,13 +27,43 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('add()', () => {
-        test('should return undefined on success', async () => {
+        let userId: string
+        let bookId: string
+
+        beforeEach(async () => {
+            const account = await User.create({
+                email: faker.internet.email(),
+                password: faker.internet.password(),
+            })
+            const book = await Book.create({
+                title: faker.datatype.string(),
+                author: faker.datatype.string(),
+                description: faker.datatype.string(),
+                currentPage: faker.datatype.number(),
+                createdAt: faker.datatype.datetime(),
+                pages: faker.datatype.number(),
+                userId: account.id,
+            })
+            userId = account.id 
+            bookId = book.id 
+        })
+
+        afterEach(() => {
+            User.deleteMany({})
+            Book.deleteMany({})
+        })
+
+        test('should add only one note on success', async () => {
             const sut = makeSut()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockAccount())
+            const fakenote = mockNote({ userId, bookId })
+
+            await sut.add(fakenote)
     
-            const result = await sut.add(mockNote())
-    
-            expect(result).toBeUndefined()
+            const notes = await Note.find({
+                userId,
+                bookId,
+            })
+            expect(notes.length).toEqual(1)
         })
     })
 
