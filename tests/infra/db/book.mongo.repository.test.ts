@@ -13,16 +13,16 @@ const makeSut = (): BookMongoRepository => {
 }
 
 describe('BookMongoRepository', () => {
+    let mongoDb: MongoMemoryServer;
+
     beforeAll(async () => {
-        const mongoDb = await MongoMemoryServer.create();
+        mongoDb = await MongoMemoryServer.create();
         await mongoose.connect(mongoDb.getUri())
-        setTimeout(async () => {
-            await mongoDb.stop()
-        }, 10000)
     })
 
     afterAll(async () => {
         await mongoose.disconnect()
+        await mongoDb.stop()
     })
 
     beforeEach(async () => {
