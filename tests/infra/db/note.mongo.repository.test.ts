@@ -14,16 +14,16 @@ const makeSut = (): NoteMongoRepository => {
 }
 
 describe('NoteMongoRepository', () => {
+    let mongoDb: MongoMemoryServer;
+
     beforeAll(async () => {
-        const mongoDb = await MongoMemoryServer.create();
+        mongoDb = await MongoMemoryServer.create();
         await mongoose.connect(mongoDb.getUri())
-        setTimeout(async () => {
-            await mongoDb.stop()
-        }, 10000)
     })
 
     afterAll(async () => {
         await mongoose.disconnect()
+        await mongoDb.stop()
     })
 
     beforeEach(async () => {
@@ -52,9 +52,9 @@ describe('NoteMongoRepository', () => {
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
             const noteModelSpy = jest.spyOn(Note, 'find')
-            noteModelSpy.mockResolvedValueOnce([mockNote()])
+            User.mockResolvedValueOnce([mockNote()])
 
-            await sut.loadAll(bookId)
+            await sut.loadAll({ bookId })
 
             expect(noteModelSpy).toHaveBeenCalledWith({ bookId })
         })
