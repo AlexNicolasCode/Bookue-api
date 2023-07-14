@@ -122,6 +122,15 @@ describe('NoteMongoRepository', () => {
             expect(noteModelSpy).toHaveBeenCalledWith({ userId, bookId })
         })
 
+        test('should throw if Note model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(Note, 'find').mockImplementationOnce(throwError)
+
+            const promise = sut.loadAll({ userId, bookId })
+
+            await expect(promise).rejects.toThrow()
+        })
+
         test('should return notes list on success', async () => {
             const sut = makeSut()
             await Note.create({
