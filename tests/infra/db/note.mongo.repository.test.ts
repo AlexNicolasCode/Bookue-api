@@ -3,10 +3,10 @@ import mongoose from "mongoose"
 import { faker } from "@faker-js/faker";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
-import { Note, NoteMongoRepository, User } from "@/infra";
-import { DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
+import { Note, NoteMongoRepository, User, Book } from "@/infra";
+import { AddNoteRepository, DeleteNoteRepository, LoadNotesRepository, UpdateNoteRepository } from "@/data/protocols";
 
-import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
+import { mockNote } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 const makeSut = (): NoteMongoRepository => {
@@ -14,71 +14,126 @@ const makeSut = (): NoteMongoRepository => {
 }
 
 describe('NoteMongoRepository', () => {
+    let mongoDb: MongoMemoryServer;
+
     beforeAll(async () => {
-        const mongoDb = await MongoMemoryServer.create();
+        mongoDb = await MongoMemoryServer.create();
         await mongoose.connect(mongoDb.getUri())
-        setTimeout(async () => {
-            await mongoDb.stop()
-        }, 10000)
     })
 
     afterAll(async () => {
         await mongoose.disconnect()
-    })
-
-    beforeEach(async () => {
-        await Note.deleteMany({})
-        jest.resetAllMocks()
+        await mongoDb.stop()
     })
 
     describe('add()', () => {
-        test('should return undefined on success', async () => {
+        let fakeRequest: AddNoteRepository.Params
+
+        beforeEach(async () => {
+            fakeRequest = {
+                userId: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+                text: faker.datatype.string(),
+            }
+        })
+
+        afterEach(() => {
+            Note.deleteMany({})
+        })
+
+        test('should add only one note on success', async () => {
             const sut = makeSut()
-            jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockAccount())
+
+            await sut.add(fakeRequest)
     
-            const result = await sut.add(mockNote())
+            const notes = await Note.find(fakeRequest)
+            expect(notes.length).toEqual(1)
+        })
+
+        test('should throw if Note model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(Note, 'create').mockImplementationOnce(throwError)
+
+            const promise = sut.add(fakeRequest)
+
+            await expect(promise).rejects.toThrow()
+        })
+
+        test('should add correct note on success', async () => {
+            const sut = makeSut()
+
+            await sut.add(fakeRequest)
     
-            expect(result).toBeUndefined()
+            const noteFromDatabase = await Note.findOne(fakeRequest)
+            expect(fakeRequest).toEqual({
+                userId: noteFromDatabase.userId,
+                bookId: noteFromDatabase.bookId,
+                text: noteFromDatabase.text,
+            })
         })
     })
 
     describe('loadAll()', () => {
-        let bookId: string
+        let fakeRequest: LoadNotesRepository.Params
 
-        beforeEach(() => {
-            bookId = faker.datatype.uuid()
+        beforeEach(async () => {
+            fakeRequest = {
+                userId: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+            }
+        })
+
+        afterEach(() => {
+            Note.deleteMany({})
         })
 
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
             const noteModelSpy = jest.spyOn(Note, 'find')
-            noteModelSpy.mockResolvedValueOnce([mockNote()])
 
-            await sut.loadAll(bookId)
+            await sut.loadAll(fakeRequest)
 
-            expect(noteModelSpy).toHaveBeenCalledWith({ bookId })
+            expect(noteModelSpy).toHaveBeenCalledWith(fakeRequest)
+        })
+
+        test('should throw if Note model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(Note, 'find').mockImplementationOnce(throwError)
+
+            const promise = sut.loadAll(fakeRequest)
+
+            await expect(promise).rejects.toThrow()
         })
 
         test('should return notes list on success', async () => {
             const sut = makeSut()
-            const fakeNotes = mockLoadNotes()
-            jest.spyOn(Note, 'find').mockResolvedValueOnce(fakeNotes)
+            await Note.create({
+                userId: fakeRequest.userId,
+                bookId: fakeRequest.bookId,
+                text: faker.datatype.string(),
+                createdAt: faker.datatype.datetime(),
+            })
+            
+            const notes = await sut.loadAll(fakeRequest)
 
-            const notes = await sut.loadAll(bookId)
-
-            expect(notes).toBe(fakeNotes)
+            const fakeNotes = await Note.find(fakeRequest)
+            expect(notes).toEqual(fakeNotes)
         })
     })
 
     describe('delete()', () => {
-        let fakeRequest: DeleteNoteRepository.Params;
+        let fakeRequest: DeleteNoteRepository.Params
 
-        beforeEach(() => {
+        beforeEach(async () => {
             fakeRequest = {
                 userId: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
                 noteId: faker.datatype.uuid(),
             }
+        })
+
+        afterEach(() => {
+            Note.deleteMany({})
         })
 
         test('should call Note model with correct values', async () => {
@@ -103,12 +158,13 @@ describe('NoteMongoRepository', () => {
             await expect(promise).rejects.toThrowError()
         })
 
-        test('should return undefined on success', async () => {
+        test('should delete note on success', async () => {
             const sut = makeSut()
 
-            const result = await sut.delete(fakeRequest)
+            await sut.delete(fakeRequest)
 
-            expect(result).toBeUndefined()
+            const notes = await Note.find(fakeRequest)
+            expect(notes.length).toStrictEqual(0)
         })
     })
 
@@ -146,12 +202,25 @@ describe('NoteMongoRepository', () => {
             }, fakeNote)
         })
 
-        test('should return undefined on success', async () => {
+        test('should update correctly on success', async () => {
             const sut = makeSut()
+            const noteCreated =  await Note.create({
+                userId: fakeNote.userId,
+                bookId: fakeNote.bookId,
+                text: fakeNote.text,
+            })
+            fakeNote.noteId = noteCreated.id
+            fakeNote.text = faker.random.words()
 
-            const result = await sut.update(fakeNote)
+            await sut.update(fakeNote)
 
-            expect(result).toBeUndefined()
+            const noteAfterUpdate = await Note.findOne(fakeNote)
+            expect({
+                noteId: noteAfterUpdate.id,
+                userId: noteAfterUpdate.userId,
+                bookId: noteAfterUpdate.bookId,
+                text: noteAfterUpdate.text,
+            }).toStrictEqual(fakeNote)
         })
     })
 })
