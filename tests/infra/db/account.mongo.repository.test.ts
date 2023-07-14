@@ -101,13 +101,20 @@ describe('AccountMongoRepository', () => {
     })
 
     describe('checkByAccessToken()', () => {
+        test('should throw if User model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(User, 'findOne').mockImplementationOnce(throwError)
+            
+            const promise = sut.checkByAccessToken(fakeRequest.accessToken)
+
+            await expect(promise).rejects.toThrow()
+        })
+
         test('should return true when account exists', async () => {
             const sut = makeSut()
-            const fakeAccount = mockAccount()
-            fakeAccount._id = undefined
-            await User.create(fakeAccount)
+            await User.create(fakeRequest)
             
-            const result = await sut.checkByAccessToken(fakeAccount.accessToken)
+            const result = await sut.checkByAccessToken(fakeRequest.accessToken)
 
             expect(result).toBe(true)
         })
