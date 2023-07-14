@@ -36,6 +36,15 @@ describe('AccountMongoRepository', () => {
     })
 
     describe('add()', () => {
+        test('should throw if User model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(User, 'create').mockImplementationOnce(throwError)
+            
+            const promise = sut.add(mockAddAccountParams())
+
+            await expect(promise).rejects.toThrow()
+        })
+
         test('should add one only user', async () => {
             const sut = makeSut()
             const fakeAccount = mockAddAccountParams()
