@@ -85,6 +85,15 @@ describe('AccountMongoRepository', () => {
     })
     
     describe('updateAccessToken()', () => {
+        test('should throw if User model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(User, 'findOneAndUpdate').mockImplementationOnce(throwError)
+            
+            const promise = sut.updateAccessToken(fakeRequest._id, fakeRequest.accessToken)
+
+            await expect(promise).rejects.toThrow()
+        })
+
         test('should call updateAccessToken to update token on success', async () => {
             const sut = makeSut()
             const accountMock = mockAddAccountParams()
