@@ -48,6 +48,15 @@ describe('AccountMongoRepository', () => {
     })
 
     describe('checkByEmail()', () => {
+        test('should throw if User model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(User, 'findOne').mockImplementationOnce(throwError)
+            
+            const promise = sut.checkByAccessToken(fakeRequest.email)
+
+            await expect(promise).rejects.toThrow()
+        })
+
         test('should return true when account exists', async () => {
             const sut = makeSut()
             const fakeAccount = mockAddAccountParams()
