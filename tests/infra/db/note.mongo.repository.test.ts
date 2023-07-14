@@ -4,9 +4,9 @@ import { faker } from "@faker-js/faker";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 import { Note, NoteMongoRepository, User, Book } from "@/infra";
-import { AddBookRepository, DeleteNoteRepository, UpdateNoteRepository } from "@/data/protocols";
+import { AddNoteRepository, DeleteNoteRepository, LoadNotesRepository, UpdateNoteRepository } from "@/data/protocols";
 
-import { mockLoadNotes, mockNote, mockAccount } from "tests/domain/mocks";
+import { mockNote } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 const makeSut = (): NoteMongoRepository => {
@@ -27,42 +27,26 @@ describe('NoteMongoRepository', () => {
     })
 
     describe('add()', () => {
-        let userId: string
-        let bookId: string
+        let fakeRequest: AddNoteRepository.Params
 
         beforeEach(async () => {
-            const account = await User.create({
-                email: faker.internet.email(),
-                password: faker.internet.password(),
-            })
-            const book = await Book.create({
-                title: faker.datatype.string(),
-                author: faker.datatype.string(),
-                description: faker.datatype.string(),
-                currentPage: faker.datatype.number(),
-                createdAt: faker.datatype.datetime(),
-                pages: faker.datatype.number(),
-                userId: account.id,
-            })
-            userId = account.id 
-            bookId = book.id 
+            fakeRequest = {
+                userId: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+                text: faker.datatype.string(),
+            }
         })
 
         afterEach(() => {
-            User.deleteMany({})
-            Book.deleteMany({})
+            Note.deleteMany({})
         })
 
         test('should add only one note on success', async () => {
             const sut = makeSut()
-            const fakenote = mockNote({ userId, bookId })
 
-            await sut.add(fakenote)
+            await sut.add(fakeRequest)
     
-            const notes = await Note.find({
-                userId,
-                bookId,
-            })
+            const notes = await Note.find(fakeRequest)
             expect(notes.length).toEqual(1)
         })
 
@@ -70,55 +54,36 @@ describe('NoteMongoRepository', () => {
             const sut = makeSut()
             jest.spyOn(Note, 'create').mockImplementationOnce(throwError)
 
-            const promise = sut.add(mockNote({ userId, bookId }))
+            const promise = sut.add(fakeRequest)
 
             await expect(promise).rejects.toThrow()
         })
 
         test('should add correct note on success', async () => {
             const sut = makeSut()
-            const fakenote = mockNote({ userId, bookId })
 
-            await sut.add(fakenote)
+            await sut.add(fakeRequest)
     
-            const noteFromDatabase = await Note.findOne({
-                userId,
-                bookId,
-            })
-            expect(fakenote).toEqual({
+            const noteFromDatabase = await Note.findOne(fakeRequest)
+            expect(fakeRequest).toEqual({
                 userId: noteFromDatabase.userId,
                 bookId: noteFromDatabase.bookId,
                 text: noteFromDatabase.text,
-                createdAt: noteFromDatabase.createdAt,
             })
         })
     })
 
     describe('loadAll()', () => {
-        let userId: string
-        let bookId: string
+        let fakeRequest: LoadNotesRepository.Params
 
         beforeEach(async () => {
-            const account = await User.create({
-                email: faker.internet.email(),
-                password: faker.internet.password(),
-            })
-            const book = await Book.create({
-                title: faker.datatype.string(),
-                author: faker.datatype.string(),
-                description: faker.datatype.string(),
-                currentPage: faker.datatype.number(),
-                createdAt: faker.datatype.datetime(),
-                pages: faker.datatype.number(),
-                userId: account.id,
-            })
-            userId = account.id 
-            bookId = book.id 
+            fakeRequest = {
+                userId: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
+            }
         })
 
         afterEach(() => {
-            User.deleteMany({})
-            Book.deleteMany({})
             Note.deleteMany({})
         })
 
@@ -126,16 +91,16 @@ describe('NoteMongoRepository', () => {
             const sut = makeSut()
             const noteModelSpy = jest.spyOn(Note, 'find')
 
-            await sut.loadAll({ userId, bookId })
+            await sut.loadAll(fakeRequest)
 
-            expect(noteModelSpy).toHaveBeenCalledWith({ userId, bookId })
+            expect(noteModelSpy).toHaveBeenCalledWith(fakeRequest)
         })
 
         test('should throw if Note model throws', async () => {
             const sut = makeSut()
             jest.spyOn(Note, 'find').mockImplementationOnce(throwError)
 
-            const promise = sut.loadAll({ userId, bookId })
+            const promise = sut.loadAll(fakeRequest)
 
             await expect(promise).rejects.toThrow()
         })
@@ -143,23 +108,21 @@ describe('NoteMongoRepository', () => {
         test('should return notes list on success', async () => {
             const sut = makeSut()
             await Note.create({
-                userId: userId,
-                bookId: bookId,
+                userId: fakeRequest.userId,
+                bookId: fakeRequest.bookId,
                 text: faker.datatype.string(),
                 createdAt: faker.datatype.datetime(),
             })
             
-            const notes = await sut.loadAll({ userId, bookId })
+            const notes = await sut.loadAll(fakeRequest)
 
-            const fakeNotes = await Note.find({ userId, bookId })
+            const fakeNotes = await Note.find(fakeRequest)
             expect(notes).toEqual(fakeNotes)
         })
     })
 
     describe('delete()', () => {
-        let fakeRequest: DeleteNoteRepository.Params;
-        let userId: string
-        let bookId: string
+        let fakeRequest: DeleteNoteRepository.Params
 
         beforeEach(async () => {
             fakeRequest = {
@@ -167,26 +130,9 @@ describe('NoteMongoRepository', () => {
                 bookId: faker.datatype.uuid(),
                 noteId: faker.datatype.uuid(),
             }
-            const account = await User.create({
-                email: faker.internet.email(),
-                password: faker.internet.password(),
-            })
-            const book = await Book.create({
-                title: faker.datatype.string(),
-                author: faker.datatype.string(),
-                description: faker.datatype.string(),
-                currentPage: faker.datatype.number(),
-                createdAt: faker.datatype.datetime(),
-                pages: faker.datatype.number(),
-                userId: account.id,
-            })
-            userId = account.id 
-            bookId = book.id 
         })
 
         afterEach(() => {
-            User.deleteMany({})
-            Book.deleteMany({})
             Note.deleteMany({})
         })
 
@@ -256,12 +202,25 @@ describe('NoteMongoRepository', () => {
             }, fakeNote)
         })
 
-        test('should return undefined on success', async () => {
+        test('should update correctly on success', async () => {
             const sut = makeSut()
+            const noteCreated =  await Note.create({
+                userId: fakeNote.userId,
+                bookId: fakeNote.bookId,
+                text: fakeNote.text,
+            })
+            fakeNote.noteId = noteCreated.id
+            fakeNote.text = faker.random.words()
 
-            const result = await sut.update(fakeNote)
+            await sut.update(fakeNote)
 
-            expect(result).toBeUndefined()
+            const noteAfterUpdate = await Note.findOne(fakeNote)
+            expect({
+                noteId: noteAfterUpdate.id,
+                userId: noteAfterUpdate.userId,
+                bookId: noteAfterUpdate.bookId,
+                text: noteAfterUpdate.text,
+            }).toStrictEqual(fakeNote)
         })
     })
 })
