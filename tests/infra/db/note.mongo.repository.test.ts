@@ -65,6 +65,24 @@ describe('NoteMongoRepository', () => {
             })
             expect(notes.length).toEqual(1)
         })
+
+        test('should add correct note on success', async () => {
+            const sut = makeSut()
+            const fakenote = mockNote({ userId, bookId })
+
+            await sut.add(fakenote)
+    
+            const noteFromDatabase = await Note.findOne({
+                userId,
+                bookId,
+            })
+            expect(fakenote).toEqual({
+                userId: noteFromDatabase.userId,
+                bookId: noteFromDatabase.bookId,
+                text: noteFromDatabase.text,
+                createdAt: noteFromDatabase.createdAt,
+            })
+        })
     })
 
     describe('loadAll()', () => {
