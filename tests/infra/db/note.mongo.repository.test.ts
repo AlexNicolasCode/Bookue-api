@@ -66,6 +66,15 @@ describe('NoteMongoRepository', () => {
             expect(notes.length).toEqual(1)
         })
 
+        test('should throw if Note model throws', async () => {
+            const sut = makeSut()
+            jest.spyOn(Note, 'create').mockImplementationOnce(throwError)
+
+            const promise = sut.add(mockNote({ userId, bookId }))
+
+            await expect(promise).rejects.toThrow()
+        })
+
         test('should add correct note on success', async () => {
             const sut = makeSut()
             const fakenote = mockNote({ userId, bookId })
