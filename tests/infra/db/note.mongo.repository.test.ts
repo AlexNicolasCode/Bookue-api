@@ -140,13 +140,36 @@ describe('NoteMongoRepository', () => {
 
     describe('delete()', () => {
         let fakeRequest: DeleteNoteRepository.Params;
+        let userId: string
+        let bookId: string
 
-        beforeEach(() => {
+        beforeEach(async () => {
             fakeRequest = {
                 userId: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
                 noteId: faker.datatype.uuid(),
             }
+            const account = await User.create({
+                email: faker.internet.email(),
+                password: faker.internet.password(),
+            })
+            const book = await Book.create({
+                title: faker.datatype.string(),
+                author: faker.datatype.string(),
+                description: faker.datatype.string(),
+                currentPage: faker.datatype.number(),
+                createdAt: faker.datatype.datetime(),
+                pages: faker.datatype.number(),
+                userId: account.id,
+            })
+            userId = account.id 
+            bookId = book.id 
+        })
+
+        afterEach(() => {
+            User.deleteMany({})
+            Book.deleteMany({})
+            Note.deleteMany({})
         })
 
         test('should call Note model with correct values', async () => {
@@ -171,12 +194,13 @@ describe('NoteMongoRepository', () => {
             await expect(promise).rejects.toThrowError()
         })
 
-        test('should return undefined on success', async () => {
+        test('should delete note on success', async () => {
             const sut = makeSut()
 
-            const result = await sut.delete(fakeRequest)
+            await sut.delete(fakeRequest)
 
-            expect(result).toBeUndefined()
+            const notes = await Note.find(fakeRequest)
+            expect(notes.length).toStrictEqual(0)
         })
     })
 
