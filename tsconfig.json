@@ -12,5 +12,5 @@
     }
   },
   "include": ["src", "tests"],
-  "exclude": ["node_modules", "src/env.ts"],
+  "exclude": ["node_modules", "src/env.ts", "tests"],
 }
