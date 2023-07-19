@@ -1,9 +1,27 @@
 version: "3.9"
 services:
-  mongodb:
+  database:
     container_name: mongodb
     image: mongo
     volumes:
       - ~/mongo:/data/db
     ports:
       - "27017:27017"
+  app:
+    container_name: app
+    command: npm run start:dev
+    ports:
+        - 8000:8000
+    environment: 
+        MONGO_DB_URL: mongodb://host.docker.internal:27017/MONGO_DATABASE_DEV
+        PORT: 8000
+        JWT_SECRET_KEY: docker-jwt-secret-key
+    volumes:
+        - ./app:/dist
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+      cache_from:
+        - node:16-alpine
+    depends_on: 
+        - database
