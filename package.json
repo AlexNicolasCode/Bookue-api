@@ -13,7 +13,8 @@
     "start:dev": "ts-node -r tsconfig-paths/register src/main/server.ts",
     "build": "tsc --build tsconfig-build.json",
     "lint": "eslint . --ext .ts",
-    "lint-and-fix": "eslint . --ext .ts --fix"
+    "lint-and-fix": "eslint . --ext .ts --fix",
+    "prepare": "husky install"
   },
   "author": "AlexNicolasCode",
   "license": "ISC",
@@ -40,6 +41,7 @@
     "@typescript-eslint/parser": "^6.1.0",
     "coveralls": "^3.1.1",
     "eslint": "^8.45.0",
+    "husky": "^8.0.0",
     "jest": "^27.5.1",
     "jest-environment-node": "^27.5.0",
     "mockdate": "^3.0.5",
