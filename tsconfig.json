@@ -5,12 +5,14 @@
     "outDir": "dist",
     "module": "commonjs",
     "target": "es2019",
+    "noUnusedLocals": true,
     "esModuleInterop": true,
+    "noImplicitAny": false,
     "paths": {
       "@/tests/*": ["../tests/*"],
       "@/*": ["src/*"]
     }
   },
   "include": ["src", "tests"],
-  "exclude": ["node_modules", "src/env.ts", "tests"],
+  "exclude": ["node_modules", "src/env.ts"],
 }

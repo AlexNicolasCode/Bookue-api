@@ -1,5 +1,4 @@
 import { AddAccount, Authentication, LoadAccountByToken, UpdateBook } from "@/domain/usecases"
-import { mockAccount } from "tests/domain/mocks"
 
 import { faker } from "@faker-js/faker"
 
@@ -36,12 +35,10 @@ export class UpdateBookSpy implements UpdateBook {
 
 export class LoadAccountByTokenSpy implements LoadAccountByToken {
     accessToken: string
-    role: string
     result = { id: faker.datatype.uuid() }
   
-    async load (accessToken: string, role?: string ): Promise<LoadAccountByToken.Result> {
+    async load (accessToken: string): Promise<LoadAccountByToken.Result> {
       this.accessToken = accessToken
-      this.role = role
       return this.result
     }
 }

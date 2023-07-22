@@ -42,13 +42,12 @@ describe('DbLoadAccountByToken', () => {
         expect(decrypterSpy.ciphertext).toBe(fakeAccessToken)
     })
 
-    test('should call LoadAccountByTokenRepository with correct token and role', async () => {
+    test('should call LoadAccountByTokenRepository with correct token', async () => {
         const { sut, loadAccountByTokenRepositorySpy } = makeSut()
         const fakeAccessToken = faker.internet.password()
 
-        await sut.load(fakeAccessToken, 'any_role')
+        await sut.load(fakeAccessToken)
 
-        expect(loadAccountByTokenRepositorySpy.role).toBe('any_role')
         expect(loadAccountByTokenRepositorySpy.token).toBe(fakeAccessToken)
     })
 

@@ -5,8 +5,8 @@ import {
     LoadBookRepository, 
     UpdateBookRepository,
 } from "@/data/protocols"
-import { BookModel, UserModel } from "@/domain/models"
-import { Book, User } from "./mongoose.schemas"
+import { BookModel } from "@/domain/models"
+import { Book } from "./mongoose.schemas"
 
 export class BookMongoRepository implements AddBookRepository, LoadBooksRepository, LoadBookRepository, UpdateBookRepository, DeleteBookRepository {
     async add (data: AddBookRepository.Params): Promise<void> {

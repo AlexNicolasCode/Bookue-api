@@ -24,7 +24,7 @@ export class AddBookController implements Controller {
             await this.addBook.add(book)
             return ok(book)
         } catch (error) {
-            return serverError(error)
+            return serverError()
         }
     }
 }

@@ -62,7 +62,7 @@ describe('LoadNotesController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toBe(500)
-        expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
+        expect(httpResponse.body).toStrictEqual(serverError().body)
     })
 
     test('should return 403 if LoadAccountByToken not found an account', async () => {
