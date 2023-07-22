@@ -11,7 +11,7 @@
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "start": "node dist/main/server.js",
     "start:dev": "ts-node -r tsconfig-paths/register src/main/server.ts",
-    "build": "tsc"
+    "build": "tsc --build tsconfig-build.json"
   },
   "author": "AlexNicolasCode",
   "license": "ISC",
