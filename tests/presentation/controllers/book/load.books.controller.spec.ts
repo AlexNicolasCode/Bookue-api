@@ -47,7 +47,7 @@ describe('LoadBooksController', () => {
 
         const httpResponse = await sut.handle({ accessToken: fakeAccessToken })
 
-        expect(httpResponse.body).toStrictEqual(serverError(new Error).body)
+        expect(httpResponse.body).toStrictEqual(serverError().body)
     })
 
     test('should return 200 on success', async () => {

@@ -21,7 +21,7 @@ export class LoadBookController implements Controller {
             })
             return book ? ok(book) : notFound()
         } catch (error) {
-            return serverError(error)
+            return serverError()
         }
     }
 }

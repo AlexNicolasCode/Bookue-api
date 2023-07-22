@@ -18,7 +18,7 @@ export class LoadBooksController implements Controller {
             const bookList = await this.loadBooks.load(account.id)
             return ok(bookList)
         } catch (error) {
-            return serverError(error)
+            return serverError()
         }
     }
 }

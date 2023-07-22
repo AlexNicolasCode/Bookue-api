@@ -24,7 +24,7 @@ describe('AuthMiddleware', () => {
         const httpResponse = await sut.handle(mockRequest())
 
         expect(httpResponse.statusCode).toStrictEqual(500)
-        expect(httpResponse.body).toStrictEqual(serverError(new Error).body)
+        expect(httpResponse.body).toStrictEqual(serverError().body)
     })
 
     test('should return 200 on success', async () => {
@@ -41,13 +41,12 @@ describe('AuthMiddleware', () => {
 
     test('should call LoadAccountByToken with correct values', async () => {
         const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
-        const sut = new AuthMiddleware(loadAccountByTokenSpy, 'any_role')
+        const sut = new AuthMiddleware(loadAccountByTokenSpy)
         const fakeRequest = mockRequest()
 
         await sut.handle(fakeRequest)
 
         expect(loadAccountByTokenSpy.accessToken).toStrictEqual(fakeRequest.accessToken)
-        expect(loadAccountByTokenSpy.role).toStrictEqual('any_role')
     })
 
     test('should return 403 if access token is invalid', async () => {

@@ -28,7 +28,7 @@ export class UpdateBookController implements Controller {
             await this.updateBook.update(book)
             return noContent()
         } catch (error) {
-            return serverError(error)
+            return serverError()
         }
     }
 }

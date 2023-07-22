@@ -99,6 +99,6 @@ describe('UpdateNoteController', () => {
         const httpResponse = await sut.handle(fakeRequest)
 
         expect(httpResponse.statusCode).toBe(500)
-        expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
+        expect(httpResponse.body).toStrictEqual(serverError().body)
     })
 })

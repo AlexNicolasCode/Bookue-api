@@ -56,7 +56,7 @@ describe('LoginController', () => {
     })
 
     test('should return 200 on success', async () => {
-        const { sut, authenticationSpy, } = makeSut()
+        const { sut } = makeSut()
         const fakeRequest = mockRequest()
 
         const httpResponse = await sut.handle(fakeRequest)

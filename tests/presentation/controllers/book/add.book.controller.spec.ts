@@ -88,7 +88,7 @@ describe('AddBookController', () => {
 
         const httpResponse = await sut.handle(request)
 
-        expect(httpResponse).toEqual(serverError(new Error()))
+        expect(httpResponse).toEqual(serverError())
     })
 
     test('should call LoadAccountByToken with correct values', async () => {

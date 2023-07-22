@@ -43,7 +43,7 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
         })
     }
 
-    async loadByToken (accessToken: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
+    async loadByToken (accessToken: string): Promise<LoadAccountByTokenRepository.Result> {
         const account = await User.findOne({ accessToken: accessToken })
         if (account) {
             return {

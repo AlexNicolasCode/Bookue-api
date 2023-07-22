@@ -1,9 +1,9 @@
 export type BookResultModel = {
-    title: String,
-    author: String,
-    description: String,
+    title: string,
+    author: string,
+    description: string,
     currentPage: number,
     pages: number,
-    created_by: String,
+    created_by: string,
     createdAt: Date,
 }

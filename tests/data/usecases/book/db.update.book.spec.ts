@@ -1,7 +1,7 @@
 import { UpdateBookRepositorySpy } from "../../mocks"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { DbUpdateBook } from "@/data/usecases"
-import { mockUpdateBookRequest, mockAccount } from "tests/domain/mocks"
+import { mockUpdateBookRequest } from "tests/domain/mocks"
 
 type SutType = {
     sut: DbUpdateBook
