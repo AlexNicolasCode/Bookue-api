@@ -1,5 +1,5 @@
 import { UpdateBookController } from "@/presentation/controllers"
-import { forbidden, serverError } from "@/presentation/helpers"
+import { serverError } from "@/presentation/helpers"
 import { throwError } from "tests/domain/mocks/test.helpers"
 import { LoadAccountByTokenSpy, UpdateBookSpy, ValidationSpy } from "../../mocks"
 import { faker } from "@faker-js/faker"
@@ -51,7 +51,7 @@ describe('UpdateBookController', () => {
         const httpResponse = await sut.handle(mockRequest())
 
         expect(httpResponse.statusCode).toBe(500)
-        expect(httpResponse.body).toStrictEqual(serverError(new Error()).body)
+        expect(httpResponse.body).toStrictEqual(serverError().body)
     })
 
     test('should return 400 if Validation returns error', async () => {

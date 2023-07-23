@@ -6,8 +6,8 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
+    timeout-minutes: 2
 
     strategy:
       matrix:
@@ -28,4 +28,4 @@ jobs:
       run: yarn install
 
     - name: Run tests
-      run: yarn test:unit
+      run: yarn test

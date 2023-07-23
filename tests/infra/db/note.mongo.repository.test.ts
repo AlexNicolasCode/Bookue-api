@@ -3,10 +3,9 @@ import mongoose from "mongoose"
 import { faker } from "@faker-js/faker";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
-import { Note, NoteMongoRepository, User, Book } from "@/infra";
+import { Note, NoteMongoRepository } from "@/infra";
 import { AddNoteRepository, DeleteNoteRepository, LoadNotesRepository, UpdateNoteRepository } from "@/data/protocols";
 
-import { mockNote } from "tests/domain/mocks";
 import { throwError } from "tests/domain/mocks/test.helpers";
 
 const makeSut = (): NoteMongoRepository => {

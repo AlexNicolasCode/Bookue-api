@@ -49,12 +49,10 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
 
 export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
     token: string
-    role: string
     result = { id: faker.datatype.uuid() }
 
-    async loadByToken (token: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
+    async loadByToken (token: string): Promise<LoadAccountByTokenRepository.Result> {
         this.token = token
-        this.role = role
         return this.result
     }
 }

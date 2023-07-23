@@ -6,21 +6,20 @@ import { HttpResponse, Middleware } from "../protocols"
 export class AuthMiddleware implements Middleware {
     constructor (
         private readonly loadAccountByToken: LoadAccountByToken,
-        private readonly role?: string,
     ) {}
 
     async handle (request: AuthMiddleware.Request): Promise<HttpResponse> {
         try {
             const { accessToken } = request
             if (accessToken) {
-                const account = await this.loadAccountByToken.load(accessToken, this.role)  
+                const account = await this.loadAccountByToken.load(accessToken)  
                 if (account) {
                     return ok({ id: account.id })
                 }
             }
             return forbidden(new AccessDeniedError())
         } catch (error) {
-            return serverError(error)
+            return serverError()
         }
     }
 } 

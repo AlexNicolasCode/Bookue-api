@@ -11,7 +11,10 @@
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "start": "node dist/main/server.js",
     "start:dev": "ts-node -r tsconfig-paths/register src/main/server.ts",
-    "build": "tsc"
+    "build": "tsc --build tsconfig-build.json",
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix",
+    "prepare": "husky install"
   },
   "author": "AlexNicolasCode",
   "license": "ISC",
@@ -29,12 +32,18 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@faker-js/faker": "^7.4.0",
     "@shelf/jest-mongodb": "^3.0.1",
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "^27.4.1",
     "@types/jsonwebtoken": "^8.5.5",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "coveralls": "^3.1.1",
+    "eslint": "^8.45.0",
+    "husky": "^8.0.0",
     "jest": "^27.5.1",
     "jest-environment-node": "^27.5.0",
     "mockdate": "^3.0.5",

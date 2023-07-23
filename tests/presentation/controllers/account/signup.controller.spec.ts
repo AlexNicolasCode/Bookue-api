@@ -67,7 +67,7 @@ describe('SignUpController', () => {
 
         const httpResponse = await sut.handle(fakeRequest)
 
-        expect(httpResponse).toStrictEqual(serverError(new Error()))
+        expect(httpResponse).toStrictEqual(serverError())
     })
 
     test('should call AddAccount with correct values', async () => {
@@ -100,7 +100,7 @@ describe('SignUpController', () => {
 
         const httpResponse = await sut.handle(fakeRequest)
 
-        expect(httpResponse).toStrictEqual(serverError(new Error()))
+        expect(httpResponse).toStrictEqual(serverError())
     })
 
     test('should call Authentication with correct values', async () => {
@@ -134,7 +134,7 @@ describe('SignUpController', () => {
 
         const httpResponse = await sut.handle(fakeRequest)
 
-        expect(httpResponse).toStrictEqual(serverError(new Error()))
+        expect(httpResponse).toStrictEqual(serverError())
     })
 
     test('should return 200 if valid data is provided', async () => {

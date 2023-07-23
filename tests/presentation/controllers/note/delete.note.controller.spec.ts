@@ -83,7 +83,7 @@ describe('DeleteNoteController', () => {
         const httpReponse = await sut.handle(fakeRequest)
 
         expect(httpReponse.statusCode).toBe(500)
-        expect(httpReponse.body).toStrictEqual(serverError(new Error).body)
+        expect(httpReponse.body).toStrictEqual(serverError().body)
     })
 
     test('should return 403 if LoadAccountByToken not found an account', async () => {

@@ -26,7 +26,7 @@ export class LoadNotesController implements Controller {
             })
             return notes.length ? ok(notes) : noContent()
         } catch (error) {
-            return serverError(error)
+            return serverError()
         }
     }
 }
