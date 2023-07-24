@@ -8,11 +8,12 @@
     "noUnusedLocals": true,
     "esModuleInterop": true,
     "noImplicitAny": false,
+    "rootDir": "src",
     "paths": {
       "@/tests/*": ["../tests/*"],
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "tests"],
-  "exclude": ["node_modules", "src/env.ts"],
+  "include": ["src"],
+  "exclude": ["node_modules", "src/env.ts", "tests"],
 }
