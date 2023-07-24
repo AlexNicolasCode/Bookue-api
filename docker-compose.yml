@@ -9,7 +9,7 @@ services:
       - "27017:27017"
   app:
     container_name: app
-    command: npm run start:dev
+    command: yarn start:dev
     ports:
         - 8000:8000
     environment: 
@@ -17,11 +17,14 @@ services:
         PORT: 8000
         JWT_SECRET_KEY: docker-jwt-secret-key
     volumes:
-        - ./app:/dist
-    build:
+        - ./:/usr/local/apps/bookue-api/
+        - nodemodules:/usr/local/apps/bookue-api/node_modules/
+    build:  
       dockerfile: ./Dockerfile
       context: .
       cache_from:
         - node:16-alpine
     depends_on: 
         - database
+volumes:
+    nodemodules:
