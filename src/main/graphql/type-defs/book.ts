@@ -20,7 +20,7 @@ export default gql`
             description: String,
             currentPage: String,
             pages: String,
-            bookId: String
+            bookId: String!
         ): Boolean
         deleteBook (bookId: String!): Boolean
     }
