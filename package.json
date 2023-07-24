@@ -10,7 +10,7 @@
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "start": "node dist/main/server.js",
     "start:dev": "ts-node-dev -r tsconfig-paths/register src/main/server.ts",
-    "build": "tsc --build tsconfig-build.json",
+    "build": "tsc --build",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
     "prepare": "husky install"
