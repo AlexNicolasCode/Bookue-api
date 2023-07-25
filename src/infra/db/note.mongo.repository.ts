@@ -20,7 +20,7 @@ export class NoteMongoRepository implements AddNoteRepository, LoadNotesReposito
 
     async delete (data: DeleteNoteRepository.Params): Promise<void> {
         await Note.deleteOne({ 
-            id: data.noteId, 
+            _id: data.noteId, 
             bookId: data.bookId,
             userId: data.userId,
         })
@@ -28,9 +28,9 @@ export class NoteMongoRepository implements AddNoteRepository, LoadNotesReposito
 
     async update (note: UpdateNoteRepository.Params): Promise<void> {
         await Note.updateOne({ 
+            _id: note.noteId,
             userId: note.userId,
             bookId: note.bookId,
-            noteId: note.noteId,
         }, note)
     }
 }

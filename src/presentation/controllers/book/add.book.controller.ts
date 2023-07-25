@@ -15,10 +15,10 @@ export class AddBookController implements Controller {
             if (error) {
                 return badRequest(error)
             }
-            const user = await this.loadAccountByToken.load(request.accessToken)
+            const account = await this.loadAccountByToken.load(request.accessToken)
             const book: AddBook.Params = {
                 ...request,
-                userId: user.id,
+                userId: account.id,
                 createdAt: new Date(),
             }
             await this.addBook.add(book)

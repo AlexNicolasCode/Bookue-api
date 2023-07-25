@@ -44,7 +44,7 @@ export class AccountMongoRepository implements AddAccountRepository, CheckAccoun
     }
 
     async loadByToken (accessToken: string): Promise<LoadAccountByTokenRepository.Result> {
-        const account = await User.findOne({ accessToken: accessToken })
+        const account = await User.findOne({ accessToken })
         if (account) {
             return {
                 id: `${account._id}`
