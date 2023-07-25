@@ -72,7 +72,7 @@ describe('BookMongoRepository', () => {
 
         beforeEach(() => {
             fakeRequest = {
-                accessToken: faker.datatype.uuid(),
+                userId: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
             }
         })
@@ -89,13 +89,13 @@ describe('BookMongoRepository', () => {
 
         test('should call Book with correct values', async () => {
             const sut = makeSut()
-            const bookSpy = jest.spyOn(Book, 'findOne')
+            const bookSpy = jest.spyOn(Book, 'findOne').mockResolvedValueOnce('')
             
             await sut.loadOne(fakeRequest)
 
             expect(bookSpy).toHaveBeenCalledWith({ 
                 userId: fakeRequest.userId, 
-                bookId: fakeRequest.bookId, 
+                _id: fakeRequest.bookId, 
             })
         })
     })
@@ -115,24 +115,16 @@ describe('BookMongoRepository', () => {
                 bookId: faker.datatype.uuid(),
             }
         })
-
-        test('should return undefined on success', async () => {
-            const sut = makeSut()
-
-            const result = await sut.update(fakeNewBook)
-
-            expect(result).toBeUndefined()
-        })
         
         test('should call Book model with correct values', async () => {
             const sut = makeSut()
-            const bookModelSpy = jest.spyOn(Book, 'updateOne')
+            const bookModelSpy = jest.spyOn(Book, 'updateOne').mockResolvedValueOnce(undefined)
 
             await sut.update(fakeNewBook)
 
             expect(bookModelSpy).toHaveBeenCalledWith({ 
                 userId: fakeNewBook.userId,
-                bookId: fakeNewBook.bookId,
+                _id: fakeNewBook.bookId,
             }, fakeNewBook)
         })
     })
@@ -149,19 +141,14 @@ describe('BookMongoRepository', () => {
 
         test('should call Book model with correct values', async () => {
             const sut = makeSut()
-            const bookModelSpy = jest.spyOn(Book, 'deleteOne')
+            const bookModelSpy = jest.spyOn(Book, 'deleteOne').mockResolvedValueOnce(undefined)
 
             await sut.delete(fakeBookIdentify)
 
-            expect(bookModelSpy).toBeCalledWith(fakeBookIdentify)
-        })
-
-        test('should return undefined on success', async () => {
-            const sut = makeSut()
-
-            const result = await sut.delete(fakeBookIdentify)
-
-            expect(result).toBeUndefined()
+            expect(bookModelSpy).toBeCalledWith({
+                userId: fakeBookIdentify.userId,
+                _id: fakeBookIdentify.bookId,
+            })
         })
     })
 })

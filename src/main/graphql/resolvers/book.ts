@@ -3,8 +3,8 @@ import { makeAddBookController, makeDeleteBookController, makeLoadBookController
 
 export default {
     Query: {
-        loadAllBooks: async (parent: any, args: any) => adaptResolver(makeLoadBooksController(), args),
-        loadOneBook: async (parent: any, args: any) => adaptResolver(makeLoadBookController(), args),
+        loadAllBooks: async (parent: any, args: any, context: any) => adaptResolver(makeLoadBooksController(), args, context),
+        loadOneBook: async (parent: any, args: any, context: any) => adaptResolver(makeLoadBookController(), args, context),
     },
 
     Mutation: {

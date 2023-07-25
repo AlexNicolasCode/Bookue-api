@@ -14,7 +14,8 @@ module.exports = {
   },
   moduleNameMapper: {
     'tests/(.*)': '<rootDir>/tests/$1',
-    '@/(.*)': '<rootDir>/src/$1'
+    '@/(.*)': '<rootDir>/src/$1',
+    "uuid": require.resolve('uuid')
   }
 }
   

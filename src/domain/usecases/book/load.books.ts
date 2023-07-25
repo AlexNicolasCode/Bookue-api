@@ -1,7 +1,7 @@
 import { BookModel } from "@/domain/models"
 
 export interface LoadBooks {
-    load: (accessToken: string) => Promise<LoadBooks.Result>
+    load: (userId: string) => Promise<LoadBooks.Result>
 }
 
 export namespace LoadBooks {
