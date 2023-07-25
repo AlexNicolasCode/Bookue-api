@@ -1,10 +1,9 @@
-
 import mongoose from "mongoose"
 import { faker } from "@faker-js/faker";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 import { Note, NoteMongoRepository } from "@/infra";
-import { AddNoteRepository, DeleteNoteRepository, LoadNotesRepository, UpdateNoteRepository } from "@/data/protocols";
+import { AddNoteRepository, DeleteNoteRepository, LoadNotesRepository } from "@/data/protocols";
 
 import { throwError } from "tests/domain/mocks/test.helpers";
 
@@ -88,7 +87,7 @@ describe('NoteMongoRepository', () => {
 
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
-            const noteModelSpy = jest.spyOn(Note, 'find')
+            const noteModelSpy = jest.spyOn(Note, 'find').mockResolvedValueOnce(undefined)
 
             await sut.loadAll(fakeRequest)
 
@@ -137,12 +136,12 @@ describe('NoteMongoRepository', () => {
 
         test('should call Note model with correct values', async () => {
             const sut = makeSut()
-            const noteModelSpy =  jest.spyOn(Note, 'deleteOne')
+            const noteModelSpy =  jest.spyOn(Note, 'deleteOne').mockResolvedValueOnce(undefined)
 
             await sut.delete(fakeRequest)
 
             expect(noteModelSpy).toHaveBeenCalledWith({ 
-                id: fakeRequest.noteId,
+                _id: fakeRequest.noteId,
                 bookId: fakeRequest.bookId,
                 userId: fakeRequest.userId,
             })
@@ -159,22 +158,31 @@ describe('NoteMongoRepository', () => {
 
         test('should delete note on success', async () => {
             const sut = makeSut()
+            const createdNote = await Note.create({
+                bookId: fakeRequest.bookId,
+                userId: fakeRequest.userId,
+                text: faker.datatype.string(),
+            })
 
-            await sut.delete(fakeRequest)
+            await sut.delete({
+                noteId: createdNote.id,
+                bookId: fakeRequest.bookId,
+                userId: fakeRequest.userId,
+            })
 
-            const notes = await Note.find(fakeRequest)
+            const notes = await Note.find({ _id: createdNote.id })
             expect(notes.length).toStrictEqual(0)
         })
     })
 
     describe('update()', () => {
-        let fakeNote: UpdateNoteRepository.Params
+        let fakeNote
 
         beforeEach(() => {
             fakeNote = {
+                noteId: faker.datatype.uuid(),
                 userId: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
-                noteId: faker.datatype.uuid(),
                 text: faker.random.words(),
             }
         })
@@ -190,14 +198,14 @@ describe('NoteMongoRepository', () => {
         
         test('should call Note schema with correct parameters', async () => {
             const sut = makeSut()
-            const noteSchemaSpy = jest.spyOn(Note, 'updateOne')
+            const noteSchemaSpy = jest.spyOn(Note, 'updateOne').mockResolvedValueOnce(undefined)
 
             await sut.update(fakeNote)
 
             expect(noteSchemaSpy).toHaveBeenCalledWith({
+                _id: fakeNote.noteId,
                 userId: fakeNote.userId,
                 bookId: fakeNote.bookId,
-                noteId: fakeNote.noteId,
             }, fakeNote)
         })
 
@@ -208,18 +216,23 @@ describe('NoteMongoRepository', () => {
                 bookId: fakeNote.bookId,
                 text: fakeNote.text,
             })
-            fakeNote.noteId = noteCreated.id
+            fakeNote.noteId = noteCreated._id
             fakeNote.text = faker.random.words()
 
             await sut.update(fakeNote)
 
-            const noteAfterUpdate = await Note.findOne(fakeNote)
+            const noteAfterUpdate = await Note.findOne({ _id: fakeNote.noteId })
             expect({
-                noteId: noteAfterUpdate.id,
+                _id: noteAfterUpdate._id,
                 userId: noteAfterUpdate.userId,
                 bookId: noteAfterUpdate.bookId,
                 text: noteAfterUpdate.text,
-            }).toStrictEqual(fakeNote)
+            }).toStrictEqual({
+                _id: fakeNote.noteId,
+                userId: fakeNote.userId,
+                bookId: fakeNote.bookId,
+                text: fakeNote.text,                
+            })
         })
     })
 })
