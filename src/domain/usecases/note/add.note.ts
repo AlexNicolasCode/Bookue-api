@@ -1,5 +1,5 @@
 export interface AddNote {
-    add: (data: AddNote.Params) => Promise<void>
+    add: (data: AddNote.Params) => Promise<AddNote.Result>
 }
 
 export namespace AddNote {
@@ -7,5 +7,8 @@ export namespace AddNote {
         userId: string
         bookId: string
         text: string
+    }
+    export type Result = {
+        id: string
     }
 }
