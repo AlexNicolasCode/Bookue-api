@@ -9,7 +9,7 @@ export default gql`
         addNote (
             text: String!,
             bookId: String!,
-        ): { id: String }
+        ): AddNoteResult
         deleteNote (
             noteId: String!,
             bookId: String!,
@@ -19,6 +19,10 @@ export default gql`
             bookId: String!,
             text: String!,
         ): Boolean
+    }
+
+    type AddNoteResult {
+        id: String
     }
 
     type Notes {
