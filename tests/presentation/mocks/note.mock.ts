@@ -1,11 +1,15 @@
+import { faker } from "@faker-js/faker"
+
 import { AddNote, DeleteNote, LoadNotes, UpdateNote } from "@/domain/usecases"
 import { mockLoadNotes } from "tests/domain/mocks"
 
 export class AddNoteSpy implements AddNote {
     params: AddNote.Params
+    result = { id: faker.datatype.uuid() }
 
-    async add (params: AddNote.Params): Promise<void> {
+    async add (params: AddNote.Params): Promise<AddNote.Result> {
         this.params = params
+        return this.result
     }
 }
 

@@ -9,7 +9,7 @@ export default gql`
         addNote (
             text: String!,
             bookId: String!,
-        ): Boolean
+        ): { id: String }
         deleteNote (
             noteId: String!,
             bookId: String!,

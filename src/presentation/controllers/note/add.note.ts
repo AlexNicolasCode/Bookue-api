@@ -1,6 +1,6 @@
 import { AddNote, LoadAccountByToken } from "@/domain/usecases"
 import { AccessDeniedError } from "@/presentation/errors"
-import { badRequest, forbidden, noContent, serverError } from "@/presentation/helpers"
+import { badRequest, forbidden, ok, serverError } from "@/presentation/helpers"
 import { Controller, Validation, HttpResponse } from "@/presentation/protocols"
 
 export class AddNoteController implements Controller {
@@ -20,12 +20,12 @@ export class AddNoteController implements Controller {
             if (!account) {
                 return forbidden(new AccessDeniedError())
             }
-            await this.addNote.add({
+            const note = await this.addNote.add({
                 userId: account.id,
                 bookId: request.bookId,
                 text: request.text,
             })
-            return noContent()
+            return ok({ id: note.id })
         } catch (error) {
             return serverError()
         }
