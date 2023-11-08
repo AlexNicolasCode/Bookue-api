@@ -2,13 +2,14 @@ import { AddNoteRepository, LoadNotesRepository, DeleteNoteRepository, UpdateNot
 import { Note } from "./mongoose.schemas"
 
 export class NoteMongoRepository implements AddNoteRepository, LoadNotesRepository, DeleteNoteRepository, UpdateNoteRepository {
-    async add (data: AddNoteRepository.Params): Promise<void> {
-        await Note.create({
+    async add (data: AddNoteRepository.Params): Promise<AddNoteRepository.Result> {
+        const note = await Note.create({
             userId: data.userId,
             bookId: data.bookId,
             text: data.text,
             createdAt: new Date()
         })
+        return { id: note.id }
     }
 
     async loadAll (data: LoadNotesRepository.Params): Promise<LoadNotesRepository.Result> {

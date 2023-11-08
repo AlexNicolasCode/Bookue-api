@@ -95,12 +95,12 @@ describe('AddNoteController', () => {
         expect(httpResponse.body).toStrictEqual(new AccessDeniedError())
     })
 
-    test('should return 204 on success', async () => {
-        const { sut } = makeSut()
+    test('should return 200 on success', async () => {
+        const { sut, addNoteSpy } = makeSut()
 
         const httpResponse = await sut.handle(fakeRequest)
 
-        expect(httpResponse.statusCode).toBe(204)
-        expect(httpResponse.body).toBeNull()
+        expect(httpResponse.statusCode).toBe(200)
+        expect(httpResponse.body).toStrictEqual(addNoteSpy.result)
     })
 })
