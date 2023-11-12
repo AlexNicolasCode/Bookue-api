@@ -32,6 +32,7 @@ export default gql`
         description: String
         currentPage: String
         pages: String
+        slug: String
         createdAt: String
         userId: String
     }
