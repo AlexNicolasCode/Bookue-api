@@ -7,7 +7,7 @@ export interface LoadBookRepository {
 export namespace LoadBookRepository {
     export type Request = {
         userId: string 
-        slug: string
+        bookId: string 
     }
     export type Result = BookModel
 }

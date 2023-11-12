@@ -20,8 +20,8 @@ export class BookMongoRepository implements AddBookRepository, LoadBooksReposito
         return await Book.find({ userId })
     }
 
-    async loadOne ({ userId, slug }: LoadBookRepository.Request): Promise<BookModel> {
-        return await Book.findOne({ userId: userId, slug: slug })
+    async loadOne ({ userId, bookId }: LoadBookRepository.Request): Promise<BookModel> {
+        return await Book.findOne({ userId: userId, _id: bookId })
     }
 
     async update (book: UpdateBookRepository.Params): Promise<void> {
