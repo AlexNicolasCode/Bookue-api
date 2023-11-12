@@ -23,7 +23,7 @@ describe('DbLoadBook', () => {
         const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
             userId: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
         jest.spyOn(loadBookRepositorySpy, 'loadOne').mockImplementationOnce(throwError)
 
@@ -32,23 +32,23 @@ describe('DbLoadBook', () => {
         expect(promise).rejects.toThrowError()
     })
 
-    test('should call LoadBookRepository with correct bookId', async () => {
+    test('should call LoadBookRepository with correct slug', async () => {
         const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
             userId: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
 
         await sut.load(fakeData)
 
-        expect(loadBookRepositorySpy.bookId).toBe(fakeData.bookId)
+        expect(loadBookRepositorySpy.slug).toBe(fakeData.slug)
     })
 
     test('should return a book on success', async () => {
         const { sut, loadBookRepositorySpy, } = makeSut()
         const fakeData = {
             userId: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
 
         const book = await sut.load(fakeData)

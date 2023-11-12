@@ -10,6 +10,7 @@ export namespace AddBookRepository {
         currentPage: number
         createdAt: Date
         pages: number
+        slug: string
         userId: string
     }
 }
