@@ -1,7 +1,7 @@
+import { faker } from '@faker-js/faker'
+
 import { BookModel } from "@/domain/models"
 import { AddBook, DeleteBook, UpdateBook } from "@/domain/usecases"
-
-import { faker } from '@faker-js/faker'
 
 export const mockBook = (): BookModel => {
     return {
@@ -9,6 +9,7 @@ export const mockBook = (): BookModel => {
         author: faker.random.word(),
         description: faker.random.words(),
         currentPage: faker.datatype.number(),
+        slug: faker.datatype.uuid(),
         pages: faker.datatype.number(),
     }
 }

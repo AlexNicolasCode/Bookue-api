@@ -36,7 +36,7 @@ describe('LoadBookController', () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
             accessToken: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
         jest.spyOn(loadBookSpy, 'load').mockImplementationOnce(throwError)
 
@@ -49,7 +49,7 @@ describe('LoadBookController', () => {
         const { sut, loadAccountByTokenSpy } = makeSut()
         const fakeRequest = {
             accessToken: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
         loadAccountByTokenSpy.result = undefined
 
@@ -62,7 +62,7 @@ describe('LoadBookController', () => {
         const { sut } = makeSut()
         const fakeRequest = {
             accessToken: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -74,7 +74,7 @@ describe('LoadBookController', () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
             accessToken: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
 
         const httpResponse = await sut.handle(fakeRequest)
@@ -86,7 +86,7 @@ describe('LoadBookController', () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
             accessToken: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
         loadBookSpy.result = null
 
@@ -99,7 +99,7 @@ describe('LoadBookController', () => {
         const { sut, loadBookSpy } = makeSut()
         const fakeRequest = {
             accessToken: faker.datatype.uuid(),
-            bookId: faker.datatype.uuid(),
+            slug: faker.datatype.uuid(),
         }
         loadBookSpy.result = null
 
