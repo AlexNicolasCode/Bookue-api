@@ -5,11 +5,11 @@ import { AddBook, DeleteBook, UpdateBook } from "@/domain/usecases"
 
 export const mockBook = (): BookModel => {
     return {
+        id: faker.datatype.uuid(),
         title: faker.random.words(),
         author: faker.random.word(),
         description: faker.random.words(),
         currentPage: faker.datatype.number(),
-        slug: faker.datatype.uuid(),
         pages: faker.datatype.number(),
     }
 }

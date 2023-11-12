@@ -37,7 +37,7 @@ describe('BookMongoRepository', () => {
         beforeEach(() => {
             fakeRequest = {
                 userId: faker.datatype.uuid(),
-                slug: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
             }
         })
 
@@ -80,7 +80,7 @@ describe('BookMongoRepository', () => {
         beforeEach(() => {
             fakeRequest = {
                 userId: faker.datatype.uuid(),
-                slug: faker.datatype.uuid(),
+                bookId: faker.datatype.uuid(),
             }
         })
 
@@ -102,7 +102,7 @@ describe('BookMongoRepository', () => {
 
             expect(bookSpy).toHaveBeenCalledWith({ 
                 userId: fakeRequest.userId, 
-                slug: fakeRequest.slug, 
+                _id: fakeRequest.bookId, 
             })
         })
     })

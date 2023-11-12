@@ -17,7 +17,7 @@ export class LoadBookController implements Controller {
             }
             const book = await this.loadBook.load({
                 userId: account.id,
-                slug: request.slug
+                bookId: request.bookId
             })
             return book ? ok(book) : notFound()
         } catch (error) {
@@ -29,6 +29,6 @@ export class LoadBookController implements Controller {
 export namespace LoadBookController {
     export type Request = {
         accessToken: string
-        slug: string
+        bookId: string
     }
 }
