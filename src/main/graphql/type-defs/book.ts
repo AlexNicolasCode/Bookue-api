@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express"
 export default gql`
     type Query {
         loadAllBooks: [Book]
-        loadOneBook (bookId: String!): Book
+        loadOneBook (slug: String!): Book
     }
 
     type Mutation {
@@ -32,6 +32,7 @@ export default gql`
         description: String
         currentPage: String
         pages: String
+        slug: String
         createdAt: String
         userId: String
     }

@@ -4,4 +4,5 @@ export type BookModel = {
     description: string,
     currentPage: number,
     pages: number,
+    slug: string,
 }

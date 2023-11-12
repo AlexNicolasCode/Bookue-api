@@ -32,25 +32,32 @@ describe('BookMongoRepository', () => {
     })
 
     describe('add book system', () => {
+        let fakeRequest 
+
+        beforeEach(() => {
+            fakeRequest = {
+                userId: faker.datatype.uuid(),
+                slug: faker.datatype.uuid(),
+            }
+        })
+
         test('should add one only book', async () => {
             const sut = makeSut()
-            const bookData = mockAddBookParams()
             jest.spyOn(User, 'findOne').mockResolvedValueOnce(mockAccount())
             
-            await sut.add(bookData)
+            await sut.add(fakeRequest)
             
-            const count = await Book.countDocuments(bookData)
+            const count = await Book.countDocuments(fakeRequest)
             expect(count).toBe(1)
         })
         
         test('should save book with correct userId', async () => {
             const sut = makeSut()
-            const bookData = mockAddBookParams()
             
-            await sut.add(bookData)
+            await sut.add(fakeRequest)
             
-            const book = await Book.findOne({ userId: bookData.userId })
-            expect(book.userId).toBe(bookData.userId)
+            const book = await Book.findOne({ userId: fakeRequest.userId })
+            expect(book.userId).toBe(fakeRequest.userId)
         })
     })
 
@@ -73,7 +80,7 @@ describe('BookMongoRepository', () => {
         beforeEach(() => {
             fakeRequest = {
                 userId: faker.datatype.uuid(),
-                bookId: faker.datatype.uuid(),
+                slug: faker.datatype.uuid(),
             }
         })
 
@@ -95,7 +102,7 @@ describe('BookMongoRepository', () => {
 
             expect(bookSpy).toHaveBeenCalledWith({ 
                 userId: fakeRequest.userId, 
-                _id: fakeRequest.bookId, 
+                slug: fakeRequest.slug, 
             })
         })
     })
@@ -130,10 +137,10 @@ describe('BookMongoRepository', () => {
     })
 
     describe('delete method', () => {
-        let fakeBookIdentify: DeleteBookRepository.Params
+        let fakerRequest: DeleteBookRepository.Params
 
         beforeEach(() => {
-            fakeBookIdentify = {
+            fakerRequest = {
                 userId: faker.datatype.uuid(),
                 bookId: faker.datatype.uuid(),
             }
@@ -143,11 +150,11 @@ describe('BookMongoRepository', () => {
             const sut = makeSut()
             const bookModelSpy = jest.spyOn(Book, 'deleteOne').mockResolvedValueOnce(undefined)
 
-            await sut.delete(fakeBookIdentify)
+            await sut.delete(fakerRequest)
 
             expect(bookModelSpy).toBeCalledWith({
-                userId: fakeBookIdentify.userId,
-                _id: fakeBookIdentify.bookId,
+                userId: fakerRequest.userId,
+                _id: fakerRequest.bookId,
             })
         })
     })
