@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "skipLibCheck": true,
-    "baseUrl": "./",
     "outDir": "dist",
     "module": "commonjs",
     "target": "es2019",
     "noUnusedLocals": true,
     "esModuleInterop": true,
     "noImplicitAny": false,
-    "rootDir": "src",
+    "rootDirs": ["src", "tests"],
+    "baseUrl": "src",
     "paths": {
-      "@/tests/*": ["../tests/*"],
-      "@/*": ["src/*"]
+      "tests/*": ["../tests/*"],
+      "@/*": ["*"]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "src/env.ts", "tests"],
+  "include": ["src", "tests"],
+  "exclude": ["node_modules", "src/env.ts"],
 }
