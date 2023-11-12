@@ -25,12 +25,12 @@ export class LoadBooksSpy implements LoadBooks {
 
 export class LoadBookSpy implements LoadBook {
     userId: string
-    slug: string
+    bookId: string
     result = mockBook()
 
     async load (data: LoadBook.Request): Promise<BookModel> {
         this.userId = data.userId
-        this.slug = data.slug
+        this.bookId = data.bookId
         return this.result
     }
 }

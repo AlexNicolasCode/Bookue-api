@@ -9,7 +9,7 @@ export class DbLoadBook implements LoadBook {
     async load (data: LoadBook.Request): Promise<LoadBook.Result> {
         return await this.loadBookRepository.loadOne({
             userId: data.userId,
-            slug: data.slug,
+            bookId: data.bookId,
         })
     }
 }
